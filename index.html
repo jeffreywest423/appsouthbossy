@@ -112,11 +112,27 @@
             position: relative; width: 140px; height: 140px;
             display: flex; justify-content: center; align-items: center;
         }
-        .logo-img {
-            width: 100%; height: 100%; object-fit: contain;
-            filter: drop-shadow(0 0 0px transparent);
-            animation: goldenPulse 3s infinite ease-in-out;
+        /* ✨ LOGO ANIMATION SEQUENCE */
+        .logo-sequence {
+            position: absolute;
+            width: 100%; height: 100%;
+            object-fit: contain;
+            opacity: 0;
+            animation: logoCycle 4s infinite ease-in-out;
         }
+        /* Animation Timing: 3 Logos */
+        .logo-sequence:nth-child(1) { animation-delay: 0s; }
+        .logo-sequence:nth-child(2) { animation-delay: 1.3s; }
+        .logo-sequence:nth-child(3) { animation-delay: 2.6s; }
+
+        @keyframes logoCycle {
+            0% { opacity: 0; transform: scale(0.9); }
+            10% { opacity: 1; transform: scale(1); filter: drop-shadow(0 0 15px rgba(245, 158, 11, 0.4)); }
+            30% { opacity: 1; transform: scale(1); }
+            40% { opacity: 0; transform: scale(1.1); }
+            100% { opacity: 0; }
+        }
+
         .loading-line {
             width: 0; height: 2px;
             background: linear-gradient(90deg, transparent, var(--accent), transparent);
@@ -130,8 +146,6 @@
             animation: textFadeIn 1s ease-out forwards 1s;
         }
 
-        @keyframes logoFadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
-        @keyframes goldenPulse { 0% { filter: drop-shadow(0 0 0px transparent); } 50% { filter: drop-shadow(0 0 15px rgba(245, 158, 11, 0.4)); } 100% { filter: drop-shadow(0 0 0px transparent); } }
         @keyframes lineExpand { 0% { width: 0; opacity: 0; } 50% { opacity: 1; } 100% { width: 150px; opacity: 0; } }
         @keyframes textFadeIn { to { opacity: 1; } }
 
@@ -162,10 +176,20 @@
 <!-- 🚨 SECURITY LAYERS -->
 <div id="panic-screen" class="hidden fixed inset-0 z-[200] bg-black flex items-center justify-center"><h1 class="text-red-600 font-mono">CONNECTION LOST</h1></div>
 <div id="maintenance-screen" class="hidden fixed inset-0 z-[150] bg-black flex items-center justify-center"><h1 class="text-xl font-bold text-red-600">SYSTEM OFFLINE</h1></div>
-<!-- TWA GATEKEEPER SCREEN -->
+
+<!-- TWA GATEKEEPER SCREEN (BLOCKAGE) -->
 <div id="access-denied-screen" class="hidden fixed inset-0 z-[200] bg-black flex flex-col items-center justify-center text-center p-8">
-    <h1 class="text-3xl font-black brand-font text-red-600 mb-4">ACCÈS REFUSÉ</h1>
-    <p class="text-xs text-gray-500 max-w-sm">Ce service est exclusivement réservé aux utilisateurs de Telegram Web App. Veuillez ouvrir l'application via le lien fourni par votre contact sécurisé.</p>
+    <div class="w-20 h-20 bg-red-900/20 rounded-full flex items-center justify-center mb-6 border border-red-900/50">
+        <span class="text-4xl">🛡️</span>
+    </div>
+    <h1 class="text-2xl font-black brand-font text-red-600 mb-4 tracking-widest uppercase">ACCÈS REFUSÉ</h1>
+    <p class="text-xs text-gray-500 max-w-sm font-mono leading-relaxed">
+        CONNEXION NON SÉCURISÉE DÉTECTÉE.<br>
+        CE PORTAIL EST ACCESSIBLE UNIQUEMENT VIA LE RÉSEAU TELEGRAM CHIFFRÉ.
+    </p>
+    <div class="mt-8 border-t border-white/5 pt-4">
+        <p class="text-[9px] text-gray-600 uppercase tracking-widest">Error Code: TWA_REQUIRED_0x99</p>
+    </div>
 </div>
 
 <!-- 💎 INTRO PRESTIGE -->
@@ -399,21 +423,34 @@
             return; 
         }
         
-        const isTWA = window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData;
-        const isDev = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+        // 🚀 GHOST PROTOCOL ACTIVATED: STRICT GATEKEEPER
+        const tg = window.Telegram?.WebApp;
         
-        if (!isTWA && !isDev && !document.referrer) {
-            // Gatekeeper logic
+        // Check if running inside Telegram WebApp
+        // initData must be present (it's the payload signed by Telegram)
+        const isSecure = tg && tg.initData.length > 0;
+        
+        // OPTIONAL: Allow localhost for YOUR dev testing only (Comment out for Production)
+        // const isDev = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+        // if (!isSecure && !isDev) { 
+
+        if (!isSecure) {
+            // KILL SWITCH
+            document.getElementById('intro-layer').style.display = 'none';
+            document.getElementById('app-container').remove(); // Destroy App DOM
+            document.getElementById('access-denied-screen').classList.remove('hidden'); // Show Block Screen
+            return; // Stop execution
         }
 
-        console.log("✅ Gatekeeper: Acc\u00e8s autoris\u00e9.");
+        console.log("✅ Gatekeeper: Secure TWA Connection.");
+        if(tg) tg.expand();
 
         checkStatus();
         updateTicker();
         setInterval(checkStatus, 60000); 
         setInterval(updateTicker, 60000); 
 
-        // INTRO (Minimalist)
+        // INTRO
         setTimeout(() => {
             document.getElementById('intro-layer').style.transition = 'opacity 0.8s ease';
             document.getElementById('intro-layer').style.opacity = '0';
@@ -426,7 +463,6 @@
         }, 2000);
 
         initPanic();
-        if(window.Telegram?.WebApp) window.Telegram.WebApp.expand();
     };
 
     // --- TICKER (MARKETING VICIEUX) ---
