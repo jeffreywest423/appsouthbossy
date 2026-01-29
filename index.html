@@ -2,400 +2,277 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Service Gateway</title> 
-    <meta name="description" content="Error 404">
-    <meta name="robots" content="noindex, nofollow, noarchive">
-
-    <!-- 🎨 STACK -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>South Valley QG</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-deep: #050505;
-            --bg-card: #111111;
-            --accent: #F59E0B;
-            --accent-dim: rgba(245, 158, 11, 0.15);
-            --text-main: #FFFFFF;
-            --text-muted: #9CA3AF;
-            --border: #222222;
+            --accent: #f59e0b;
+            --accent-dim: rgba(245, 158, 11, 0.1);
+            --bg: #000000;
+            --card: #0a0a0a;
+            --border: #1a1a1a;
+            --text-main: #ffffff;
+            --text-dim: #888888;
         }
 
-        body {
-            background-color: var(--bg-deep);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-            -webkit-tap-highlight-color: transparent;
-            user-select: none;
+        * { -webkit-tap-highlight-color: transparent; outline: none; box-sizing: border-box; }
+        body { 
+            background-color: var(--bg); 
+            color: var(--text-main); 
+            font-family: 'Inter', sans-serif; 
+            margin: 0; padding: 0; 
+            overflow: hidden; 
+            height: 100vh;
         }
 
-        h1, h2, h3, .brand-font { font-family: 'Montserrat', sans-serif; letter-spacing: -0.02em; }
-        .mono-font { font-family: 'JetBrains Mono', monospace; }
+        .brand-font { font-family: 'Archivo+Black', sans-serif; font-weight: 900; }
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+        
+        .nav-glass {
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border);
+        }
 
         .titanium-card {
-            background: linear-gradient(145deg, #151515, #0a0a0a);
+            background: linear-gradient(145deg, #0f0f0f, #050505);
             border: 1px solid var(--border);
             border-radius: 16px;
         }
 
-        .nav-glass {
-            background: rgba(10, 10, 10, 0.95);
-            backdrop-filter: blur(12px);
-            border-top: 1px solid var(--border);
+        /* Ticker */
+        .ticker-wrap {
+            width: 100%; overflow: hidden; height: 24px;
+            background: #050505; border-bottom: 1px solid #111;
+            display: flex; align-items: center;
         }
+        .ticker-move {
+            display: flex; white-space: nowrap;
+            animation: tickerMove 40s linear infinite;
+        }
+        @keyframes tickerMove { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .ticker-item { display: inline-flex; align-items: center; padding: 0 20px; font-size: 9px; font-weight: 900; color: #555; }
+        .ticker-val { color: #fff; margin-left: 4px; }
+        .ticker-up { color: #10b981; } .ticker-down { color: #ef4444; }
+
+        /* Intro layer */
+        #intro-layer {
+            position: fixed; inset: 0; z-index: 999;
+            background: #000; display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+        }
+
+        .logo-container {
+            position: relative; width: 140px; height: 140px;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .logo-sequence {
+            position: absolute; width: 100%; height: 100%;
+            border: 2px solid var(--accent); border-radius: 50%;
+            animation: ringPulse 2s infinite ease-in-out;
+        }
+        @keyframes ringPulse { 0% { transform: scale(0.8); opacity: 0; } 50% { opacity: 0.5; } 100% { transform: scale(1.2); opacity: 0; } }
+
+        /* General Animations */
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .btn-main {
-            background: linear-gradient(to right, #F59E0B, #D97706);
-            color: black;
-            font-weight: 800;
+            background: var(--accent); color: #000;
+            border-radius: 12px; font-weight: 900;
+            transition: all 0.2s active:scale-95;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            border-radius: 10px;
         }
-
-        .btn-upsell {
-            background: linear-gradient(to right, #ec4899, #8b5cf6);
-            color: white;
-            font-weight: 800;
-            text-transform: uppercase;
-            border-radius: 10px;
-        }
-
-        /* --- MARKET TICKER --- */
-        .marquee-container {
-            overflow: hidden;
-            white-space: nowrap;
-            background: #080808;
-            border-bottom: 1px solid #222;
-            padding: 8px 0;
-        }
-        .marquee-content {
-            display: inline-block;
-            animation: marquee 30s linear infinite;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 10px;
-            color: #ccc;
-        }
-        .ticker-item { margin-right: 40px; display: inline-flex; align-items: center; gap: 8px; }
-        .ticker-up { color: #10b981; }
-        .ticker-down { color: #ef4444; }
-
-        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-
-        /* --- INTRO --- */
-        #intro-layer {
-            position: fixed; inset: 0; z-index: 100;
-            background: black;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-        }
-        .loading-line {
-            width: 0; height: 2px;
-            background: linear-gradient(90deg, transparent, var(--accent), transparent);
-            margin-top: 40px;
-            animation: lineExpand 2s ease-out forwards 0.5s;
-        }
-        @keyframes lineExpand { 0% { width: 0; opacity: 0; } 100% { width: 150px; opacity: 0; } }
-
+        
         .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            appearance: none;
+        }
     </style>
 </head>
-<body class="antialiased">
+<body>
 
-<!-- GATEKEEPER SCREEN -->
-<div id="access-denied-screen" class="hidden fixed inset-0 z-[200] bg-black flex flex-col items-center justify-center text-center p-8">
-    <div class="w-20 h-20 bg-red-900/20 rounded-full flex items-center justify-center mb-6 border border-red-900/50">
-        <span class="text-4xl">🛡️</span>
-    </div>
-    <h1 class="text-2xl font-black brand-font text-red-600 mb-4 tracking-widest uppercase">ACCÈS REFUSÉ</h1>
-    <p class="text-xs text-gray-500 max-w-sm font-mono leading-relaxed">
-        CONNEXION NON SÉCURISÉE DÉTECTÉE.<br>
-        CE PORTAIL EST ACCESSIBLE UNIQUEMENT VIA LE RÉSEAU TELEGRAM.
-    </p>
-</div>
-
-<!-- INTRO -->
 <div id="intro-layer">
     <div class="logo-container">
-        <img src="https://res.cloudinary.com/dlmmylat6/image/upload/v1765067656/Sans_titre_Logo_wjtljl.png" class="w-32 h-32 object-contain" alt="Logo">
+        <div class="logo-sequence"></div>
+        <div class="text-center z-10">
+            <h1 class="text-4xl font-black text-white brand-font tracking-tighter">S<span class="text-[--accent]">V</span></h1>
+            <p class="text-[8px] tracking-[0.3em] font-bold text-gray-500 mt-2">SECURE GATEWAY</p>
+        </div>
     </div>
-    <div class="loading-line"></div>
-    <p class="mt-4 text-[10px] text-gray-600 tracking-[0.3em] uppercase">Secure Access</p>
 </div>
 
-<!-- APP -->
-<div id="app-container" class="hidden flex flex-col h-screen pb-20 overflow-hidden">
-    <!-- Background -->
-    <div class="fixed inset-0 z-[-2] bg-black">
-        <div class="w-full h-full object-cover opacity-20 bg-[url('https://res.cloudinary.com/dlmmylat6/image/upload/v1765419450/Sans_titre_Bannie%CC%80re_moyenne_US_Paysage_1_gpbddu.png')] bg-cover bg-center"></div>
+<div id="access-denied-screen" class="hidden fixed inset-0 bg-black flex flex-col items-center justify-center p-8 text-center">
+    <div class="w-16 h-16 bg-red-900/20 border border-red-500/50 rounded-full flex items-center justify-center text-3xl mb-6">🔒</div>
+    <h2 class="text-2xl font-black mb-2">ACCÈS RESTREINT</h2>
+    <p class="text-gray-500 text-sm">Cette application est réservée exclusivement aux membres du cercle via Telegram.</p>
+</div>
+
+<div id="app-container" class="hidden h-screen flex flex-col max-w-md mx-auto relative bg-black">
+    
+    <div class="ticker-wrap shrink-0">
+        <div class="ticker-move" id="live-ticker"></div>
     </div>
 
-    <header class="bg-black/80 backdrop-blur-md z-40 border-b border-white/5">
-        <div class="h-14 px-5 flex items-center justify-between">
-            <div class="flex items-center gap-3" onclick="router('menu')">
-                <img src="https://res.cloudinary.com/dlmmylat6/image/upload/v1765067656/Sans_titre_Logo_wjtljl.png" class="h-10">
-                <div>
-                    <h1 class="text-xs font-black text-white uppercase tracking-wider">South Valley</h1>
-                    <div class="flex items-center gap-1.5">
-                        <div id="status-dot" class="w-1.5 h-1.5 rounded-full bg-green-500"></div>
-                        <span id="status-text" class="text-[8px] font-bold text-gray-400">CHARGEMENT...</span>
-                    </div>
-                </div>
-            </div>
-            <div class="text-xl">⚡</div>
+    <header class="px-4 py-4 flex justify-between items-center border-bottom border-[#111] shrink-0 bg-black/50 backdrop-blur-md">
+        <div class="flex items-center gap-2">
+            <div class="w-2 h-2 rounded-full bg-[--accent] shadow-[0_0_8px_var(--accent)]"></div>
+            <h1 class="text-xs font-black text-white uppercase tracking-wider brand-font">South Valley QG</h1>
         </div>
-
-        <div class="marquee-container">
-            <div class="marquee-content" id="live-ticker">
-                <span class="ticker-item">INITIALISATION FLUX MARCHÉ...</span>
-            </div>
+        <div class="flex items-center gap-1.5 bg-[#111] px-3 py-1.5 rounded-full border border-white/5">
+            <div id="status-dot" class="w-1.5 h-1.5 rounded-full bg-green-500"></div>
+            <span id="status-text" class="text-[8px] font-bold text-gray-400 uppercase tracking-widest">Opérationnel</span>
         </div>
     </header>
 
-    <main id="main-view" class="flex-1 overflow-y-auto px-4 py-6 space-y-6">
-        <!-- Content injected here -->
-    </main>
+    <main id="main-view" class="flex-1 overflow-y-auto px-4 py-6 space-y-6"></main>
 
-    <!-- NAVBAR -->
-    <nav class="nav-glass fixed bottom-0 w-full h-16 flex justify-around items-center z-50">
-        <button onclick="router('menu')" class="flex flex-col items-center opacity-50 transition-all" id="nav-menu">
+    <nav class="nav-glass fixed bottom-0 w-full h-16 pb-safe z-50 flex justify-around items-center px-2">
+        <button onclick="router('menu')" id="nav-menu" class="flex flex-col items-center justify-center w-16 transition-all">
             <span class="text-xl">🏠</span>
-            <span class="text-[9px] font-bold uppercase">QG</span>
+            <span class="text-[9px] font-bold uppercase tracking-wide">Accueil</span>
         </button>
-        <button onclick="router('products')" class="flex flex-col items-center opacity-50 transition-all" id="nav-products">
-            <span class="text-xl">📋</span>
-            <span class="text-[9px] font-bold uppercase">Menu</span>
+        <button onclick="router('products')" id="nav-products" class="flex flex-col items-center justify-center w-16 opacity-50 transition-all">
+            <span class="text-xl">🌿</span>
+            <span class="text-[9px] font-bold uppercase tracking-wide">Menu</span>
         </button>
-        <button onclick="router('cart')" class="flex flex-col items-center opacity-50 transition-all relative" id="nav-cart">
-            <span class="text-xl">🛍️</span>
-            <span id="cart-dot" class="absolute top-0 right-0 w-2 h-2 bg-orange-500 rounded-full hidden"></span>
-            <span class="text-[9px] font-bold uppercase">Panier</span>
+        <button onclick="router('cart')" id="nav-cart" class="relative flex flex-col items-center justify-center w-16 opacity-50 transition-all">
+            <span class="text-xl">🛒</span>
+            <span class="text-[9px] font-bold uppercase tracking-wide">Panier</span>
+            <div id="cart-count" class="absolute -top-1 right-2 bg-[--accent] text-black text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center hidden">0</div>
         </button>
-        <button onclick="router('infos')" class="flex flex-col items-center opacity-50 transition-all" id="nav-infos">
-            <span class="text-xl">📡</span>
-            <span class="text-[9px] font-bold uppercase">Infos</span>
+        <button onclick="router('infos')" id="nav-infos" class="flex flex-col items-center justify-center w-16 opacity-50 transition-all">
+            <span class="text-xl">📦</span>
+            <span class="text-[9px] font-bold uppercase tracking-wide">Infos</span>
         </button>
     </nav>
-</div>
 
-<!-- MODAL PRODUIT -->
-<div id="product-modal" class="fixed inset-0 z-[60] bg-black/90 hidden flex items-end justify-center backdrop-blur-sm">
-    <div id="modal-content" class="bg-[#111] w-full max-w-md h-[80vh] rounded-t-3xl border-t border-white/10 flex flex-col transform translate-y-full transition-transform duration-300">
-        <div class="relative h-48 w-full bg-black rounded-t-3xl overflow-hidden shrink-0">
-            <img id="modal-image" class="w-full h-full object-cover opacity-60" src="">
-            <button onclick="closeModal()" class="absolute top-4 right-4 bg-black/50 w-8 h-8 rounded-full">✕</button>
-        </div>
-        <div class="p-6 flex-1 overflow-y-auto">
-            <h2 id="modal-title" class="text-xl font-black text-white uppercase mb-2"></h2>
-            <p id="modal-desc" class="text-xs text-gray-400 mb-6"></p>
-            <div id="tiers-list" class="space-y-2"></div>
+    <!-- Product Modal -->
+    <div id="product-modal" class="fixed inset-0 z-[60] bg-black/90 hidden flex items-end sm:items-center justify-center backdrop-blur-sm p-0 sm:p-4">
+        <div id="modal-content" class="bg-[#111] w-full max-w-sm h-[85vh] sm:h-auto sm:max-h-[80vh] sm:rounded-2xl rounded-t-3xl border-t border-[--border] shadow-2xl flex flex-col transform translate-y-full transition-transform duration-300">
+            <div class="relative w-full h-56 bg-black shrink-0 sm:rounded-t-2xl overflow-hidden">
+                <video id="modal-video" class="w-full h-full object-cover hidden" loop muted playsinline autoplay onerror="handleVideoError(this)"></video>
+                <img id="modal-image" class="w-full h-full object-cover hidden transition-opacity duration-500" src="" alt="Product">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#111] to-transparent"></div>
+                <button onclick="closeModal()" class="absolute top-4 right-4 bg-black/50 text-white w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-md z-10">✕</button>
+            </div>
+            <div class="p-6 flex-1 overflow-y-auto no-scrollbar">
+                <div class="flex justify-between items-start mb-2">
+                    <div class="flex items-center gap-3">
+                        <h2 id="modal-title" class="text-xl font-black text-white uppercase brand-font"></h2>
+                        <img id="modal-brand-logo" src="" class="h-6 w-auto hidden" alt="Brand Logo">
+                    </div>
+                    <button onclick="toggleModalFav()" id="modal-fav-btn" class="text-2xl transition-transform active:scale-90">🤍</button>
+                </div>
+                <span id="modal-tag" class="text-[9px] font-bold bg-[--accent-dim] text-[--accent] px-2 py-1 rounded uppercase border border-[--accent]/20 inline-block mb-3"></span>
+                <p id="modal-desc" class="text-xs text-gray-400 mb-6 leading-relaxed whitespace-pre-line"></p>
+                
+                <div id="modal-variants-container" class="mb-4 hidden">
+                    <p class="text-[10px] font-bold text-gray-500 uppercase mb-2 tracking-widest">SÉLECTIONNER VARIÉTÉ</p>
+                    <div id="modal-variants-list" class="flex flex-wrap gap-2 mb-4"></div>
+                </div>
+
+                <p class="text-[10px] font-bold text-gray-500 uppercase mb-3 tracking-widest">SÉLECTIONNER QUANTITÉ</p>
+                <div id="tiers-list" class="space-y-2"></div>
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-    const CONFIG = {
-        ADMIN: "33759840764",
-        CURRENCY: "€"
-    };
-
-    let cart = [];
-
-    // --- LOGIQUE TICKER ---
-    async function updateTicker() {
-        const el = document.getElementById('live-ticker');
-        const comms = [
-            '<span class="ticker-item">🔒 CRYPTO = 0 TRACE BANCAIRE</span>',
-            '<span class="ticker-item">📉 PRIX DÉGRESSIFS AUTO</span>',
-            '<span class="ticker-item">⚡ LIVRAISON 24/48H</span>'
-        ];
-        
-        try {
-            const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=eur&include_24hr_change=true');
-            const data = await res.json();
-            const btc = data.bitcoin;
-            comms.push(`<span class="ticker-item">BTC: <span class="text-white">${Math.floor(btc.eur)}€</span> <span class="${btc.eur_24h_change >= 0 ? 'ticker-up' : 'ticker-down'}">${btc.eur_24h_change.toFixed(1)}%</span></span>`);
-        } catch(e) {}
-        
-        el.innerHTML = comms.join('').repeat(3);
-    }
-
-    // --- ROUTER ---
-    function router(view) {
-        const main = document.getElementById('main-view');
-        // Reset nav opacity
-        ['menu', 'products', 'cart', 'infos'].forEach(id => {
-            document.getElementById('nav-' + id).style.opacity = '0.5';
-        });
-        document.getElementById('nav-' + view).style.opacity = '1';
-
-        if(view === 'menu') renderMenu();
-        if(view === 'products') renderProducts();
-        if(view === 'cart') renderCart();
-        if(view === 'infos') renderInfos();
-    }
-
-    const CATALOG = [
-        {
-            id: 'WZ-ALL', name: "Olives Wizard Treez - Frozen Sift 🧊", 
-            desc: "🇺🇸 CALI CONNECTION EXCLUSIVE 🇺🇸\nFROZEN SIFT PREMIUM - COLD CURED STORAGE\nVariétés: Honey Banana, Dream Queen, Forbidden Fruits...",
-            image: "https://res.cloudinary.com/dlmmylat6/image/upload/v1765993841/IMG_2073_ffmyfd.jpg",
-            tiers: [{w:'5G (1/2)',p:80},{w:'10G (1)',p:170}]
-        },
-        {
-            id: 'PK', name: "Pink Kush 🇺🇸", 
-            desc: "Import Cali Top Shelf. Puissance et arômes garantis.",
-            image: "https://res.cloudinary.com/dlmmylat6/image/upload/v1765419450/Sans_titre_Bannie%CC%80re_moyenne_US_Paysage_1_gpbddu.png",
-            tiers: [{w:'5G',p:60},{w:'10G',p:120},{w:'25G',p:220}]
-        }
-    ];
-
-    function renderMenu() {
-        document.getElementById('main-view').innerHTML = `
-            <div class="titanium-card p-5 mb-4">
-                <h2 class="brand-font text-xl font-black mb-2 uppercase italic text-orange-500">Bienvenue au QG</h2>
-                <p class="text-xs text-gray-400">Sélectionne tes produits et valide ta commande en quelques clics via Telegram.</p>
+    <!-- Upsell Modal -->
+    <div id="upsell-modal" class="fixed inset-0 z-[80] bg-black/95 hidden flex items-center justify-center backdrop-blur-md p-4">
+        <div class="bg-[#111] border border-purple-500/50 w-full max-w-sm rounded-2xl p-5 relative overflow-hidden">
+             <div class="flex justify-between items-start mb-4">
+                <h2 class="text-xl font-black text-white brand-font italic">OFFRE FLASH ⚡</h2>
+                <button onclick="closeUpsell()" class="text-gray-500">✕</button>
             </div>
-            <div class="grid grid-cols-1 gap-4">
-                <div class="titanium-card p-4 flex justify-between items-center" onclick="router('products')">
-                    <span class="font-bold">VOIR LE MENU COMPLET</span>
-                    <span>➡️</span>
+            <div class="flex gap-4 mb-4">
+                <div class="w-20 h-20 rounded-lg bg-black overflow-hidden shrink-0 border border-purple-500/30">
+                    <video src="https://res.cloudinary.com/dlmmylat6/video/upload/v1764906290/06AECEF5-7C0A-493C-9588-99433B454A4E_2_1_hnlzee.mov" class="w-full h-full object-cover" autoplay loop muted></video>
                 </div>
-            </div>
-        `;
-    }
-
-    function renderProducts() {
-        let html = CATALOG.map(p => `
-            <div class="titanium-card overflow-hidden flex flex-col" onclick="openModal('${p.id}')">
-                <img src="${p.image}" class="h-32 w-full object-cover">
-                <div class="p-4">
-                    <h3 class="font-black text-sm uppercase">${p.name}</h3>
-                    <div class="flex justify-between items-center mt-2">
-                        <span class="text-[10px] text-gray-500 uppercase tracking-widest">À partir de</span>
-                        <span class="text-orange-500 font-bold">${p.tiers[0].p}€</span>
+                <div>
+                    <h3 class="text-sm font-bold text-white uppercase">Cali Pink Kush 🇺🇸</h3>
+                    <p class="text-[10px] text-gray-400 mb-2">+3G de Top Shelf pour votre commande.</p>
+                    <div class="flex items-center gap-2">
+                        <span class="text-lg font-black text-green-400">20€</span>
+                        <span class="text-xs text-gray-500 line-through">45€</span>
                     </div>
                 </div>
             </div>
-        `).join('');
-        document.getElementById('main-view').innerHTML = `<div class="grid grid-cols-2 gap-3">${html}</div>`;
-    }
+            <button onclick="addUpsell()" class="w-full py-3 bg-purple-600 text-white font-black rounded-xl text-xs tracking-widest">AJOUTER À MON PANIER 🔥</button>
+        </div>
+    </div>
 
-    function openModal(id) {
-        const p = CATALOG.find(x => x.id === id);
-        document.getElementById('modal-title').innerText = p.name;
-        document.getElementById('modal-desc').innerText = p.desc;
-        document.getElementById('modal-image').src = p.image;
-        
-        let tiersHtml = p.tiers.map(t => `
-            <button onclick="addToCart('${p.id}', '${t.w}', ${t.p})" class="w-full bg-white/5 border border-white/10 p-3 rounded-xl flex justify-between items-center hover:bg-orange-500/20 transition-colors">
-                <span class="font-bold">${t.w}</span>
-                <span class="text-orange-500 font-black">${t.p}€</span>
-            </button>
-        `).join('');
-        
-        document.getElementById('tiers-list').innerHTML = tiersHtml;
-        document.getElementById('product-modal').classList.remove('hidden');
-        setTimeout(() => document.getElementById('modal-content').style.transform = 'translateY(0)', 10);
-    }
+    <!-- UI Message -->
+    <div id="ui-message-modal" class="fixed inset-0 z-[100] bg-black/80 hidden flex items-center justify-center p-4">
+        <div class="titanium-card p-6 w-full max-w-xs text-center border-l-4 border-l-red-500">
+            <h3 id="ui-message-title" class="text-lg font-black brand-font mb-2 text-red-400">Erreur</h3>
+            <p id="ui-message-body" class="text-sm text-gray-300 mb-4"></p>
+            <button onclick="document.getElementById('ui-message-modal').classList.add('hidden')" class="btn-main py-2 px-4 text-xs font-bold w-full">Compris</button>
+        </div>
+    </div>
 
-    function closeModal() {
-        document.getElementById('modal-content').style.transform = 'translateY(100%)';
-        setTimeout(() => document.getElementById('product-modal').classList.add('hidden'), 300);
-    }
+</div>
 
-    function addToCart(id, weight, price) {
-        const p = CATALOG.find(x => x.id === id);
-        cart.push({ name: p.name, weight, price });
-        document.getElementById('cart-dot').classList.remove('hidden');
-        closeModal();
-    }
+<script>
+    const CONFIG = { 
+        ADMIN: "33759840764", 
+        CURRENCY: "€"
+    };
 
-    function renderCart() {
-        if(cart.length === 0) {
-            document.getElementById('main-view').innerHTML = `<div class="text-center py-20 opacity-30 font-bold">PANIER VIDE</div>`;
-            return;
+    const _d = s => { try { return decodeURIComponent(escape(atob(s))); } catch { return s; } };
+
+    let cart = [];
+    let favorites = JSON.parse(localStorage.getItem('sv_favs') || '[]');
+    let currentModalId = null;
+    let selectedVariant = null;
+    let bannerInterval = null;
+
+    // --- DATA ---
+    const CATALOG = [
+        {
+            id: 'WZ-ALL', name: "Olives Wizard Treez - Frozen Sift 🧊🧙‍♀️", category: _d('U3VubnkgVmFsbGV5'), icon: '🧙‍♀️',
+            desc: "🇺🇸 CALI CONNECTION EXCLUSIVE 🇺🇸\n\nLE TERROIR WIZARD TREEZ DÉBARQUE !\n\n5 STRAINS LÉGENDAIRES :\n🍌 Honey Banana, 👑 DREAM Queen, 🍇 Forbidden Fruits, 🍏 Apple GELATO, 🍩 OG DONUTZ\n\n🧊 FROZEN SIFT PREMIUM", 
+            tag: "WIZARD TREEZ",
+            video: "", 
+            images: ["https://res.cloudinary.com/dlmmylat6/image/upload/v1765993841/IMG_2073_ffmyfd.jpg"],
+            tiers: [{w:'5G (1/2)',p:80},{w:'10G (1)',p:170}],
+            variants: ["Honey Banana", "DREAM Queen", "Forbidden Fruits", "Apple GELATO", "OG DONUTZ"],
+            logo: "https://res.cloudinary.com/dlmmylat6/image/upload/v1766008859/IMG_2087_vgvu2p.png"
+        },
+        {
+            id: 'PK', name: _d('UGluayBLdXNo'), category: _d('U3VubnkgVmFsbGV5'), icon: '🧬', 
+            desc: "Import Cali 🇺🇸. Taux THC 34%. Terpènes explosifs. La référence Top Shelf.", tag: "TOP SHELF",
+            video: "https://res.cloudinary.com/dlmmylat6/video/upload/v1764906290/06AECEF5-7C0A-493C-9588-99433B454A4E_2_1_hnlzee.mov",
+            tiers: [{w:'5G',p:60},{w:'10G',p:120},{w:'25G',p:220},{w:'100G',p:640}]
+        },
+        {
+            id: 'MC', name: _d('TU9OVMOJIENSSVNUTw=='), category: _d('U25vdyBWYWxsZXk='), icon: '🏔️',
+            desc: "Origine Bolivie 🇧🇴. Pureté exceptionnelle (0.98%). Une expérience unique.", tag: "DIAMOND",
+            video: "https://res.cloudinary.com/dlmmylat6/video/upload/v1764906305/IMG_1629_ntkjra.mp4",
+            tiers: [{w:'1G',p:60},{w:'2G',p:120},{w:'5G',p:260}]
         }
-        let total = cart.reduce((sum, item) => sum + item.price, 0);
-        let itemsHtml = cart.map((item, idx) => `
-            <div class="flex justify-between items-center bg-white/5 p-3 rounded-lg border border-white/5">
-                <div>
-                    <div class="text-xs font-bold uppercase">${item.name}</div>
-                    <div class="text-[10px] text-gray-500">${item.weight}</div>
-                </div>
-                <div class="flex items-center gap-4">
-                    <span class="font-bold text-orange-500">${item.price}€</span>
-                    <button onclick="removeItem(${idx})" class="text-red-500 text-xs">✕</button>
-                </div>
-            </div>
-        `).join('');
+    ];
 
-        document.getElementById('main-view').innerHTML = `
-            <h2 class="brand-font font-black mb-4">TON PANIER</h2>
-            <div class="space-y-3 mb-6">${itemsHtml}</div>
-            <div class="titanium-card p-4">
-                <div class="flex justify-between mb-4">
-                    <span class="text-gray-400">TOTAL</span>
-                    <span class="text-xl font-black text-orange-500">${total}€</span>
-                </div>
-                <button onclick="checkout()" class="btn-main w-full py-4">VALIDER SUR TELEGRAM</button>
-            </div>
-        `;
-    }
-
-    function removeItem(idx) {
-        cart.splice(idx, 1);
-        if(cart.length === 0) document.getElementById('cart-dot').classList.add('hidden');
-        renderCart();
-    }
-
-    function checkout() {
-        let text = "🚨 NOUVELLE COMMANDE 🚨\n\n";
-        cart.forEach(i => text += `▪️ ${i.name} - ${i.weight} (${i.price}€)\n`);
-        text += `\n💰 TOTAL: ${cart.reduce((sum, item) => sum + item.price, 0)}€`;
-        
-        const url = `https://wa.me/${CONFIG.ADMIN}?text=${encodeURIComponent(text)}`;
-        // Ici on peut aussi rediriger vers Telegram si tu as un bot ou lien direct
-        window.open(url, '_blank');
-    }
-
-    function renderInfos() {
-        document.getElementById('main-view').innerHTML = `
-            <div class="space-y-4">
-                <div class="titanium-card p-4">
-                    <h3 class="font-bold text-orange-500 mb-2">📦 LIVRAISON</h3>
-                    <p class="text-xs text-gray-400">Expédition discrète 24/48h. Suivi fourni dès l'envoi.</p>
-                </div>
-                <div class="titanium-card p-4">
-                    <h3 class="font-bold text-blue-400 mb-2">₿ PAIEMENT CRYPTO</h3>
-                    <p class="text-xs text-gray-400">Nous acceptons BTC, LTC et USDT. Zéro trace sur ton relevé bancaire.</p>
-                </div>
-            </div>
-        `;
-    }
-
-    // --- INIT ---
     window.onload = () => {
         const tg = window.Telegram?.WebApp;
-        // Protection: Uniquement si dans Telegram (initData présent)
-        const isSecure = (tg && tg.initData && tg.initData.length > 0) || location.hostname === 'localhost';
-
-        if (!isSecure) {
+        if (!tg || tg.initData.length === 0) {
             document.getElementById('intro-layer').style.display = 'none';
             document.getElementById('access-denied-screen').classList.remove('hidden');
             return;
         }
-
-        if(tg) {
-            tg.expand();
-            tg.ready();
-        }
-
+        
+        tg.expand();
         updateTicker();
-        document.getElementById('status-text').innerText = "OPÉRATIONNEL";
+        setInterval(updateTicker, 60000);
 
         setTimeout(() => {
             document.getElementById('intro-layer').style.opacity = '0';
@@ -404,8 +281,209 @@
                 document.getElementById('app-container').classList.remove('hidden');
                 router('menu');
             }, 800);
-        }, 2500);
+        }, 1500);
     };
+
+    function router(view, data) {
+        const main = document.getElementById('main-view');
+        document.querySelectorAll('nav button').forEach(b => b.classList.add('opacity-50'));
+        document.getElementById(`nav-${view === 'products' ? 'products' : view}`)?.classList.remove('opacity-50');
+        
+        main.innerHTML = '';
+        if(view === 'menu') renderMenu(main);
+        else if(view === 'products') renderProducts(main, data);
+        else if(view === 'cart') renderCart(main);
+        else if(view === 'infos') renderInfos(main);
+    }
+
+    function renderMenu(c) {
+        c.innerHTML = `
+            <div class="titanium-card p-6 mb-4 fade-in text-center border-t-2 border-[--accent]" onclick="router('products', _d('U3VubnkgVmFsbGV5'))">
+                <h2 class="text-3xl font-black brand-font text-white mb-2">SUNNY VALLEY</h2>
+                <p class="text-[10px] text-gray-500 uppercase tracking-[0.3em]">Cali Connect • Top Shelf</p>
+            </div>
+            <div class="titanium-card p-6 mb-4 fade-in text-center border-t-2 border-blue-500" onclick="router('products', _d('U25vdyBWYWxsZXk='))">
+                <h2 class="text-3xl font-black brand-font text-white mb-2">SNOW VALLEY</h2>
+                <p class="text-[10px] text-gray-500 uppercase tracking-[0.3em]">Diamond Purity • 0.98%</p>
+            </div>
+        `;
+    }
+
+    function renderProducts(c, catName) {
+        const items = CATALOG.filter(p => !catName || p.category === catName);
+        items.forEach(p => {
+            const card = document.createElement('div');
+            card.className = "titanium-card overflow-hidden flex flex-col fade-in cursor-pointer active:scale-[0.98] transition-transform";
+            card.onclick = () => openProduct(p.id);
+            card.innerHTML = `
+                <div class="h-32 bg-zinc-900 relative">
+                    <img src="${p.images ? p.images[0] : ''}" class="w-full h-full object-cover opacity-60">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
+                    <span class="absolute bottom-2 left-3 text-[8px] font-black bg-[--accent] text-black px-2 py-0.5 rounded">${p.tag}</span>
+                </div>
+                <div class="p-3">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-sm text-white uppercase">${p.name}</h3>
+                        <span class="text-xs">àpd ${p.tiers[0].p}€</span>
+                    </div>
+                </div>
+            `;
+            c.appendChild(card);
+        });
+    }
+
+    function openProduct(id) {
+        const p = CATALOG.find(x => x.id === id);
+        currentModalId = id;
+        selectedVariant = p.variants ? p.variants[0] : null;
+
+        const modal = document.getElementById('product-modal');
+        const content = document.getElementById('modal-content');
+        
+        document.getElementById('modal-title').innerText = p.name;
+        document.getElementById('modal-desc').innerText = p.desc;
+        document.getElementById('modal-tag').innerText = p.tag;
+
+        const vid = document.getElementById('modal-video');
+        const img = document.getElementById('modal-image');
+        
+        if(p.video) {
+            vid.src = p.video; vid.classList.remove('hidden'); img.classList.add('hidden');
+        } else {
+            img.src = p.images[0]; img.classList.remove('hidden'); vid.classList.add('hidden');
+        }
+
+        // Variants
+        const varCont = document.getElementById('modal-variants-container');
+        const varList = document.getElementById('modal-variants-list');
+        if(p.variants) {
+            varCont.classList.remove('hidden');
+            varList.innerHTML = p.variants.map(v => `<button onclick="setVariant('${v}')" class="variant-btn px-3 py-2 text-[10px] font-bold rounded-lg border ${selectedVariant === v ? 'border-[--accent] bg-[--accent]/10 text-white' : 'border-[#222] text-gray-500'}">${v}</button>`).join('');
+        } else {
+            varCont.classList.add('hidden');
+        }
+
+        // Tiers
+        const tiersList = document.getElementById('tiers-list');
+        tiersList.innerHTML = p.tiers.map(t => `
+            <div onclick="addToCart('${p.id}', '${t.w}', ${t.p})" class="flex justify-between items-center p-4 bg-black/40 border border-[#222] rounded-xl active:bg-[--accent]/20 transition-colors">
+                <span class="font-bold text-white">${t.w}</span>
+                <span class="font-black text-[--accent]">${t.p}€</span>
+            </div>
+        `).join('');
+
+        modal.classList.remove('hidden');
+        setTimeout(() => content.style.transform = 'translateY(0)', 10);
+    }
+
+    function setVariant(v) {
+        selectedVariant = v;
+        const btns = document.querySelectorAll('.variant-btn');
+        btns.forEach(b => {
+            if(b.innerText === v) {
+                b.className = "variant-btn px-3 py-2 text-[10px] font-bold rounded-lg border border-[--accent] bg-[--accent]/10 text-white";
+            } else {
+                b.className = "variant-btn px-3 py-2 text-[10px] font-bold rounded-lg border border-[#222] text-gray-500";
+            }
+        });
+    }
+
+    function addToCart(id, weight, price) {
+        const p = CATALOG.find(x => x.id === id);
+        const itemName = selectedVariant ? `${p.name} (${selectedVariant})` : p.name;
+        cart.push({ id, itemName, weight, price });
+        updateCartCount();
+        closeModal();
+        if(window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+    }
+
+    function updateCartCount() {
+        const el = document.getElementById('cart-count');
+        el.innerText = cart.length;
+        el.classList.toggle('hidden', cart.length === 0);
+    }
+
+    function renderCart(c) {
+        if(cart.length === 0) {
+            c.innerHTML = `<div class="text-center py-20 text-gray-500"><p>Votre panier est vide.</p></div>`;
+            return;
+        }
+        let total = cart.reduce((s, i) => s + i.price, 0);
+        c.innerHTML = `
+            <h2 class="text-2xl font-black text-white brand-font uppercase mb-6">Mon Panier</h2>
+            <div class="space-y-3 mb-6">
+                ${cart.map((item, idx) => `
+                    <div class="titanium-card p-4 flex justify-between items-center">
+                        <div>
+                            <p class="font-bold text-sm text-white">${item.itemName}</p>
+                            <p class="text-[10px] text-gray-500">${item.weight}</p>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <span class="font-bold text-[--accent]">${item.price}€</span>
+                            <button onclick="removeFromCart(${idx})" class="text-red-500 text-lg">✕</button>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+            <div class="titanium-card p-4 flex justify-between items-center mb-6">
+                <span class="font-black text-white uppercase">Total</span>
+                <span class="text-xl font-black text-white">${total}€</span>
+            </div>
+            <button onclick="checkout()" class="btn-main w-full py-4 text-sm tracking-widest">VALIDER MA COMMANDE</button>
+        `;
+    }
+
+    function removeFromCart(idx) {
+        cart.splice(idx, 1);
+        renderCart(document.getElementById('main-view'));
+        updateCartCount();
+    }
+
+    function checkout() {
+        let text = "Salut la team ! Voici ma commande South Valley :\n\n";
+        cart.forEach(i => text += `• ${i.itemName} | ${i.weight} | ${i.price}€\n`);
+        text += `\n💰 TOTAL : ${cart.reduce((s, x) => s + x.price, 0)}€\n\nMerci de me donner les instructions de livraison !`;
+        window.open(`https://wa.me/${CONFIG.ADMIN}?text=${encodeURIComponent(text)}`);
+    }
+
+    function closeModal() {
+        const content = document.getElementById('modal-content');
+        content.style.transform = 'translateY(100%)';
+        setTimeout(() => document.getElementById('product-modal').classList.add('hidden'), 300);
+    }
+
+    function updateTicker() {
+        const el = document.getElementById('live-ticker');
+        const msgs = [
+            '<span class="ticker-item">🔒 CRYPTO = 0 TRACE</span>',
+            '<span class="ticker-item">📉 PRIX DÉGRESSIFS AUTO</span>',
+            '<span class="ticker-item">⚡ LIVRAISON 24/48H</span>'
+        ];
+        el.innerHTML = (msgs.join('')).repeat(5);
+    }
+
+    function renderInfos(c) {
+        c.innerHTML = `
+            <h2 class="text-2xl font-black text-white brand-font mb-6 uppercase">Infos & Support</h2>
+            <div class="grid grid-cols-2 gap-3 mb-6">
+                <a href="https://t.me/SouthValleyCenter" target="_blank" class="titanium-card p-6 flex flex-col items-center gap-2 border-blue-500/30">
+                    <span class="text-2xl">📢</span>
+                    <span class="text-[9px] font-black uppercase text-blue-400">Canal News</span>
+                </a>
+                <a href="https://wa.me/${CONFIG.ADMIN}" target="_blank" class="titanium-card p-6 flex flex-col items-center gap-2 border-green-500/30">
+                    <span class="text-2xl">💬</span>
+                    <span class="text-[9px] font-black uppercase text-green-400">Support 24/7</span>
+                </a>
+            </div>
+            <div class="titanium-card p-5">
+                <h3 class="font-black text-white uppercase text-sm mb-3">Modes de Paiement</h3>
+                <p class="text-[11px] text-gray-400 leading-relaxed">
+                    Nous acceptons les Crypto-monnaies (LTC, BTC, USDT) pour une discrétion totale. Les paiements en espèces sont disponibles uniquement pour les meet-ups validés.
+                </p>
+            </div>
+        `;
+    }
 </script>
+
 </body>
 </html>
