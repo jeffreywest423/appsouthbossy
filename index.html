@@ -112,6 +112,10 @@
             position: relative; width: 140px; height: 140px;
             display: flex; justify-content: center; align-items: center;
         }
+        .logo-img {
+            width: 100%; height: 100%; object-fit: contain;
+            filter: drop-shadow(0 0 0px transparent);
+            animation: goldenPulse 3s infinite ease-in-out;
         /* ✨ LOGO ANIMATION SEQUENCE */
         .logo-sequence {
             position: absolute;
@@ -146,6 +150,8 @@
             animation: textFadeIn 1s ease-out forwards 1s;
         }
 
+        @keyframes logoFadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        @keyframes goldenPulse { 0% { filter: drop-shadow(0 0 0px transparent); } 50% { filter: drop-shadow(0 0 15px rgba(245, 158, 11, 0.4)); } 100% { filter: drop-shadow(0 0 0px transparent); } }
         @keyframes lineExpand { 0% { width: 0; opacity: 0; } 50% { opacity: 1; } 100% { width: 150px; opacity: 0; } }
         @keyframes textFadeIn { to { opacity: 1; } }
 
@@ -158,8 +164,6 @@
         #confetti-canvas { z-index: 200; } 
         .snowflake { position: absolute; color: white; opacity: 0.5; animation: fall linear infinite; font-size: 10px; }
         @keyframes fall { to { transform: translateY(105vh); } }
-        /* Confetti Only */
-        #confetti-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 200; } 
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -178,9 +182,12 @@
 <!-- 🚨 SECURITY LAYERS -->
 <div id="panic-screen" class="hidden fixed inset-0 z-[200] bg-black flex items-center justify-center"><h1 class="text-red-600 font-mono">CONNECTION LOST</h1></div>
 <div id="maintenance-screen" class="hidden fixed inset-0 z-[150] bg-black flex items-center justify-center"><h1 class="text-xl font-bold text-red-600">SYSTEM OFFLINE</h1></div>
+<!-- TWA GATEKEEPER SCREEN -->
 
 <!-- TWA GATEKEEPER SCREEN (BLOCKAGE) -->
 <div id="access-denied-screen" class="hidden fixed inset-0 z-[200] bg-black flex flex-col items-center justify-center text-center p-8">
+    <h1 class="text-3xl font-black brand-font text-red-600 mb-4">ACCÈS REFUSÉ</h1>
+    <p class="text-xs text-gray-500 max-w-sm">Ce service est exclusivement réservé aux utilisateurs de Telegram Web App. Veuillez ouvrir l'application via le lien fourni par votre contact sécurisé.</p>
     <div class="w-20 h-20 bg-red-900/20 rounded-full flex items-center justify-center mb-6 border border-red-900/50">
         <span class="text-4xl">🛡️</span>
     </div>
@@ -228,7 +235,6 @@
                 </div>
             </div>
             <div class="text-xl opacity-80 animate-pulse">🎅</div>
-            <div class="text-xl opacity-80 animate-pulse text-[--accent]">⚡</div>
         </div>
 
         <!-- 🔥 MARKET TICKER 2.0 (SAFE) -->
@@ -243,7 +249,6 @@
     <main id="main-view" class="flex-1 overflow-y-auto px-4 py-6 space-y-6">
         <!-- Dynamic Content -->
     </main>
-        </main>
 
     <!-- NAV BAR -->
     <nav class="nav-glass fixed bottom-0 w-full h-16 pb-safe z-50 flex justify-around items-center px-2">
@@ -396,15 +401,6 @@
 
 <script>
     const CONFIG = { ADMIN: "33759840764", CURRENCY: "€", MAINTENANCE: false };
-    // ⚠️ CONFIGURATION PRINCIPALE ⚠️
-    // Remplace le numéro ci-dessous par ton nouveau numéro (sans le +)
-    // Exemple: "33712345678"
-    const CONFIG = { 
-        ADMIN: "33759840764", // <--- METS TON NOUVEAU NUMÉRO ICI
-        CURRENCY: "€", 
-        MAINTENANCE: false 
-    };
-
     const _d = s => { try { return decodeURIComponent(escape(atob(s))); } catch { return s; } };
 
     // --- STATE ---
@@ -436,15 +432,18 @@
             return; 
         }
 
+        const isTWA = window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData;
+        const isDev = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
         // 🚀 GHOST PROTOCOL ACTIVATED: STRICT GATEKEEPER
         const tg = window.Telegram?.WebApp;
-
+        
         // Check if running inside Telegram WebApp
         // initData must be present (it's the payload signed by Telegram)
         const isSecure = tg && tg.initData.length > 0;
 
+        if (!isTWA && !isDev && !document.referrer) {
+            // Gatekeeper logic
         // OPTIONAL: Allow localhost for YOUR dev testing only (Comment out for Production)
-        // DEV MODE (Comment for production)
         // const isDev = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
         // if (!isSecure && !isDev) { 
 
@@ -454,11 +453,9 @@
             document.getElementById('app-container').remove(); // Destroy App DOM
             document.getElementById('access-denied-screen').classList.remove('hidden'); // Show Block Screen
             return; // Stop execution
-            document.getElementById('app-container').remove(); 
-            document.getElementById('access-denied-screen').classList.remove('hidden'); 
-            return; 
         }
 
+        console.log("✅ Gatekeeper: Acc\u00e8s autoris\u00e9.");
         console.log("✅ Gatekeeper: Secure TWA Connection.");
         if(tg) tg.expand();
 
@@ -467,6 +464,7 @@
         setInterval(checkStatus, 60000); 
         setInterval(updateTicker, 60000); 
 
+        // INTRO (Minimalist)
         // INTRO
         setTimeout(() => {
             document.getElementById('intro-layer').style.transition = 'opacity 0.8s ease';
@@ -476,23 +474,19 @@
                 document.getElementById('app-container').classList.remove('hidden');
                 router('menu');
                 initSnow();
-                // Snow removed for freshness
             }, 800);
         }, 2000);
 
         initPanic();
+        if(window.Telegram?.WebApp) window.Telegram.WebApp.expand();
     };
 
     // --- TICKER (MARKETING VICIEUX) ---
-    // --- TICKER ---
     async function updateTicker() {
         const el = document.getElementById('live-ticker');
         const msg1 = '<span class="ticker-item"><span class="ticker-icon">🔒</span> CRYPTO PAIEMENT = 0 TRACE BANCAIRE</span>';
         const msg2 = '<span class="ticker-item"><span class="ticker-icon">📉</span> GROS VOLUMES = PRIX DÉGRESSIFS AUTOMATIQUES</span>';
         const msg3 = '<span class="ticker-item"><span class="ticker-icon">⚡</span> LIVRAISON 24/48H GARANTIE</span>';
-        const msg1 = '<span class="ticker-item"><span class="ticker-icon">🔒</span> CRYPTO = 0 TRACE</span>';
-        const msg2 = '<span class="ticker-item"><span class="ticker-icon">📉</span> PRIX DÉGRESSIFS AUTO</span>';
-        const msg3 = '<span class="ticker-item"><span class="ticker-icon">⚡</span> LIVRAISON 24/48H</span>';
         const comms = [msg1, msg2, msg3];
 
         let cryptoHtml = '';
@@ -574,8 +568,6 @@
         {
             id: 'MC', name: _d('TU9OVMOJIENSSVNUTw=='), category: _d('U25vdyBWYWxsZXk='), icon: '❄️',
             desc: "Origine Bolivie 🇧🇴. Pureté exceptionnelle (0.98%). Une expérience givrée unique.", tag: "DIAMOND",
-            id: 'MC', name: _d('TU9OVMOJIENSSVNUTw=='), category: _d('U25vdyBWYWxsZXk='), icon: '🏔️',
-            desc: "Origine Bolivie 🇧🇴. Pureté exceptionnelle (0.98%). Une expérience unique.", tag: "DIAMOND",
             video: "https://res.cloudinary.com/dlmmylat6/video/upload/v1764906305/IMG_1629_ntkjra.mp4",
             tiers: [{w:'1G',p:60},{w:'2G',p:120},{w:'3G',p:160},{w:'5G',p:260},{w:'10G',p:400},{w:'50G',p:1500},{w:'100G',p:2800}]
         }
@@ -584,10 +576,8 @@
     const REVIEWS = [
         { name: "Client 01821", txt: "Du caviar la Monté CRISTO, merci la team ! 🙏" },
         { name: "Client 01544", txt: "Service rapide de nuit, la Cali c'est du lourd ❄️" },
-        { name: "Client 01544", txt: "Service rapide de nuit, la Cali c'est du lourd ⚡" },
         { name: "Client 01634", txt: "Meet-up 92 carré, servie au gramme près. 👍" },
         { name: "Client 02983", txt: "Validé fort, je recommande pour les fêtes. 🙏" },
-        { name: "Client 02983", txt: "Validé fort, je recommande. 🙏" },
         { name: "Client 02718", txt: "Livraison rapide, discret, produits top. 📦" }
     ];
 
@@ -627,7 +617,6 @@
                         <div class="absolute inset-0 z-20 flex flex-col justify-center px-8">
                             <div class="flex items-center gap-2 mb-3">
                                 <span class="text-[9px] bg-[--accent] text-black font-black px-2.5 py-1 rounded shadow-[0_0_15px_rgba(245,158,11,0.2)] tracking-widest uppercase">Offre Noël</span>
-                                <span class="text-[9px] bg-[--accent] text-black font-black px-2.5 py-1 rounded shadow-[0_0_15px_rgba(245,158,11,0.2)] tracking-widest uppercase">Offre Limitée</span>
                                 <span class="text-[10px] animate-pulse">🎁</span>
                             </div>
                             <h2 class="text-3xl font-black text-white uppercase brand-font leading-none tracking-tight mb-4">South <span class="text-transparent bg-clip-text bg-gradient-to-r from-[--accent] to-[#ffeeb0]">Valley</span></h2>
@@ -660,7 +649,6 @@
         const cats = [
             { name: _d('U3VubnkgVmFsbGV5'), sub: "CALI CONNECT • TOP SHELF • EXOTIC", icon: "☀️" },
             { name: _d('U25vdyBWYWxsZXk='), sub: "Festivité - Expérience givrée garantie", icon: "❄️" }
-            { name: _d('U25vdyBWYWxsZXk='), sub: "Produits de Pureté Garantie", icon: "❄️" }
         ];
 
         let catsHtml = '';
@@ -789,7 +777,6 @@
         let introText = "";
         if(category.includes("Sunny")) introText = "💎 SÉLECTION EXCLUSIVE CALIFORNIA. Direct from Farms. Terpènes validés, génétiques rares et connexions officielles. Le soleil en pochon.";
         else if(category.includes("Snow")) introText = "❄️ Menu Festif - Exclusivités givrées & pureté garantie ! Sélection premium & validée ! 🥳";
-        else if(category.includes("Snow")) introText = "❄️ Menu Select - Pureté garantie et arrivages frais !";
 
         c.innerHTML = `
             <div class="flex items-center gap-3 mb-4 fade-in">
@@ -863,16 +850,6 @@
 
     function renderCheckout(c) {
         const total = cart.reduce((a,b) => a+b.price, 0);
-        
-        // --- UX AUTOFILL ---
-        // 1. Get User from Telegram
-        const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
-        const prefillName = tgUser ? (tgUser.first_name + (tgUser.last_name ? ' ' + tgUser.last_name : '')) : '';
-        
-        // 2. Get saved data from LocalStorage
-        const savedWA = localStorage.getItem('sv_user_wa') || '';
-        const savedAddr = localStorage.getItem('sv_user_addr') || '';
-
         c.innerHTML = `
             <button onclick="router('cart')" class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-6">← Retour</button>
             <h2 class="text-2xl font-black text-white uppercase brand-font mb-6">Validation</h2>
@@ -892,9 +869,6 @@
                     <input id="in-name" type="text" placeholder="NOM / PSEUDO" class="w-full bg-black border border-[--border] text-white text-xs p-3 rounded focus:border-[--accent] outline-none">
                     <input id="in-wa" type="text" placeholder="WHATSAPP (OBLIGATOIRE)" class="w-full bg-black border border-[--border] border-l-2 border-l-[--accent] text-white text-xs p-3 rounded focus:border-white outline-none">
                     <div id="address-container"><input id="in-addr" type="text" placeholder="ADRESSE / LIEU" class="w-full bg-black border border-[--border] text-white text-xs p-3 rounded focus:border-[--accent] outline-none"></div>
-                    <input id="in-name" type="text" placeholder="NOM / PSEUDO" value="${prefillName}" class="w-full bg-black border border-[--border] text-white text-xs p-3 rounded focus:border-[--accent] outline-none">
-                    <input id="in-wa" type="text" placeholder="WHATSAPP (OBLIGATOIRE)" value="${savedWA}" class="w-full bg-black border border-[--border] border-l-2 border-l-[--accent] text-white text-xs p-3 rounded focus:border-white outline-none">
-                    <div id="address-container"><input id="in-addr" type="text" placeholder="ADRESSE / LIEU" value="${savedAddr}" class="w-full bg-black border border-[--border] text-white text-xs p-3 rounded focus:border-[--accent] outline-none"></div>
                     <div id="time-container"><label id="time-label" class="text-[9px] font-bold text-gray-500 uppercase block mt-2 mb-1">Préférence Horaire</label><input id="in-time" type="text" placeholder="Heure souhaitée..." class="w-full bg-black border border-[--border] text-white text-xs p-3 rounded focus:border-[--accent] outline-none"></div>
                 </div>
                 <div class="titanium-card p-4">
@@ -1147,10 +1121,6 @@
 
         if(window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
 
-        // --- UX SAVE DATA ---
-        localStorage.setItem('sv_user_wa', wa);
-        if(srv !== 'MEET') localStorage.setItem('sv_user_addr', addr);
-        
         const code = "SV-" + Math.floor(1000 + Math.random() * 9000);
         const list = cart.map(i => `${i.name} (${i.weight})`).join('\n');
         const total = cart.reduce((a,b) => a+b.price, 0);
