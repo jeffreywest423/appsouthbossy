@@ -2,345 +2,1149 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>South Valley QG</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Service Gateway</title> 
+    <meta name="description" content="Error 404">
+    <meta name="robots" content="noindex, nofollow, noochive">
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
     <style>
+        /* --- IDENTITY --- */
         :root {
-            --accent: #f59e0b;
-            --accent-dim: rgba(245, 158, 11, 0.1);
-            --bg: #000000;
-            --card: #0a0a0a;
-            --border: #1a1a1a;
-            --text-main: #ffffff;
-            --text-dim: #888888;
+            --bg-deep: #050505;
+            --bg-card: #111111;
+            --accent: #F59E0B;
+            --accent-dim: rgba(245, 158, 11, 0.15);
+            --text-main: #FFFFFF;
+            --text-muted: #9CA3AF;
+            --border: #222222;
         }
 
-        * { -webkit-tap-highlight-color: transparent; outline: none; box-sizing: border-box; }
-        body { 
-            background-color: var(--bg); 
-            color: var(--text-main); 
-            font-family: 'Inter', sans-serif; 
-            margin: 0; padding: 0; 
-            overflow: hidden; 
-            height: 100vh;
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
 
-        .brand-font { font-family: 'Archivo Black', sans-serif; }
-        .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
-        
+        h1, h2, h3, .brand-font { font-family: 'Montserrat', sans-serif; letter-spacing: -0.02em; }
+        .mono-font { font-family: 'JetBrains Mono', monospace; }
+
+        /* --- UI COMPONENTS --- */
+        .titanium-card {
+            background: linear-gradient(145deg, #151515, #0a0a0a);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+        }
+
         .nav-glass {
-            background: rgba(10, 10, 10, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(12px);
             border-top: 1px solid var(--border);
         }
 
-        .titanium-card {
-            background: linear-gradient(145deg, #0f0f0f, #050505);
-            border: 1px solid var(--border);
-            border-radius: 16px;
+        .btn-main {
+            background: linear-gradient(to right, #F59E0B, #D97706);
+            color: black;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+            border-radius: 10px;
+            transition: transform 0.1s;
+        }
+        .btn-main:active { transform: scale(0.98); }
+
+        .btn-upsell {
+            background: linear-gradient(to right, #ec4899, #8b5cf6);
+            color: white;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: 0 0 15px rgba(236, 72, 153, 0.4);
+            border-radius: 10px;
         }
 
-        /* Ticker */
-        .ticker-wrap {
-            width: 100%; overflow: hidden; height: 24px;
-            background: #050505; border-bottom: 1px solid #111;
-            display: flex; align-items: center;
+        /* --- MARKET TICKER --- */
+        .marquee-container {
+            overflow: hidden;
+            white-space: nowrap;
+            background: #080808;
+            border-bottom: 1px solid #222;
+            padding: 8px 0;
+            position: relative;
         }
-        .ticker-move {
-            display: flex; white-space: nowrap;
-            animation: tickerMove 40s linear infinite;
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 30s linear infinite;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: #ccc;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        @keyframes tickerMove { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        .ticker-item { display: inline-flex; align-items: center; padding: 0 20px; font-size: 9px; font-weight: 900; color: #555; }
+        .ticker-item { margin-right: 40px; display: inline-flex; align-items: center; gap: 8px; }
+        .ticker-icon { color: var(--accent); }
+        .ticker-val { color: #fff; font-weight: bold; }
+        .ticker-down { color: #ef4444; }
+        .ticker-up { color: #10b981; }
 
-        /* Intro layer */
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* --- INTRO PRESTIGE --- */
         #intro-layer {
-            position: fixed; inset: 0; z-index: 999;
-            background: #000; display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            transition: opacity 0.8s ease;
+            position: fixed; inset: 0; z-index: 100;
+            background: black;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
         }
-
         .logo-container {
             position: relative; width: 140px; height: 140px;
             display: flex; justify-content: center; align-items: center;
         }
+        /* ✨ LOGO ANIMATION SEQUENCE */
         .logo-sequence {
-            position: absolute; width: 100%; height: 100%;
-            border: 2px solid var(--accent); border-radius: 50%;
-            animation: ringPulse 2s infinite ease-in-out;
+            position: absolute;
+            width: 100%; height: 100%;
+            object-fit: contain;
+            opacity: 0;
+            animation: logoCycle 4s infinite ease-in-out;
         }
-        @keyframes ringPulse { 0% { transform: scale(0.8); opacity: 0; } 50% { opacity: 0.5; } 100% { transform: scale(1.2); opacity: 0; } }
+        .logo-sequence:nth-child(1) { animation-delay: 0s; }
+        .logo-sequence:nth-child(2) { animation-delay: 1.3s; }
+        .logo-sequence:nth-child(3) { animation-delay: 2.6s; }
 
+        @keyframes logoCycle {
+            0% { opacity: 0; transform: scale(0.9); }
+            10% { opacity: 1; transform: scale(1); filter: drop-shadow(0 0 15px rgba(245, 158, 11, 0.4)); }
+            30% { opacity: 1; transform: scale(1); }
+            40% { opacity: 0; transform: scale(1.1); }
+            100% { opacity: 0; }
+        }
+
+        .loading-line {
+            width: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            margin-top: 40px;
+            animation: lineExpand 2s ease-out forwards 0.5s;
+        }
+        .intro-text {
+            margin-top: 16px; font-family: 'Montserrat', sans-serif;
+            font-size: 10px; color: #666; letter-spacing: 0.3em;
+            text-transform: uppercase; opacity: 0;
+            animation: textFadeIn 1s ease-out forwards 1s;
+        }
+
+        @keyframes lineExpand { 0% { width: 0; opacity: 0; } 50% { opacity: 1; } 100% { width: 150px; opacity: 0; } }
+        @keyframes textFadeIn { to { opacity: 1; } }
+
+        /* --- ANIMATIONS --- */
         .fade-in { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .btn-main {
-            background: var(--accent); color: #000;
-            border-radius: 12px; font-weight: 900;
-            transition: all 0.2s;
-            text-transform: uppercase;
-        }
-        .btn-main:active { transform: scale(0.95); }
-        
+        /* Confetti Only */
+        #confetti-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 200; } 
+
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Select custom arrow */
+        select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+        }
     </style>
 </head>
-<body>
+<body class="antialiased">
 
-<div id="intro-layer">
-    <div class="logo-container">
-        <div class="logo-sequence"></div>
-        <div class="text-center z-10">
-            <h1 class="text-4xl font-black text-white brand-font tracking-tighter">S<span class="text-[--accent]">V</span></h1>
-            <p class="text-[8px] tracking-[0.3em] font-bold text-gray-500 mt-2">SECURE GATEWAY</p>
-        </div>
+<div id="panic-screen" class="hidden fixed inset-0 z-[200] bg-black flex items-center justify-center"><h1 class="text-red-600 font-mono">CONNECTION LOST</h1></div>
+<div id="maintenance-screen" class="hidden fixed inset-0 z-[150] bg-black flex items-center justify-center"><h1 class="text-xl font-bold text-red-600">SYSTEM OFFLINE</h1></div>
+
+<div id="access-denied-screen" class="hidden fixed inset-0 z-[200] bg-black flex flex-col items-center justify-center text-center p-8">
+    <div class="w-20 h-20 bg-red-900/20 rounded-full flex items-center justify-center mb-6 border border-red-900/50">
+        <span class="text-4xl">🛡️</span>
+    </div>
+    <h1 class="text-2xl font-black brand-font text-red-600 mb-4 tracking-widest uppercase">ACCÈS REFUSÉ</h1>
+    <p class="text-xs text-gray-500 max-w-sm font-mono leading-relaxed">
+        CONNEXION NON SÉCURISÉE DÉTECTÉE.<br>
+        CE PORTAIL EST ACCESSIBLE UNIQUEMENT VIA LE RÉSEAU TELEGRAM CHIFFRÉ.
+    </p>
+    <div class="mt-8 border-t border-white/5 pt-4">
+        <p class="text-[9px] text-gray-600 uppercase tracking-widest">Error Code: TWA_REQUIRED_0x99</p>
     </div>
 </div>
 
-<div id="app-container" class="hidden h-screen flex flex-col max-w-md mx-auto relative bg-black">
-    
-    <div class="ticker-wrap shrink-0">
-        <div class="ticker-move" id="live-ticker"></div>
+<div id="intro-layer">
+    <div class="logo-container relative">
+        <img src="https://res.cloudinary.com/dlmmylat6/image/upload/v1765067656/Sans_titre_Logo_wjtljl.png" class="logo-img" alt="SV">
     </div>
+    <div class="loading-line"></div>
+    <p class="intro-text">Secure Access</p>
+</div>
 
-    <header class="px-4 py-4 flex justify-between items-center border-bottom border-[#111] shrink-0 bg-black/50 backdrop-blur-md">
-        <div class="flex items-center gap-2">
-            <div class="w-2 h-2 rounded-full bg-[--accent] shadow-[0_0_8px_var(--accent)]"></div>
-            <h1 class="text-xs font-black text-white uppercase tracking-wider brand-font">South Valley QG</h1>
+<div id="app-container" class="hidden flex flex-col h-screen pb-20 overflow-hidden">
+
+    <div class="fixed inset-0 z-[-2]">
+        <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/90 to-black"></div>
+        <div class="w-full h-full object-cover opacity-20 bg-[url('https://res.cloudinary.com/dlmmylat6/image/upload/v1765419450/Sans_titre_Bannie%CC%80re_moyenne_US_Paysage_1_gpbddu.png')] bg-cover bg-center" onerror="this.style.backgroundImage='none'; this.style.backgroundColor='#0a0a0a';"></div>
+    </div>
+    <canvas id="confetti-canvas"></canvas>
+
+    <header class="bg-black/80 backdrop-blur-md z-40 shrink-0 border-b border-white/5">
+        <div class="h-14 px-5 flex items-center justify-between">
+            <div class="flex items-center gap-3" onclick="router('menu')">
+                <img src="https://res.cloudinary.com/dlmmylat6/image/upload/v1765067656/Sans_titre_Logo_wjtljl.png" onerror="this.style.display='none';" class="h-10 w-auto drop-shadow-[0_0_10px_rgba(245,158,11,0.5)]">
+                <div>
+                    <h1 class="text-xs font-black text-white uppercase tracking-wider brand-font">South Valley</h1>
+                    <div class="flex items-center gap-1.5" id="shop-status">
+                        <div id="status-dot" class="w-1.5 h-1.5 rounded-full bg-gray-500"></div>
+                        <span id="status-text" class="text-[8px] font-bold text-gray-400 uppercase tracking-widest">Chargement...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="text-xl opacity-80 animate-pulse text-[--accent]">⚡</div>
         </div>
-        <div class="flex items-center gap-1.5 bg-[#111] px-3 py-1.5 rounded-full border border-white/5">
-            <div id="status-dot" class="w-1.5 h-1.5 rounded-full bg-green-500"></div>
-            <span id="status-text" class="text-[8px] font-bold text-gray-400 uppercase tracking-widest">Opérationnel</span>
+
+        <div class="marquee-container">
+            <div class="marquee-content" id="live-ticker">
+                <span class="ticker-item">INITIALISATION FLUX MARCHÉ...</span>
+            </div>
         </div>
     </header>
 
-    <main id="main-view" class="flex-1 overflow-y-auto px-4 py-6 space-y-6 no-scrollbar"></main>
+    <main id="main-view" class="flex-1 overflow-y-auto px-4 py-6 space-y-6">
+        </main>
+    <main id="main-view" class="flex-1 overflow-y-auto px-4 py-6 space-y-6"></main>
 
     <nav class="nav-glass fixed bottom-0 w-full h-16 pb-safe z-50 flex justify-around items-center px-2">
-        <button onclick="router('menu')" id="nav-menu" class="flex flex-col items-center justify-center w-16 transition-all">
-            <span class="text-xl">🏠</span>
-            <span class="text-[9px] font-bold uppercase tracking-wide">Accueil</span>
+        <button onclick="router('menu')" id="nav-menu" class="flex flex-col items-center justify-center w-16 opacity-50 transition-all">
+            <span class="text-xl mb-1">🏠</span>
+            <span class="text-[9px] font-bold uppercase tracking-wide">QG</span>
         </button>
         <button onclick="router('products')" id="nav-products" class="flex flex-col items-center justify-center w-16 opacity-50 transition-all">
-            <span class="text-xl">🌿</span>
+            <span class="text-xl mb-1">📋</span>
             <span class="text-[9px] font-bold uppercase tracking-wide">Menu</span>
         </button>
-        <button onclick="router('cart')" id="nav-cart" class="relative flex flex-col items-center justify-center w-16 opacity-50 transition-all">
-            <span class="text-xl">🛒</span>
+        <button onclick="router('cart')" id="nav-cart" class="flex flex-col items-center justify-center w-16 opacity-50 transition-all relative">
+            <div class="relative">
+                <span class="text-xl mb-1">🛍️</span>
+                <span id="cart-dot" class="absolute -top-1 -right-1 w-2 h-2 bg-[--accent] rounded-full hidden"></span>
+            </div>
             <span class="text-[9px] font-bold uppercase tracking-wide">Panier</span>
-            <div id="cart-count" class="absolute -top-1 right-2 bg-[--accent] text-black text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center hidden">0</div>
         </button>
         <button onclick="router('infos')" id="nav-infos" class="flex flex-col items-center justify-center w-16 opacity-50 transition-all">
-            <span class="text-xl">📦</span>
+            <span class="text-xl mb-1">📡</span>
             <span class="text-[9px] font-bold uppercase tracking-wide">Infos</span>
         </button>
     </nav>
 
-    <!-- Product Modal -->
-    <div id="product-modal" class="fixed inset-0 z-[60] bg-black/90 hidden flex items-end sm:items-center justify-center backdrop-blur-sm">
-        <div id="modal-content" class="bg-[#111] w-full max-w-sm h-[85vh] sm:rounded-2xl rounded-t-3xl border-t border-[--border] shadow-2xl flex flex-col transform translate-y-full transition-transform duration-300">
+    <div id="product-modal" class="fixed inset-0 z-[60] bg-black/90 hidden flex items-end sm:items-center justify-center backdrop-blur-sm p-0 sm:p-4">
+        <div id="modal-content" class="bg-[#111] w-full max-w-sm h-[85vh] sm:h-auto sm:max-h-[80vh] sm:rounded-2xl rounded-t-3xl border-t border-[--border] shadow-2xl flex flex-col transform translate-y-full transition-transform duration-300">
             <div class="relative w-full h-56 bg-black shrink-0 sm:rounded-t-2xl overflow-hidden">
-                <img id="modal-image" class="w-full h-full object-cover" src="" alt="Product">
+                <video id="modal-video" class="w-full h-full object-cover hidden" loop muted playsinline autoplay onerror="handleVideoError(this)"></video>
+                <img id="modal-image" class="w-full h-full object-cover hidden transition-opacity duration-500" src="" alt="Product">
                 <div class="absolute inset-0 bg-gradient-to-t from-[#111] to-transparent"></div>
                 <button onclick="closeModal()" class="absolute top-4 right-4 bg-black/50 text-white w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-md z-10">✕</button>
             </div>
-            <div class="p-6 flex-1 overflow-y-auto no-scrollbar">
-                <h2 id="modal-title" class="text-xl font-black text-white uppercase brand-font mb-1"></h2>
+            <div class="p-6 flex-1 overflow-y-auto">
+                <div class="flex justify-between items-start mb-2">
+                    <div class="flex items-center gap-3">
+                        <h2 id="modal-title" class="text-xl font-black text-white uppercase brand-font"></h2>
+                        <img id="modal-brand-logo" src="" class="h-6 w-auto hidden" alt="Brand Logo">
+                    </div>
+                    <button onclick="toggleModalFav()" id="modal-fav-btn" class="text-2xl transition-transform active:scale-90">🤍</button>
+                </div>
                 <span id="modal-tag" class="text-[9px] font-bold bg-[--accent-dim] text-[--accent] px-2 py-1 rounded uppercase border border-[--accent]/20 inline-block mb-3"></span>
                 <p id="modal-desc" class="text-xs text-gray-400 mb-6 leading-relaxed whitespace-pre-line"></p>
+                <div id="modal-variants" class="mb-4 hidden"></div>
+                <p class="text-[10px] font-bold text-gray-500 uppercase mb-3 tracking-widest">SÉLECTIONNER QUANTITÉ</p>
                 <div id="tiers-list" class="space-y-2"></div>
             </div>
+        </div>
+    </div>
+
+    <div id="upsell-modal" class="fixed inset-0 z-[80] bg-black/95 hidden flex items-center justify-center backdrop-blur-md p-4">
+        <div class="bg-gradient-to-br from-[#1a1a1a] to-black border border-purple-500/50 w-full max-w-sm rounded-2xl p-1 relative overflow-hidden shadow-[0_0_50px_rgba(168,85,247,0.2)]">
+            <div class="bg-[#050505] rounded-xl p-5 relative overflow-hidden">
+                <div class="absolute -top-10 -right-10 w-32 h-32 bg-purple-600 blur-[60px] opacity-20"></div>
+                <div class="flex justify-between items-start mb-4">
+                    <div class="flex items-center gap-2">
+                        <span class="text-lg animate-pulse">⚡</span>
+                        <h2 class="text-xl font-black text-white uppercase brand-font italic">OFFRE FLASH</h2>
+                    </div>
+                    <button onclick="closeUpsell()" class="text-gray-500 hover:text-white">✕</button>
+                </div>
+                <div class="flex gap-4 mb-4">
+                    <div class="w-20 h-20 rounded-lg bg-black border border-purple-500/30 overflow-hidden shrink-0">
+                        <video src="https://res.cloudinary.com/dlmmylat6/video/upload/v1764906290/06AECEF5-7C0A-493C-9588-99433B454A4E_2_1_hnlzee.mov" class="w-full h-full object-cover" autoplay loop muted></video>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-white uppercase leading-tight mb-1">Cali Pink Kush 🇺🇸</h3>
+                        <p class="text-[10px] text-gray-400 mb-2">Ajoutez 3G de Top Shelf à votre commande pour une misère.</p>
+                        <div class="flex items-center gap-2">
+                            <span class="text-lg font-black text-green-400">20€</span>
+                            <span class="text-xs text-gray-500 line-through">45€</span>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="addUpsell()" class="btn-upsell w-full py-3 text-xs tracking-widest flex items-center justify-center gap-2"><span>AJOUTER (+20€)</span><span class="text-lg">🔥</span></button>
+                <button onclick="closeUpsell()" class="w-full py-2 text-[10px] text-gray-500 font-bold uppercase mt-2 hover:text-white transition-colors">Non merci, je refuse l'offre</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="promo-modal" class="fixed inset-0 z-[70] bg-black/95 hidden flex items-center justify-center backdrop-blur-md p-4">
+        <div class="bg-[#151515] border border-[--accent] w-full max-w-sm rounded-2xl p-6 relative overflow-hidden shadow-[0_0_30px_rgba(245,158,11,0.1)]">
+            <div class="absolute top-0 right-0 p-4">
+                <button onclick="closePromo()" class="text-gray-500 hover:text-white">✕</button>
+            </div>
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-[--accent-dim] rounded-full flex items-center justify-center mx-auto mb-4 border border-[--accent]/30">
+                    <span class="text-3xl">🎁</span>
+                </div>
+                <h2 class="text-xl font-black text-white uppercase brand-font mb-2">CERCLE PRIVÉ</h2>
+                <div class="h-0.5 w-12 bg-[--accent] mx-auto rounded-full"></div>
+            </div>
+            <div class="space-y-4 text-center">
+                <p class="text-sm text-gray-300 leading-relaxed">
+                    Invitez un ami à rejoindre le QG. Dès sa première commande validée, vous recevez :
+                </p>
+                <div class="bg-black/40 border border-[#333] p-4 rounded-xl space-y-2">
+                    <p class="text-white font-bold text-sm flex items-center justify-center gap-2">
+                        <span class="text-[--accent]">💍</span> 10€ à 20€ de REMISE
+                    </p>
+                    <p class="text-xs text-gray-500 font-mono uppercase">OU</p>
+                    <p class="text-white font-bold text-sm flex items-center justify-center gap-2">
+                        <span class="text-[--accent]">🌿</span> 1G à 2G OFFERTS
+                    </p>
+                </div>
+                <p class="text-[10px] text-gray-500 italic">Offre valable pour tout nouveau client parrainé qui consomme.</p>
+                <button onclick="copyPromo()" class="btn-main w-full py-3 text-xs tracking-widest mt-2">COPIER MON CODE</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="crypto-modal" class="fixed inset-0 z-[70] bg-black/95 hidden flex items-center justify-center backdrop-blur-md p-4">
+        <div class="bg-[#151515] border border-blue-500/50 w-full max-w-sm rounded-2xl p-6 relative overflow-hidden shadow-[0_0_30px_rgba(59,130,246,0.1)]">
+            <div class="absolute top-0 right-0 p-4">
+                <button onclick="document.getElementById('crypto-modal').classList.add('hidden')" class="text-gray-500 hover:text-white">✕</button>
+            </div>
+            <h2 class="text-xl font-black text-white uppercase brand-font mb-4 text-center">Paiement 30 Sec ⚡</h2>
+            <div class="space-y-4">
+                <div class="flex gap-3">
+                    <div class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-xs">1</div>
+                    <p class="text-xs text-gray-300">Téléchargez une app fiable comme <span class="text-white font-bold">MoonPay, Exodus ou Binance</span>.</p>
+                </div>
+                <div class="flex gap-3">
+                    <div class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-xs">2</div>
+                    <p class="text-xs text-gray-300">Achetez du <span class="text-white font-bold">LTC (Litecoin)</span> ou BTC avec votre Carte Bancaire. C'est instantané.</p>
+                </div>
+                <div class="flex gap-3">
+                    <div class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-xs">3</div>
+                    <p class="text-xs text-gray-300">Envoyez le montant exact à l'adresse que nous fournissons lors de la validation.</p>
+                </div>
+                <div class="bg-blue-500/10 p-3 rounded border border-blue-500/20 text-center">
+                    <p class="text-[10px] text-blue-300 font-bold uppercase">🔐 Zéro mention sur votre relevé bancaire. 100% Safe.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="ui-message-modal" class="fixed inset-0 z-[90] bg-black/80 hidden flex items-center justify-center p-4">
+        <div class="titanium-card p-6 w-full max-w-xs text-center border-l-4 border-l-red-500">
+            <h3 id="ui-message-title" class="text-lg font-black brand-font mb-2 text-red-400">Erreur</h3>
+            <p id="ui-message-body" class="text-sm text-gray-300 mb-4"></p>
+            <button onclick="document.getElementById('ui-message-modal').classList.add('hidden')" class="btn-main py-2 px-4 text-xs font-bold bg-red-600 hover:bg-red-700">Compris</button>
         </div>
     </div>
 </div>
 
 <script>
+    // ⚠️ CONFIGURATION PRINCIPALE ⚠️
     const CONFIG = { 
-        ADMIN: "33759840764", 
-        CURRENCY: "€"
+        ADMIN: "33757849093", // ✅ NUMÉRO RECTIFIÉ (+33 7 57 84 90 93)
+        ADMIN: "33759840764", // ✅ NOUVEAU NUMÉRO (+33 7 59 84 07 64)
+        CURRENCY: "€", 
+        MAINTENANCE: false 
     };
 
+    const _d = s => { try { return decodeURIComponent(escape(atob(s))); } catch { return s; } };
+
+    // --- STATE ---
     let cart = [];
+    let favorites = JSON.parse(localStorage.getItem('sv_favs') || '[]');
+    let currentModalId = null;
+    let carouselInterval = null;
+    let bannerInterval = null;
+    let upsellShown = false;
 
-    const CATALOG = [
-        {
-            id: 'WZ-ALL', name: "Wizard Treez 🧊", category: "Sunny Valley", tag: "FROZEN SIFT",
-            desc: "IMPORT CALI EXCLUSIF.\n\n5 Strains: Honey Banana, Dream Queen, Forbidden Fruits, Apple Gelato, OG Donutz.",
-            images: ["https://res.cloudinary.com/dlmmylat6/image/upload/v1765993841/IMG_2073_ffmyfd.jpg"],
-            tiers: [{w:'5G',p:80},{w:'10G',p:170}]
-        },
-        {
-            id: 'PK', name: "Pink Kush 🧬", category: "Sunny Valley", tag: "TOP SHELF",
-            desc: "Taux THC 34%. Terpènes explosifs. La référence Top Shelf.",
-            images: ["https://res.cloudinary.com/dlmmylat6/image/upload/v1765993841/IMG_2073_ffmyfd.jpg"],
-            tiers: [{w:'5G',p:60},{w:'10G',p:120}]
-        },
-        {
-            id: 'MC', name: "Monte Cristo 🏔️", category: "Snow Valley", tag: "DIAMOND",
-            desc: "Origine Bolivie 🇧🇴. Pureté exceptionnelle (0.98%).",
-            images: ["https://res.cloudinary.com/dlmmylat6/image/upload/v1765993841/IMG_2073_ffmyfd.jpg"],
-            tiers: [{w:'1G',p:60},{w:'2G',p:120}]
+    // --- UTILS UI ---
+    function showUIMessage(title, body) {
+        document.getElementById('ui-message-title').innerText = title;
+        document.getElementById('ui-message-body').innerText = body;
+        document.getElementById('ui-message-modal').classList.remove('hidden');
+        if(window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.notificationOccurred('error');
+    }
+
+    function handleVideoError(videoElement) {
+        if(!videoElement.classList.contains('hidden')) {
+             videoElement.style.display = 'none';
         }
-    ];
+    }
 
+    // --- INIT ---
     window.onload = () => {
-        // Animation d'intro forcée même hors Telegram
+        if(CONFIG.MAINTENANCE) { 
+            document.getElementById('maintenance-screen').classList.remove('hidden'); 
+            return; 
+        }
+        
+        // 🚀 GHOST PROTOCOL ACTIVATED: STRICT GATEKEEPER
+        const tg = window.Telegram?.WebApp;
+        
+        const isSecure = tg && tg.initData.length > 0;
+        
+        // DEV MODE (Comment for production)
+        // const isDev = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+        // if (!isSecure && !isDev) { 
+
+        if (!isSecure) {
+            document.getElementById('intro-layer').style.display = 'none';
+            document.getElementById('app-container').remove(); 
+            document.getElementById('access-denied-screen').classList.remove('hidden'); 
+            return; 
+        }
+
+        console.log("✅ Gatekeeper: Secure TWA Connection.");
+        if(tg) tg.expand();
+
+        checkStatus();
         updateTicker();
+        setInterval(checkStatus, 60000); 
+        setInterval(updateTicker, 60000); 
+
+        // INTRO
         setTimeout(() => {
+            document.getElementById('intro-layer').style.transition = 'opacity 0.8s ease';
             document.getElementById('intro-layer').style.opacity = '0';
             setTimeout(() => {
                 document.getElementById('intro-layer').style.display = 'none';
                 document.getElementById('app-container').classList.remove('hidden');
                 router('menu');
             }, 800);
-        }, 1500);
+        }, 2000);
+
+        initPanic();
     };
 
-    function router(view, data) {
-        const main = document.getElementById('main-view');
-        document.querySelectorAll('nav button').forEach(b => b.classList.add('opacity-50'));
-        document.getElementById(`nav-${view === 'products' ? 'products' : view}`)?.classList.remove('opacity-50');
+    // --- TICKER ---
+    async function updateTicker() {
+        const el = document.getElementById('live-ticker');
+        const msg1 = '<span class="ticker-item"><span class="ticker-icon">🔒</span> CRYPTO = 0 TRACE</span>';
+        const msg2 = '<span class="ticker-item"><span class="ticker-icon">📉</span> PRIX DÉGRESSIFS AUTO</span>';
+        const msg3 = '<span class="ticker-item"><span class="ticker-icon">⚡</span> LIVRAISON 24/48H</span>';
+        const comms = [msg1, msg2, msg3];
         
+        let cryptoHtml = '';
+        try {
+            const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=eur&include_24hr_change=true');
+            const data = await res.json();
+            const formatCoin = (coin, name) => {
+                const price = data[coin].eur;
+                const change = data[coin].eur_24h_change;
+                const arrow = change >= 0 ? '▲' : '▼';
+                const color = change >= 0 ? 'ticker-up' : 'ticker-down';
+                return `<span class="ticker-item">${name}: <span class="ticker-val">${Math.floor(price)}${CONFIG.CURRENCY}</span> <span class="${color} text-[8px]">${arrow} ${Math.abs(change).toFixed(1)}%</span></span>`;
+            };
+            cryptoHtml = formatCoin('bitcoin', 'BTC') + formatCoin('ethereum', 'ETH') + formatCoin('tether', 'USDT');
+        } catch (e) {
+            cryptoHtml = '<span class="ticker-item">BTC/ETH/USDT ACCEPTÉS</span>';
+        }
+        el.innerHTML = (comms.join('') + cryptoHtml).repeat(2); 
+    }
+
+    function checkStatus() {
+        const now = new Date();
+        const h = now.getHours();
+        const isOpen = (h >= 10 && h < 24) || (h >= 0 && h < 3); 
+        const dot = document.getElementById('status-dot');
+        const text = document.getElementById('status-text');
+        
+        if(isOpen) {
+            dot.className = "w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_#22c55e]";
+            text.innerText = "OPÉRATIONNEL";
+            text.className = "text-[8px] font-bold text-green-500 uppercase tracking-widest";
+        } else {
+            dot.className = "w-1.5 h-1.5 rounded-full bg-red-500";
+            text.innerText = "FERMÉ (RETOUR 10:00)";
+            text.className = "text-[8px] font-bold text-red-500 uppercase tracking-widest";
+        }
+    }
+
+    // --- DATA ---
+    const TIERS_WIZARD = [{w:'5G (1/2)',p:80},{w:'10G (1)',p:170}];
+
+    const CATALOG = [
+        // --- 2. SUNNY VALLEY
+        {
+            id: 'WZ-ALL', name: "Olives Wizard Treez - Frozen Sift 🧊🧙‍♀️", category: _d('U3VubnkgVmFsbGV5'), icon: '🧙‍♀️',
+            desc: "🇺🇸 CALI CONNECTION EXCLUSIVE 🇺🇸\n\nLE TERROIR WIZARD TREEZ DÉBARQUE !\n\n5 STRAINS LÉGENDAIRES RÉUNIES :\n🍌 Honey Banana\n👑 DREAM Queen\n🍇 Forbidden Fruits\n🍏 Apple GELATO\n🍩 OG DONUTZ\n\n🧊 FROZEN SIFT PREMIUM\n🌡️ COLD CURED STORAGE\n🍬 TERPS EXPLOSIFS\n\n⚠️ STOCK ULTRA LIMITÉ - PREMIER ARRIVÉ PREMIER SERVI !", tag: "WIZARD TREEZ",
+            video: "https://res.cloudinary.com/dlmmylat6/image/upload/v1765993841/IMG_2073_ffmyfd.jpg", 
+            images: [
+                "https://res.cloudinary.com/dlmmylat6/image/upload/v1765993841/IMG_2073_ffmyfd.jpg",
+                "https://res.cloudinary.com/dlmmylat6/image/upload/v1765993836/IMG_2063_obzpid.jpg",
+                "https://res.cloudinary.com/dlmmylat6/image/upload/v1765993835/IMG_2071_hlq6qq.jpg",
+                "https://res.cloudinary.com/dlmmylat6/image/upload/v1765993835/IMG_2070_s2i4im.jpg",
+                "https://res.cloudinary.com/dlmmylat6/image/upload/v1765993834/IMG_2072_ppyr6d.jpg"
+            ],
+            tiers: TIERS_WIZARD,
+            variants: ["Honey Banana", "DREAM Queen", "Forbidden Fruits", "Apple GELATO", "OG DONUTZ"],
+            logo: "https://res.cloudinary.com/dlmmylat6/image/upload/v1766008859/IMG_2087_vgvu2p.png"
+        },
+        {
+            id: 'PK', name: _d('UGluayBLdXNo'), category: _d('U3VubnkgVmFsbGV5'), icon: '🧬', 
+            desc: "Import Cali 🇺🇸. Taux THC 34%. Terpènes explosifs. La référence Top Shelf.", tag: "TOP SHELF",
+            video: "https://res.cloudinary.com/dlmmylat6/video/upload/v1764906290/06AECEF5-7C0A-493C-9588-99433B454A4E_2_1_hnlzee.mov",
+            tiers: [{w:'5G',p:60},{w:'10G',p:120},{w:'25G',p:220},{w:'50G',p:360},{w:'100G',p:640},{w:'500G',p:2900}]
+        },
+        {
+            id: 'SM', name: _d('U2ltcHNvbnMgTW91c3Nl'), category: _d('U3VubnkgVmFsbGV5'), icon: '🧽', 
+            desc: "La référence Mousseux 2025. Texture parfaite. Rapport Qualité/Prix imbattable.", tag: "REF 2025",
+            video: "https://res.cloudinary.com/dlmmylat6/video/upload/v1764906298/IMG_1715_rtit70.mp4",
+            tiers: [{w:'10G',p:60},{w:'20G',p:100},{w:'50G',p:170},{w:'100G',p:350}]
+        },
+        {
+            id: 'XM', name: _d('WGFsZSBNb3Vzc2U='), category: _d('U3VubnkgVmFsbGV5'), icon: '🧽', 
+            desc: "Top jaune mousseux. Classique efficace.", tag: "LIMITÉ",
+            video: "https://res.cloudinary.com/dlmmylat6/video/upload/v1764906313/IMG_1819_i4ipsf.mp4",
+            tiers: [{w:'10G',p:60},{w:'20G',p:100},{w:'50G',p:160},{w:'100G',p:340}]
+        },
+
+        // 3. SNOW VALLEY
+        {
+            id: 'MC', name: _d('TU9OVMOJIENSSVNUTw=='), category: _d('U25vdyBWYWxsZXk='), icon: '🏔️',
+            desc: "Origine Bolivie 🇧🇴. Pureté exceptionnelle (0.98%). Une expérience unique.", tag: "DIAMOND",
+            video: "https://res.cloudinary.com/dlmmylat6/video/upload/v1764906305/IMG_1629_ntkjra.mp4",
+            tiers: [{w:'1G',p:60},{w:'2G',p:120},{w:'3G',p:160},{w:'5G',p:260},{w:'10G',p:400},{w:'50G',p:1500},{w:'100G',p:2800}]
+        }
+    ];
+
+    const REVIEWS = [
+        { name: "Client 01821", txt: "Du caviar la Monté CRISTO, merci la team ! 🙏" },
+        { name: "Client 01544", txt: "Service rapide de nuit, la Cali c'est du lourd ⚡" },
+        { name: "Client 01634", txt: "Meet-up 92 carré, servie au gramme près. 👍" },
+        { name: "Client 02983", txt: "Validé fort, je recommande. 🙏" },
+        { name: "Client 02718", txt: "Livraison rapide, discret, produits top. 📦" }
+    ];
+
+    // --- ROUTER ---
+    function router(view, data) {
+        if(window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+        if(bannerInterval) clearInterval(bannerInterval);
+        const main = document.getElementById('main-view');
+        main.scrollTop = 0;
+        
+        document.querySelectorAll('nav button').forEach(b => {
+            b.classList.add('opacity-50'); b.classList.remove('text-[--accent]', 'opacity-100');
+        });
+        const active = document.getElementById(`nav-${view === 'products' ? 'products' : view}`);
+        if(active) active.classList.add('text-[--accent]', 'opacity-100');
+        if(active) active.classList.remove('opacity-50');
+
         main.innerHTML = '';
         if(view === 'menu') renderMenu(main);
         else if(view === 'products') renderProducts(main, data);
-        else if(view === 'cart') renderCart(main);
         else if(view === 'infos') renderInfos(main);
+        else if(view === 'cart') renderCart(main);
+        else if(view === 'checkout') renderCheckout(main);
+        else if(view === 'success') renderSuccess(main, data);
     }
 
+    // --- VIEWS ---
     function renderMenu(c) {
-        c.innerHTML = `
-            <div class="titanium-card p-6 mb-4 fade-in text-center border-t-2 border-[--accent]" onclick="router('products', 'Sunny Valley')">
-                <h2 class="text-3xl font-black brand-font text-white mb-2 uppercase">Sunny Valley</h2>
-                <p class="text-[10px] text-gray-500 uppercase tracking-[0.3em]">Cali Connect • Top Shelf</p>
-            </div>
-            <div class="titanium-card p-6 mb-4 fade-in text-center border-t-2 border-blue-500" onclick="router('products', 'Snow Valley')">
-                <h2 class="text-3xl font-black brand-font text-white mb-2 uppercase">Snow Valley</h2>
-                <p class="text-[10px] text-gray-500 uppercase tracking-[0.3em]">Diamond Purity • 0.98%</p>
+        // Banner Logic
+        const bannerHtml = `
+            <div id="home-banner" class="relative h-48 rounded-2xl overflow-hidden border border-[#222] shadow-2xl mb-6 fade-in cursor-pointer active:scale-[0.98] transition-all duration-300 group">
+                <div id="banner-track" class="absolute inset-0 flex h-full transition-transform duration-700 ease-in-out" style="width: 200%;">
+                    <div class="w-1/2 h-full relative shrink-0" onclick="openPromo()">
+                        <div class="absolute inset-0 bg-gradient-to-br from-[#121212] via-[#050505] to-[#0a0a0a]"></div>
+                        <div class="absolute -top-12 -right-12 w-48 h-48 bg-[--accent] opacity-[0.08] blur-[60px] rounded-full group-hover:opacity-[0.15] transition-opacity duration-700"></div>
+                        <div class="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-[--accent]/5 to-transparent opacity-50"></div>
+                        <div class="absolute inset-0 z-20 flex flex-col justify-center px-8">
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="text-[9px] bg-[--accent] text-black font-black px-2.5 py-1 rounded shadow-[0_0_15px_rgba(245,158,11,0.2)] tracking-widest uppercase">Offre Limitée</span>
+                                <span class="text-[10px] animate-pulse">🎁</span>
+                            </div>
+                            <h2 class="text-3xl font-black text-white uppercase brand-font leading-none tracking-tight mb-4">South <span class="text-transparent bg-clip-text bg-gradient-to-r from-[--accent] to-[#ffeeb0]">Valley</span></h2>
+                            <div class="flex items-center gap-3 border-l-2 border-[#333] pl-3 group-hover:border-[--accent] transition-colors duration-500">
+                                <p class="text-[10px] text-gray-400 font-medium leading-relaxed uppercase tracking-wide">Parrainage Exclusif <br><span class="text-white font-bold text-xs">1 Ami Validé = 1G Offert</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-1/2 h-full relative shrink-0" onclick="router('products', _d('U3VubnkgVmFsbGV5'))">
+                        <div class="absolute inset-0 bg-black"><img src="https://res.cloudinary.com/dlmmylat6/image/upload/v1765993841/IMG_2073_ffmyfd.jpg" class="w-full h-full object-cover opacity-40 blur-sm scale-110"></div>
+                        <div class="absolute inset-0 bg-gradient-to-r from-black via-black/60 to-transparent"></div>
+                        <div class="absolute inset-0 z-20 flex flex-col justify-center px-8">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center gap-2"><span class="text-[9px] bg-purple-600 text-white font-black px-2.5 py-1 rounded shadow-[0_0_15px_rgba(147,51,234,0.4)] tracking-widest uppercase animate-pulse">NOUVEAU DROP</span></div>
+                                <img src="https://res.cloudinary.com/dlmmylat6/image/upload/v1766008859/IMG_2087_vgvu2p.png" class="h-8 w-auto rounded-full border border-white/20" alt="WT Logo">
+                            </div>
+                            <h2 class="text-2xl font-black text-white uppercase brand-font leading-none tracking-tight mb-2">WIZARD <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">TREEZ</span></h2>
+                            <p class="text-[10px] font-bold text-gray-300 uppercase tracking-widest mb-4">Frozen Sift • 🧊 • Cali Exclusive</p>
+                            <div class="flex items-center gap-3"><span class="text-[10px] bg-white/10 border border-white/20 text-white px-3 py-1.5 rounded font-bold uppercase backdrop-blur-md">Voir le Menu →</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-30">
+                    <div class="w-1.5 h-1.5 rounded-full bg-[--accent] transition-all duration-300 shadow-[0_0_10px_rgba(245,158,11,0.5)]" id="ban-dot-0"></div>
+                    <div class="w-1.5 h-1.5 rounded-full bg-[#333] transition-all duration-300" id="ban-dot-1"></div>
+                </div>
             </div>
         `;
-    }
 
-    function renderProducts(c, catName) {
-        const items = CATALOG.filter(p => !catName || p.category === catName);
-        items.forEach(p => {
-            const card = document.createElement('div');
-            card.className = "titanium-card overflow-hidden flex flex-col fade-in cursor-pointer active:scale-[0.98] transition-transform";
-            card.onclick = () => openProduct(p.id);
-            card.innerHTML = `
-                <div class="h-32 bg-zinc-900 relative">
-                    <img src="${p.images[0]}" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
-                    <span class="absolute bottom-2 left-3 text-[8px] font-black bg-[--accent] text-black px-2 py-0.5 rounded">${p.tag}</span>
-                </div>
-                <div class="p-3">
-                    <div class="flex justify-between items-center">
-                        <h3 class="font-bold text-sm text-white uppercase">${p.name}</h3>
-                        <span class="text-xs">àpd ${p.tiers[0].p}€</span>
+        const cats = [
+            { name: _d('U3VubnkgVmFsbGV5'), sub: "CALI CONNECT • TOP SHELF • EXOTIC", icon: "☀️" },
+            { name: _d('U25vdyBWYWxsZXk='), sub: "Produits de Pureté Garantie", icon: "❄️" }
+        ];
+
+        let catsHtml = '';
+        cats.forEach((cat, i) => {
+            catsHtml += `
+                <div class="titanium-card p-4 mb-3 flex items-center justify-between cursor-pointer active:scale-95 transition-transform fade-in" style="animation-delay: ${i*100}ms" onclick="router('products', '${cat.name}')">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-black/50 border border-[--border] flex items-center justify-center text-2xl">${cat.icon}</div>
+                        <div>
+                            <h3 class="font-bold text-white uppercase brand-font">${cat.name}</h3>
+                            <p class="text-[10px] text-gray-500 uppercase tracking-wide">${cat.sub}</p>
+                        </div>
                     </div>
+                    <div class="w-8 h-8 rounded-full border border-[--border] flex items-center justify-center text-gray-500 text-xs">➜</div>
                 </div>
             `;
-            c.appendChild(card);
         });
-    }
 
-    function openProduct(id) {
-        const p = CATALOG.find(x => x.id === id);
-        document.getElementById('modal-title').innerText = p.name;
-        document.getElementById('modal-desc').innerText = p.desc;
-        document.getElementById('modal-tag').innerText = p.tag;
-        document.getElementById('modal-image').src = p.images[0];
-
-        const tiersList = document.getElementById('tiers-list');
-        tiersList.innerHTML = p.tiers.map(t => `
-            <div onclick="addToCart('${p.id}', '${t.w}', ${t.p})" class="flex justify-between items-center p-4 bg-black/40 border border-[#222] rounded-xl active:bg-[--accent]/20">
-                <span class="font-bold text-white">${t.w}</span>
-                <span class="font-black text-[--accent]">${t.p}€</span>
+        const reviewsHtml = `
+            <div class="mt-8 mb-6 fade-in" style="animation-delay: 200ms">
+                <h3 class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-3 ml-1">Confiance Client</h3>
+                <div class="flex overflow-x-auto gap-3 pb-2 no-scrollbar snap-x">
+                    ${REVIEWS.map(r => `<div class="titanium-card p-3 min-w-[220px] snap-center border-l-2 border-l-[--accent]"><div class="flex justify-between items-center mb-1"><span class="text-[10px] font-bold text-white">${r.name}</span><span class="text-[8px] text-[--accent]">⭐⭐⭐⭐⭐</span></div><p class="text-[10px] text-gray-400 italic leading-tight">"${r.txt}"</p></div>`).join('')}
+                </div>
             </div>
-        `).join('');
-
-        document.getElementById('product-modal').classList.remove('hidden');
-        setTimeout(() => document.getElementById('modal-content').style.transform = 'translateY(0)', 10);
-    }
-
-    function addToCart(id, weight, price) {
-        const p = CATALOG.find(x => x.id === id);
-        cart.push({ name: p.name, weight, price });
-        updateCartCount();
-        closeModal();
-    }
-
-    function updateCartCount() {
-        const el = document.getElementById('cart-count');
-        el.innerText = cart.length;
-        el.classList.toggle('hidden', cart.length === 0);
-    }
-
-    function closeModal() {
-        document.getElementById('modal-content').style.transform = 'translateY(100%)';
-        setTimeout(() => document.getElementById('product-modal').classList.add('hidden'), 300);
-    }
-
-    function renderCart(c) {
-        if(cart.length === 0) {
-            c.innerHTML = `<div class="text-center py-20 text-gray-500"><p>Panier vide.</p></div>`;
-            return;
-        }
-        let total = cart.reduce((s, i) => s + i.price, 0);
-        c.innerHTML = `
-            <h2 class="text-2xl font-black text-white brand-font uppercase mb-6">Panier</h2>
-            <div class="space-y-3 mb-6">
-                ${cart.map((item, idx) => `
-                    <div class="titanium-card p-4 flex justify-between items-center">
-                        <div>
-                            <p class="font-bold text-sm text-white">${item.name}</p>
-                            <p class="text-[10px] text-gray-500">${item.weight}</p>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <span class="font-bold text-[--accent]">${item.price}€</span>
-                            <button onclick="removeFromCart(${idx})" class="text-red-500">✕</button>
-                        </div>
-                    </div>
-                `).join('')}
-            </div>
-            <button onclick="checkout()" class="btn-main w-full py-4 text-sm tracking-widest">VALIDER (${total}€)</button>
         `;
-    }
 
-    function removeFromCart(idx) {
-        cart.splice(idx, 1);
-        renderCart(document.getElementById('main-view'));
-        updateCartCount();
-    }
+        c.innerHTML = bannerHtml + catsHtml + reviewsHtml;
 
-    function checkout() {
-        let text = "Commande South Valley :\n\n";
-        cart.forEach(i => text += `• ${i.name} | ${i.weight} | ${i.price}€\n`);
-        text += `\nTOTAL : ${cart.reduce((s, x) => s + x.price, 0)}€`;
-        window.open(`https://wa.me/${CONFIG.ADMIN}?text=${encodeURIComponent(text)}`);
+        let currentSlide = 0;
+        const track = document.getElementById('banner-track');
+        const dot0 = document.getElementById('ban-dot-0');
+        const dot1 = document.getElementById('ban-dot-1');
+
+        bannerInterval = setInterval(() => {
+            currentSlide = currentSlide === 0 ? 1 : 0;
+            if(track) {
+                track.style.transform = `translateX(-${currentSlide * 50}%)`;
+                if(currentSlide === 0) {
+                    dot0.className = "w-1.5 h-1.5 rounded-full bg-[--accent] transition-all duration-300 shadow-[0_0_10px_rgba(245,158,11,0.5)]";
+                    dot1.className = "w-1.5 h-1.5 rounded-full bg-[#333] transition-all duration-300";
+                } else {
+                    dot0.className = "w-1.5 h-1.5 rounded-full bg-[#333] transition-all duration-300";
+                    dot1.className = "w-1.5 h-1.5 rounded-full bg-[--accent] transition-all duration-300 shadow-[0_0_10px_rgba(245,158,11,0.5)]";
+                }
+            }
+        }, 4000);
     }
 
     function renderInfos(c) {
         c.innerHTML = `
-            <h2 class="text-2xl font-black text-white brand-font mb-6 uppercase">Support</h2>
-            <a href="https://wa.me/${CONFIG.ADMIN}" class="titanium-card p-6 flex flex-col items-center gap-2 border-green-500/30 mb-4">
-                <span class="text-2xl">💬</span>
-                <span class="text-[10px] font-black uppercase text-green-400">WhatsApp Support</span>
-            </a>
+            <h2 class="text-2xl font-black text-white uppercase brand-font mb-6 fade-in">Logistique</h2>
+            
+            <div class="grid grid-cols-2 gap-3 mb-6 fade-in">
+                <a href="https://t.me/+-2I0rCCwKAI0ZTU0" target="_blank" class="titanium-card p-4 flex flex-col items-center justify-center text-center gap-2 border border-green-500/30 bg-green-500/5 active:scale-95 transition-transform">
+                    <span class="text-2xl">💬</span>
+                    <div>
+                        <p class="text-[10px] font-bold text-green-400 uppercase">CHAT & AVIS CLIENTS</p>
+                        <p class="text-[8px] text-gray-500">Rejoindre la communauté (Vérif)</p>
+                    </div>
+                </a>
+                <a href="https://t.me/SouthValleyCenter" target="_blank" class="titanium-card p-4 flex flex-col items-center justify-center text-center gap-2 border border-blue-500/30 bg-blue-500/5 active:scale-95 transition-transform">
+                    <span class="text-2xl">📢</span>
+                    <div>
+                        <p class="text-[10px] font-bold text-blue-400 uppercase">CANAL PRINCIPAL</p>
+                        <p class="text-[8px] text-gray-500">News & Drops</p>
+                    </div>
+                </a>
+            </div>
+
+            <div class="titanium-card p-5 mb-6 fade-in border-t border-[--accent]/30 bg-gradient-to-b from-[--accent-dim] to-transparent">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="text-2xl">👑</span>
+                    <h3 class="font-black text-white uppercase brand-font text-lg">CERCLE D'INFLUENCE</h3>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between p-2 rounded bg-black/40 border border-white/5">
+                        <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center text-xs font-bold text-gray-400">1</div><div><p class="text-[10px] font-bold text-white uppercase">ASSOCIÉ</p><p class="text-[9px] text-gray-500">1 Ami Validé</p></div></div>
+                        <span class="text-[9px] font-bold text-[--accent] border border-[--accent] px-2 py-0.5 rounded">1G OFFERT</span>
+                    </div>
+                    <div class="flex items-center justify-between p-2 rounded bg-black/40 border border-white/5 opacity-80">
+                        <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center text-xs font-bold text-gray-400">3</div><div><p class="text-[10px] font-bold text-white uppercase">INITIÉ</p><p class="text-[9px] text-gray-500">3 Amis Validés</p></div></div>
+                        <span class="text-[9px] font-bold text-gray-300 border border-gray-600 px-2 py-0.5 rounded">5G + PRIO</span>
+                    </div>
+                    <div class="flex items-center justify-between p-2 rounded bg-black/40 border border-white/5 opacity-60">
+                        <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center text-xs font-bold text-gray-400">5</div><div><p class="text-[10px] font-bold text-white uppercase">VIP</p><p class="text-[9px] text-gray-500">5 Amis Validés</p></div></div>
+                        <span class="text-[9px] font-bold text-gray-300 border border-gray-600 px-2 py-0.5 rounded">10G + SECRET</span>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        const infos = [
+            { title: "MEET-UP", icon: "🤝", badge: "92 / IDF", desc: "Rencontre rapide et sécurisée sur nos points de retrait exclusifs dans le 92 (Ligne 13, RER C, L). Accès facile via transports.", details: [{k:"MINIMUM", v:`50${CONFIG.CURRENCY}`}, {k:"HORAIRES", v:"10:30 - 02:00"}, {k:"SÉCURITÉ", v:"Lieux discrets"}]},
+            { title: "LIVRAISON", icon: "🚚", badge: "PREMIUM", desc: "Service de livraison premium en Île-de-France par nos chauffeurs privés. Remise en main propre à l'adresse de votre choix.", details: [{k:"IDF PROCHE", v:`Min 60${CONFIG.CURRENCY}`}, {k:"LIMITROPHE", v:`Min 200${CONFIG.CURRENCY} (28/45/60...)}`}, {k:"COMMANDE", v:"24/24"},{k:"LIVRAISON", v:"12:00 - 03:00"}]},
+            { title: "POSTAL", icon: "📦", badge: "EUROPE", desc: "Expédition furtive à travers l'Europe. Double emballage sous vide, aucune odeur, suivi crypté. La référence de l'envoi.", details: [{k:"PAIEMENT", v:"BTC/LTC/ETH/USDT"}, {k:"PACKAGING", v:"Double Scellé"}, {k:"SUIVI", v:"Tracking Chiffré"}]}
+        ];
+
+        infos.forEach((info, i) => {
+            const rows = info.details.map(d => `<div class="flex justify-between py-2 border-b border-[--border] last:border-0"><span class="text-[10px] font-bold text-gray-500">${d.k}</span><span class="text-[10px] font-bold text-white text-right">${d.v}</span></div>`).join('');
+            const el = document.createElement('div');
+            el.className = "titanium-card p-5 mb-4 fade-in";
+            el.style.animationDelay = `${i*100}ms`;
+            el.innerHTML = `<div class="flex justify-between items-center mb-2"><div class="flex items-center gap-2"><span class="text-xl">${info.icon}</span><h3 class="font-black text-white uppercase brand-font">${info.title}</h3></div><span class="text-[9px] font-bold bg-[#222] text-[--accent] px-2 py-1 rounded border border-[--border]">${info.badge}</span></div><p class="text-[10px] text-gray-400 mb-4 leading-relaxed">${info.desc}</p><div class="bg-black/30 rounded-lg p-3 border border-[--border] space-y-1">${rows}</div>`;
+            c.appendChild(el);
+        });
+
+        const support = document.createElement('div');
+        support.className = "titanium-card p-4 mt-6 fade-in border-l-4 border-l-blue-500 text-center";
+        support.innerHTML = `
+            <h4 class="text-xs font-bold text-white uppercase mb-3">Besoin d'aide ?</h4>
+            <div class="grid grid-cols-2 gap-3">
+                <a href="https://wa.me/${CONFIG.ADMIN}" target="_blank" class="bg-[#25D366] text-black px-3 py-2 rounded font-bold uppercase text-[10px] flex items-center justify-center gap-2 shadow-lg transition-transform active:scale-95">
+                    <span>WhatsApp</span>
+                </a>
+                <a href="https://t.me/plataonlyplata" target="_blank" class="bg-[#0088cc] text-white px-3 py-2 rounded font-bold uppercase text-[10px] flex items-center justify-center gap-2 shadow-lg transition-transform active:scale-95">
+                    <span>Telegram</span>
+                </a>
+            </div>
+        `;
+        c.appendChild(support);
+    }
+
+    function renderProducts(c, catName) {
+        const category = catName || _d('U3VubnkgVmFsbGV5');
+        let introText = "";
+        if(category.includes("Sunny")) introText = "💎 SÉLECTION EXCLUSIVE CALIFORNIA. Direct from Farms. Terpènes validés, génétiques rares et connexions officielles. Le soleil en pochon.";
+        else if(category.includes("Snow")) introText = "❄️ Menu Select - Pureté garantie et arrivages frais !";
+
+        c.innerHTML = `
+            <div class="flex items-center gap-3 mb-4 fade-in">
+                <button onclick="router('menu')" class="w-8 h-8 rounded bg-[#111] border border-[--border] flex items-center justify-center text-gray-400">←</button>
+                <h2 class="text-lg font-black text-white uppercase brand-font">${category}</h2>
+            </div>
+            ${introText ? `<div class="p-3 bg-[--accent-dim] border border-[--accent]/20 rounded-lg mb-6 fade-in"><p class="text-[10px] text-gray-300 italic">"${introText}"</p></div>` : ''}
+        `;
+
+        CATALOG.filter(p => p.category === category).forEach((p, i) => {
+            const isFav = favorites.includes(p.id);
+            const el = document.createElement('div');
+            el.className = "titanium-card p-3 mb-3 flex gap-3 cursor-pointer active:scale-[0.98] transition-transform fade-in relative";
+            el.style.animationDelay = `${i*50}ms`;
+            el.onclick = () => openModal(p);
+            el.innerHTML = `
+                <div onclick="event.stopPropagation(); toggleListFav('${p.id}', this)" class="absolute top-2 right-2 z-10 p-2 text-lg drop-shadow-md transition-transform active:scale-125">${isFav ? '❤️' : '🤍'}</div>
+                <div class="w-20 h-20 bg-black rounded-lg border border-[--border] shrink-0 flex items-center justify-center text-3xl relative overflow-hidden">
+                    <span class="z-10">${p.icon}</span>
+                    ${p.tag ? `<div class="absolute bottom-0 w-full bg-[--accent] text-black text-[7px] font-bold text-center uppercase py-0.5 z-20">${p.tag}</div>` : ''}
+                </div>
+                <div class="flex-1 flex flex-col justify-center">
+                    <h3 class="font-bold text-sm text-white uppercase brand-font leading-tight pr-6">${p.name}</h3>
+                    <p class="text-[10px] text-gray-500 mt-1 line-clamp-2">${p.desc}</p>
+                    <div class="mt-2 flex items-center justify-between">
+                        <span class="text-[10px] font-medium text-gray-300 bg-[#222] px-2 py-0.5 rounded border border-[--border]">${p.tiers[0].p}${CONFIG.CURRENCY} / ${p.tiers[0].w}</span>
+                        <span class="text-[10px] font-bold text-[--accent] uppercase">Voir +</span>
+                    </div>
+                </div>
+            `;
+            c.appendChild(el);
+        });
+    }
+
+    function renderCart(c) {
+        if(cart.length === 0) {
+            c.innerHTML = `<div class="h-[60vh] flex flex-col items-center justify-center text-gray-600 fade-in"><div class="text-4xl mb-4 opacity-30">🛍️</div><p class="text-xs font-bold uppercase tracking-widest">Panier Vide</p><button onclick="router('products')" class="mt-4 text-[10px] text-[--accent] border-b border-[--accent] pb-0.5">EXPLORER</button></div>`;
+            return;
+        }
+        
+        const total = cart.reduce((a,b) => a+b.price, 0);
+        c.innerHTML = `<h2 class="text-xl font-black text-white uppercase brand-font mb-6 fade-in">Votre Panier</h2>`;
+        
+        cart.forEach((item, i) => {
+            const el = document.createElement('div');
+            el.className = "titanium-card p-3 mb-2 flex justify-between items-center fade-in";
+            el.innerHTML = `
+                <div>
+                    <p class="font-bold text-white text-xs uppercase">${item.name}</p>
+                    <p class="text-[10px] text-gray-500 font-mono">${item.weight}</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-xs font-bold text-white">${item.price}${CONFIG.CURRENCY}</span>
+                    <button onclick="remItem(${i})" class="text-xs text-red-500 px-2 py-1 bg-[#222] rounded">✕</button>
+                </div>
+            `;
+            c.appendChild(el);
+        });
+
+        const footer = document.createElement('div');
+        footer.className = "mt-8 pt-4 border-t border-[--border] fade-in";
+        footer.innerHTML = `
+            <div class="flex justify-between items-center mb-6">
+                <span class="text-xs font-bold text-gray-500 uppercase">Total Estimé</span>
+                <span class="text-xl font-black text-[--accent] brand-font">${total}${CONFIG.CURRENCY}</span>
+            </div>
+            <button onclick="router('checkout')" class="btn-main w-full py-4 text-xs font-black tracking-widest">VALIDER LA COMMANDE</button>
+        `;
+        c.appendChild(footer);
+    }
+
+    function renderCheckout(c) {
+        const total = cart.reduce((a,b) => a+b.price, 0);
+        
+        // --- UX AUTOFILL ---
+        // 1. Get User from Telegram
+        const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+        const prefillName = tgUser ? (tgUser.first_name + (tgUser.last_name ? ' ' + tgUser.last_name : '')) : '';
+        
+        // 2. Get saved data from LocalStorage
+        const savedWA = localStorage.getItem('sv_user_wa') || '';
+        const savedAddr = localStorage.getItem('sv_user_addr') || '';
+
+        c.innerHTML = `
+            <button onclick="router('cart')" class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-6">← Retour</button>
+            <h2 class="text-2xl font-black text-white uppercase brand-font mb-6">Validation</h2>
+            <div class="bg-red-500/10 border border-red-500/20 p-3 rounded-lg mb-6 flex gap-3 items-start fade-in"><span class="text-lg">⚠️</span><p class="text-[10px] text-red-300 leading-relaxed"><span class="font-bold text-white">Nouveau client ?</span> Préparez une photo CNI + Selfie pour la vérification WhatsApp.</p></div>
+            <div class="space-y-6 fade-in">
+                <div class="titanium-card p-4">
+                    <label class="text-[10px] font-bold text-gray-500 uppercase block mb-3">Service</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button onclick="setOpt(this, 'srv', 'MEET')" class="bg-[#222] border border-[--border] text-gray-400 py-3 text-[9px] font-bold uppercase rounded hover:border-white transition-colors">Meet-Up</button>
+                        <button onclick="setOpt(this, 'srv', 'DELIV')" class="bg-[#222] border border-[--border] text-gray-400 py-3 text-[9px] font-bold uppercase rounded hover:border-white transition-colors">Livraison</button>
+                        <button onclick="setOpt(this, 'srv', 'POST')" class="bg-[#222] border border-[--border] text-gray-400 py-3 text-[9px] font-bold uppercase rounded hover:border-white transition-colors">Postal</button>
+                    </div>
+                    <input type="hidden" id="in-srv">
+                </div>
+                <div class="titanium-card p-4 space-y-3">
+                    <label class="text-[10px] font-bold text-gray-500 uppercase block mb-1">Coordonnées</label>
+                    <input id="in-name" type="text" placeholder="NOM / PSEUDO" value="${prefillName}" class="w-full bg-black border border-[--border] text-white text-xs p-3 rounded focus:border-[--accent] outline-none">
+                    <input id="in-wa" type="text" placeholder="WHATSAPP (OBLIGATOIRE)" value="${savedWA}" class="w-full bg-black border border-[--border] border-l-2 border-l-[--accent] text-white text-xs p-3 rounded focus:border-white outline-none">
+                    <div id="address-container"><input id="in-addr" type="text" placeholder="ADRESSE / LIEU" value="${savedAddr}" class="w-full bg-black border border-[--border] text-white text-xs p-3 rounded focus:border-[--accent] outline-none"></div>
+                    <div id="time-container"><label id="time-label" class="text-[9px] font-bold text-gray-500 uppercase block mt-2 mb-1">Préférence Horaire</label><input id="in-time" type="text" placeholder="Heure souhaitée..." class="w-full bg-black border border-[--border] text-white text-xs p-3 rounded focus:border-[--accent] outline-none"></div>
+                </div>
+                <div class="titanium-card p-4">
+                    <label class="text-[10px] font-bold text-gray-500 uppercase block mb-3">Paiement</label>
+                    
+                    <div id="crypto-selector" class="mb-3 hidden transition-all duration-300">
+                        <label class="text-[9px] font-bold text-gray-500 uppercase block mb-1">Devise Crypto</label>
+                        <select id="in-crypto-type" class="w-full bg-[#1a1a1a] text-white text-xs p-3 rounded border border-[#222] focus:border-[#F59E0B] outline-none appearance-none font-bold uppercase" onchange="updateCryptoAddress()">
+                            <option value="BTC">Bitcoin (BTC) - Recommended</option>
+                            <option value="LTC">Litecoin (LTC) - Fast & Cheap</option>
+                            <option value="USDT">USDT (TRC20/ERC20) - Stable</option>
+                        </select>
+                        <div id="crypto-address-display" class="mt-2 bg-black border border-dashed border-[#333] p-2 rounded text-[9px] text-gray-400 font-mono break-all text-center select-all">
+                            Selectionnez une devise...
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="setOpt(this, 'pay', 'CASH')" class="bg-[#222] border border-[--border] text-gray-400 py-3 text-[9px] font-bold uppercase rounded hover:border-white transition-colors">CASH 💰</button>
+                        <button onclick="setOpt(this, 'pay', 'CRYPTO')" class="bg-[#222] border border-[--border] text-gray-400 py-3 text-[9px] font-bold uppercase rounded hover:border-white transition-colors">CRYPTO ₿</button>
+                    </div>
+                    <input type="hidden" id="in-pay">
+                </div>
+                <button onclick="submitOrder()" class="btn-main w-full py-4 text-xs tracking-widest mt-4">ENVOYER L'ORDRE (${total}${CONFIG.CURRENCY})</button>
+            </div>
         `;
     }
 
-    function updateTicker() {
-        const el = document.getElementById('live-ticker');
-        const msg = '<span class="ticker-item">LIVRAISON EXPRESS ⚡</span><span class="ticker-item">SECURE PAYMENT 🔒</span>';
-        el.innerHTML = msg.repeat(10);
+    function updateCryptoAddress() {
+        const type = document.getElementById('in-crypto-type').value;
+        const display = document.getElementById('crypto-address-display');
+        
+        // ⚠️ ADRESSES
+        const addresses = {
+            'BTC': 'bc1qsvuf7ynvdrv4t3grya36mkqqjkrre3adgp7555', 
+            'LTC': 'ltc1q6frmfj93g0vaxwfnhyfuvceqfnkph5hzzeunkk',
+            'USDT': '0x5e1f8c19a820e4e2e263265cbeac2098b15b7e44'
+        };
+        
+        display.innerText = addresses[type] || "Erreur";
     }
-</script>
 
+    function renderSuccess(c, data) {
+        // BUILD WHATSAPP LINK WITH MESSAGE PAYLOAD
+        const waLink = `https://wa.me/${CONFIG.ADMIN}?text=${encodeURIComponent(data.msg)}`;
+
+        c.innerHTML = `
+            <div class="h-[60vh] flex flex-col items-center justify-center text-center fade-in">
+                <div class="w-16 h-16 rounded-full bg-green-500/10 border border-green-500/30 flex items-center justify-center text-2xl mb-6 shadow-[0_0_20px_rgba(16,185,129,0.2)]">✅</div>
+                <h2 class="text-xl font-black text-white uppercase brand-font mb-2">ORDRE TRANSMIS</h2>
+                <div class="titanium-card p-4 w-full max-w-xs mb-6 mt-6 border-l-4 border-l-[--accent]">
+                    <p class="text-[9px] text-gray-500 uppercase font-bold mb-1">Code Unique</p>
+                    <p class="text-2xl font-mono font-bold text-white tracking-widest">${data.code}</p>
+                </div>
+                
+                <a href="${waLink}" class="bg-[#25D366] text-black font-bold py-3 px-8 rounded-lg text-xs uppercase tracking-widest shadow-lg flex items-center gap-2 hover:scale-105 transition-transform">
+                    FINALISER SUR WHATSAPP →
+                </a>
+                
+                <p class="text-[9px] text-gray-500 mt-4 max-w-xs">Cliquez ci-dessus pour envoyer le récapitulatif à l'administrateur.</p>
+            </div>
+        `;
+    }
+
+    // --- PROMO LOGIC ---
+    function openPromo() {
+        if(window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+        document.getElementById('promo-modal').classList.remove('hidden');
+    }
+    function closePromo() { document.getElementById('promo-modal').classList.add('hidden'); }
+    function copyPromo() {
+        if(window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+        const btn = document.querySelector('#promo-modal button');
+        btn.innerText = "COPIÉ !";
+        btn.classList.add('bg-green-500', 'text-white');
+        setTimeout(() => { btn.innerText = "COPIER MON CODE"; btn.classList.remove('bg-green-500', 'text-white'); closePromo(); }, 1500);
+    }
+
+    // --- UPSELL LOGIC ---
+    function checkUpsell(totalPrice) {
+        if (!upsellShown && totalPrice >= 80) {
+            document.getElementById('upsell-modal').classList.remove('hidden');
+            upsellShown = true;
+            if(window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.impactOccurred('heavy');
+            return true;
+        }
+        return false;
+    }
+    
+    function closeUpsell() {
+        document.getElementById('upsell-modal').classList.add('hidden');
+    }
+
+    function addUpsell() {
+        if(window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+        cart.push({name: "⚡ OFFRE FLASH: Cali Pink Kush", weight: "3G", price: 20});
+        closeUpsell();
+        updateDot();
+        router('cart');
+    }
+
+    // --- FAV LOGIC ---
+    function toggleListFav(id, el) {
+        if(favorites.includes(id)) { favorites = favorites.filter(fid => fid !== id); el.innerText = '🤍'; } 
+        else { favorites.push(id); el.innerText = '❤️'; showConfetti(); }
+        localStorage.setItem('sv_favs', JSON.stringify(favorites));
+        if(window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+    }
+    function toggleModalFav() {
+        const btn = document.getElementById('modal-fav-btn');
+        if(favorites.includes(currentModalId)) { favorites = favorites.filter(fid => fid !== currentModalId); btn.innerText = '🤍'; } 
+        else { favorites.push(currentModalId); btn.innerText = '❤️'; showConfetti(); }
+        localStorage.setItem('sv_favs', JSON.stringify(favorites));
+        if(window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+    }
+
+    // --- LOGIC ---
+    function openModal(p) {
+        currentModalId = p.id;
+        if(window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+        const modal = document.getElementById('product-modal');
+        const content = document.getElementById('modal-content');
+        
+        document.getElementById('modal-title').innerText = p.name;
+        document.getElementById('modal-tag').innerText = p.tag || 'STD';
+        document.getElementById('modal-desc').innerHTML = p.desc;
+        const favBtn = document.getElementById('modal-fav-btn');
+        favBtn.innerText = favorites.includes(p.id) ? '❤️' : '🤍';
+
+        const vid = document.getElementById('modal-video');
+        const img = document.getElementById('modal-image');
+        const logo = document.getElementById('modal-brand-logo');
+
+        if (p.logo) { logo.src = p.logo; logo.classList.remove('hidden'); } else { logo.classList.add('hidden'); }
+
+        clearInterval(carouselInterval);
+
+        if (p.images && p.images.length > 1) {
+            vid.classList.add('hidden'); vid.pause(); img.classList.remove('hidden');
+            let imgIdx = 0; img.src = p.images[0];
+            carouselInterval = setInterval(() => { imgIdx = (imgIdx + 1) % p.images.length; img.src = p.images[imgIdx]; }, 2500);
+        } else {
+            const isVideo = p.video.endsWith('.mp4') || p.video.endsWith('.mov');
+            if(isVideo) { img.classList.add('hidden'); vid.classList.remove('hidden'); vid.src = p.video; vid.load(); vid.play().catch(e => console.log("Auto-play error")); } 
+            else { vid.classList.add('hidden'); vid.pause(); img.classList.remove('hidden'); img.src = p.video; }
+        }
+
+        const variantContainer = document.getElementById('modal-variants');
+        variantContainer.innerHTML = '';
+        if (p.variants && p.variants.length > 0) {
+            variantContainer.classList.remove('hidden');
+            const label = document.createElement('label');
+            label.className = "text-[10px] font-bold text-gray-500 uppercase mb-2 block tracking-widest";
+            label.innerText = "CHOISIR VARIÉTÉ";
+            if(p.id.includes('WZ')) label.innerText = "CHOISIR STRAIN";
+            const select = document.createElement('select');
+            select.id = 'variant-select';
+            select.className = "w-full bg-[#1a1a1a] text-white text-xs p-3 rounded border border-[#222] focus:border-[#F59E0B] outline-none appearance-none font-bold uppercase";
+            p.variants.forEach(v => { const opt = document.createElement('option'); opt.value = v; opt.innerText = v; select.appendChild(opt); });
+            variantContainer.appendChild(label); variantContainer.appendChild(select);
+        } else { variantContainer.classList.add('hidden'); }
+
+        const list = document.getElementById('tiers-list');
+        list.innerHTML = p.tiers.map(t => `
+            <div onclick="addItem('${p.name}', '${t.w}', ${t.p})" class="flex justify-between items-center p-3 border border-[--border] bg-[#1a1a1a] active:bg-[--accent] active:text-black transition-colors cursor-pointer rounded-lg">
+                <span class="text-xs font-bold font-mono">${t.w}</span>
+                <div class="flex items-center gap-2"><span class="text-xs font-bold">${t.p}${CONFIG.CURRENCY}</span><span class="text-[9px] font-bold border border-current px-1.5 rounded opacity-60">+</span></div>
+            </div>
+        `).join('');
+
+        modal.classList.remove('hidden'); modal.classList.add('flex');
+        setTimeout(() => content.classList.remove('translate-y-full'), 10);
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('product-modal');
+        const content = document.getElementById('modal-content');
+        clearInterval(carouselInterval);
+        content.classList.add('translate-y-full');
+        setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); document.getElementById('modal-video').pause(); }, 300);
+    }
+
+    function addItem(n, w, p) {
+        const select = document.getElementById('variant-select');
+        let finalName = n;
+        if (select && document.getElementById('modal-variants').offsetParent !== null) { finalName = `${n} [${select.value}]`; }
+
+        if(window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+        cart.push({name: finalName, weight: w, price: p});
+        
+        const total = cart.reduce((a,b) => a+b.price, 0);
+        closeModal();
+        updateDot();
+        checkUpsell(total);
+    }
+
+    function remItem(i) {
+        if(window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+        cart.splice(i, 1); router('cart'); updateDot();
+    }
+
+    function updateDot() {
+        const dot = document.getElementById('cart-dot');
+        if(cart.length) dot.classList.remove('hidden'); else dot.classList.add('hidden');
+    }
+
+    function setOpt(btn, group, val) {
+        if(window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+        document.getElementById(`in-${group}`).value = val;
+        btn.parentElement.querySelectorAll('button').forEach(b => { b.classList.remove('bg-[--accent]', 'text-black', 'border-transparent'); b.classList.add('bg-[#222]', 'text-gray-400', 'border-[--border]'); });
+        btn.classList.remove('bg-[#222]', 'text-gray-400', 'border-[--border]'); btn.classList.add('bg-[--accent]', 'text-black', 'border-transparent');
+
+        if (group === 'srv') {
+            const addrContainer = document.getElementById('address-container');
+            const timeContainer = document.getElementById('time-container');
+            const timeLabel = document.getElementById('time-label');
+            const timeInput = document.getElementById('in-time');
+            if (val === 'MEET') { addrContainer.style.display = 'none'; document.getElementById('in-addr').value = "MEET-UP POINT"; timeContainer.style.display = 'block'; timeLabel.innerText = "HEURE DE PASSAGE (10:30 - 02:00)"; timeInput.placeholder = "Ex: 14h30"; } 
+            else if (val === 'DELIV') { addrContainer.style.display = 'block'; if(document.getElementById('in-addr').value === "MEET-UP POINT") document.getElementById('in-addr').value = ""; timeContainer.style.display = 'block'; timeLabel.innerText = "CRÉNEAU DE LIVRAISON SOUHAITÉ"; timeInput.placeholder = "Ex: Ce soir vers 21h"; } 
+            else { addrContainer.style.display = 'block'; if(document.getElementById('in-addr').value === "MEET-UP POINT") document.getElementById('in-addr').value = ""; timeContainer.style.display = 'none'; timeInput.value = "N/A"; }
+        }
+        
+        if (group === 'pay') {
+            const cryptoSelector = document.getElementById('crypto-selector');
+            if (val === 'CRYPTO') {
+                cryptoSelector.classList.remove('hidden');
+                updateCryptoAddress();
+            } else {
+                cryptoSelector.classList.add('hidden');
+            }
+        }
+    }
+
+    function submitOrder() {
+        const srv = document.getElementById('in-srv').value;
+        const name = document.getElementById('in-name').value;
+        const wa = document.getElementById('in-wa').value;
+        const addr = document.getElementById('in-addr').value;
+        const time = document.getElementById('in-time').value;
+        const pay = document.getElementById('in-pay').value;
+        const cryptoType = document.getElementById('in-crypto-type').value;
+
+        let missingField = false;
+        if (!srv || !name || !wa || !pay) missingField = true;
+        else if ((srv === 'DELIV' || srv === 'POST') && !addr) missingField = true;
+
+        if(missingField) { showUIMessage("Champs Manquants", "Veuillez s\u00e9lectionner le service, le paiement, le nom et le num\u00e9ro WhatsApp. L'adresse est \u00e9galement obligatoire pour la livraison et le postal."); return; }
+
+        if(window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+        
+        // --- UX SAVE DATA ---
+        localStorage.setItem('sv_user_wa', wa);
+        if(srv !== 'MEET') localStorage.setItem('sv_user_addr', addr);
+        
+        const code = "SV-" + Math.floor(1000 + Math.random() * 9000);
+        const list = cart.map(i => `${i.name} (${i.weight})`).join('\n');
+        const total = cart.reduce((a,b) => a+b.price, 0);
+        
+        let timeMsg = "";
+        if (srv === 'MEET' && time) timeMsg = `🕑 Passage: ${time}`;
+        if (srv === 'DELIV' && time) timeMsg = `🕑 Créneau: ${time}`;
+        
+        let payMsg = `💳 ${pay}`;
+        if (pay === 'CRYPTO') {
+            payMsg += ` (${cryptoType})`;
+        }
+
+        const msg = `🚨 *NOUVEL ORDRE ${code}* 🚨\n\n👤 ${name}\n📞 ${wa}\n\n📦\n${list}\n\n💵 ${total}${CONFIG.CURRENCY}\n📍 ${srv}\n🏠 ${addr}\n${timeMsg}\n${payMsg}`;
+        
+        cart = []; updateDot();
+        
+        // Pass payload to renderSuccess
+        router('success', {code: code, msg: msg});
+        
+        showConfetti();
+        // Remove automatic window.open
+    }
+
+    function initPanic() {
+        let lx, ly, lz, last = 0;
+        window.addEventListener('devicemotion', e => {
+            const {x,y,z} = e.accelerationIncludingGravity || {};
+            if(!x) return;
+            const delta = Math.abs(lx-x)+Math.abs(ly-y)+Math.abs(lz-z);
+            if(delta > 40 && Date.now() - last > 1000) { document.getElementById('panic-screen').classList.remove('hidden'); localStorage.clear(); last = Date.now(); }
+            lx=x; ly=y; lz=z;
+        });
+    }
+
+    function showConfetti() {
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        let pieces = [];
+        const colors = ['#F59E0B', '#D97706', '#FFFFFF'];
+        for(let i=0; i<100; i++) { pieces.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height - canvas.height, w: Math.random() * 5 + 2, h: Math.random() * 10 + 5, color: colors[Math.floor(Math.random() * colors.length)], speed: Math.random() * 5 + 2, angle: Math.random() * 360, spin: Math.random() * 10 - 5 }); }
+        function draw() { ctx.clearRect(0,0,canvas.width,canvas.height); let active = false; pieces.forEach(p => { p.y += p.speed; p.angle += p.spin; if(p.y < canvas.height) active = true; ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.angle * Math.PI / 180); ctx.fillStyle = p.color; ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h); ctx.restore(); }); if(active) requestAnimationFrame(draw); else ctx.clearRect(0,0,canvas.width,canvas.height); }
+        draw();
+    }
+    // ... Le reste de ton script continue ici ...
+</script>
 </body>
 </html>
