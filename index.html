@@ -1082,17 +1082,16 @@
                 console.log('URL:', whatsappURL);
                 console.log('======================');
                 
-                // ========== SOLUTION FINALE : SORTIR DE TELEGRAM ==========
+                // ========== SOLUTION : NAVIGATEUR SYSTÈME (PAS TELEGRAM) ==========
                 const tg = window.Telegram?.WebApp;
                 
                 console.log('=== DEBUG WHATSAPP ===');
                 console.log('Phone:', phoneNumber);
                 console.log('Message:', msg);
-                console.log('URL:', whatsappURL);
+                console.log('URL WhatsApp:', whatsappURL);
                 console.log('======================');
                 
-                // MÉTHODE QUI MARCHE : Utiliser wa.me au lieu de api.whatsapp.com
-                // wa.me est le raccourci universel WhatsApp qui fonctionne partout
+                // Utiliser wa.me (standard universel WhatsApp)
                 const waURL = `https://wa.me/${phoneNumber}?text=${encodedMsg}`;
                 
                 console.log('URL wa.me:', waURL);
@@ -1101,11 +1100,24 @@
                     // Désactiver la confirmation de sortie
                     tg.disableClosingConfirmation();
                     
-                    // IMPORTANT: openLink ouvre dans navigateur EXTERNE
-                    // C'est la bonne méthode pour Telegram Mini Apps
-                    tg.openLink(waURL);
+                    // ASTUCE CRITIQUE: openTelegramLink ouvre dans navigateur SYSTÈME
+                    // tandis que openLink ouvre dans le navigateur Telegram
+                    if (tg.openTelegramLink) {
+                        console.log('✅ Utilisation openTelegramLink (navigateur système)');
+                        tg.openTelegramLink(waURL);
+                    } else {
+                        // Fallback: créer un lien <a> invisible et cliquer dessus
+                        console.log('✅ Fallback: création lien DOM');
+                        const link = document.createElement('a');
+                        link.href = waURL;
+                        link.target = '_system'; // Forcer navigateur système
+                        link.style.display = 'none';
+                        document.body.appendChild(link);
+                        link.click();
+                        setTimeout(() => document.body.removeChild(link), 100);
+                    }
                 } else {
-                    // Fallback si pas dans Telegram
+                    // Pas dans Telegram
                     window.location.href = waURL;
                 }
 
@@ -1127,7 +1139,17 @@
             
             if (tg) {
                 tg.disableClosingConfirmation();
-                tg.openLink(waURL);
+                if (tg.openTelegramLink) {
+                    tg.openTelegramLink(waURL);
+                } else {
+                    const link = document.createElement('a');
+                    link.href = waURL;
+                    link.target = '_system';
+                    link.style.display = 'none';
+                    document.body.appendChild(link);
+                    link.click();
+                    setTimeout(() => document.body.removeChild(link), 100);
+                }
             } else {
                 window.location.href = waURL;
             }
