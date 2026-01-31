@@ -1082,7 +1082,7 @@
                 console.log('URL:', whatsappURL);
                 console.log('======================');
                 
-                // ========== OUVERTURE WHATSAPP GARANTIE ==========
+                // ========== SOLUTION FINALE : SORTIR DE TELEGRAM ==========
                 const tg = window.Telegram?.WebApp;
                 
                 console.log('=== DEBUG WHATSAPP ===');
@@ -1091,25 +1091,22 @@
                 console.log('URL:', whatsappURL);
                 console.log('======================');
                 
-                // SOLUTION ULTIME: Redirection directe sans Telegram WebView
-                // On force la sortie complète de l'app Telegram
+                // MÉTHODE QUI MARCHE : Utiliser wa.me au lieu de api.whatsapp.com
+                // wa.me est le raccourci universel WhatsApp qui fonctionne partout
+                const waURL = `https://wa.me/${phoneNumber}?text=${encodedMsg}`;
+                
+                console.log('URL wa.me:', waURL);
+                
                 if (tg) {
-                    // Fermer la confirmation de sortie pour permettre la navigation
+                    // Désactiver la confirmation de sortie
                     tg.disableClosingConfirmation();
                     
-                    // Méthode 1: Ouvrir dans navigateur externe (PRIORITAIRE)
-                    if (tg.openLink) {
-                        console.log('✅ Méthode 1: tg.openLink');
-                        tg.openLink(whatsappURL);
-                    } else {
-                        // Méthode 2: Forcer avec window.open
-                        console.log('✅ Méthode 2: window.open');
-                        window.open(whatsappURL, '_blank', 'noopener,noreferrer');
-                    }
+                    // IMPORTANT: openLink ouvre dans navigateur EXTERNE
+                    // C'est la bonne méthode pour Telegram Mini Apps
+                    tg.openLink(waURL);
                 } else {
-                    // Pas dans Telegram, utiliser méthode standard
-                    console.log('✅ Méthode 3: window.location');
-                    window.location.href = whatsappURL;
+                    // Fallback si pas dans Telegram
+                    window.location.href = waURL;
                 }
 
                 setTimeout(() => {
@@ -1125,18 +1122,14 @@
         }
         
         function contactStaff() { 
-            const whatsappURL = `https://api.whatsapp.com/send?phone=33759840764`;
+            const waURL = `https://wa.me/33759840764`;
             const tg = window.Telegram?.WebApp;
             
             if (tg) {
                 tg.disableClosingConfirmation();
-                if (tg.openLink) {
-                    tg.openLink(whatsappURL);
-                } else {
-                    window.open(whatsappURL, '_blank');
-                }
+                tg.openLink(waURL);
             } else {
-                window.location.href = whatsappURL;
+                window.location.href = waURL;
             }
         }
     </script>
