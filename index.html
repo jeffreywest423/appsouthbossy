@@ -975,6 +975,9 @@
             document.getElementById(`tab-${mode}`).classList.add('active');
             ['meetup', 'delivery', 'postal'].forEach(m => document.getElementById(`fields-${m}`).classList.add('hidden'));
             document.getElementById(`fields-${mode}`).classList.remove('hidden');
+            
+            // Recalculer le récap pour mettre à jour les frais
+            renderRecap();
         }
 
         function selectPayment(method, el) {
@@ -1056,59 +1059,62 @@
                 
                 let total = subtotal + deliveryFee;
                 
-                // Construction du message WhatsApp (sans emojis complexes pour compatibilité)
-                let msg = `COMMANDE SOUTH VALLEY\n`;
-                msg += `========================\n\n`;
+                // Construction du message WhatsApp - SUPER SIMPLIFIÉ pour compatibilité max
+                let msg = `*COMMANDE SOUTH VALLEY*\n\n`;
                 
-                msg += `ARTICLES:\n`;
+                msg += `*ARTICLES:*\n`;
                 cart.forEach((c, index) => {
-                    msg += `${index + 1}. ${c.name}\n`;
-                    msg += `   Quantite: ${c.w}\n`;
-                    msg += `   Prix: ${c.p}EUR\n\n`;
+                    // Enlever les emojis du nom pour le message WhatsApp
+                    const cleanName = c.name.replace(/[\u{1F300}-\u{1F9FF}]/gu, '').trim();
+                    msg += `${index + 1}. ${cleanName}\n`;
+                    msg += `Quantite: ${c.w} - Prix: ${c.p}EUR\n\n`;
                 });
                 
-                msg += `------------------------\n`;
+                msg += `------------------\n`;
                 msg += `Sous-total: ${subtotal}EUR\n`;
                 
                 if(deliveryFee > 0) {
                     msg += `Frais livraison: ${deliveryFee}EUR\n`;
                 }
                 
-                msg += `TOTAL: ${total}EUR\n`;
-                msg += `------------------------\n\n`;
+                msg += `*TOTAL: ${total}EUR*\n`;
+                msg += `------------------\n\n`;
                 
-                msg += `PAIEMENT: ${payment}\n\n`;
+                msg += `*PAIEMENT:* ${payment}\n\n`;
                 
-                msg += `MES COORDONNEES:\n`;
+                msg += `*MES INFOS:*\n`;
                 msg += `WhatsApp: ${whatsappVal}\n\n`;
                 
-                msg += `MODE RECUPERATION:\n`;
+                msg += `*MODE:*\n`;
                 if(currentMode === 'meetup') {
                     msg += `MEET-UP (92 Nord)\n`;
                     msg += `Heure: ${timeVal}\n`;
                 } else if(currentMode === 'delivery') {
                     msg += `LIVRAISON IDF\n`;
-                    msg += `Adresse:\n${addressVal}\n`;
+                    msg += `Adresse: ${addressVal}\n`;
                 } else if(currentMode === 'postal') {
                     msg += `ENVOI POSTAL\n`;
-                    msg += `Coordonnees:\n${addressVal}\n`;
+                    msg += `Adresse: ${addressVal}\n`;
                 }
                 
-                msg += `\n------------------------\n`;
-                msg += `PRET POUR VERIFICATION\n`;
-                msg += `CNI + SELFIE\n`;
-                msg += `------------------------\n\n`;
-                msg += `Merci pour ta confiance!\n`;
+                msg += `\nPret pour verification CNI + Selfie\n`;
+                msg += `Merci pour ta confiance!`;
 
-                // Encoder le message pour WhatsApp
+                // Construction de l'URL WhatsApp - Format API standard
+                const phoneNumber = '33759840764'; // Sans espaces ni +
                 const encodedMsg = encodeURIComponent(msg);
-                const whatsappURL = `https://wa.me/33759840764?text=${encodedMsg}`;
                 
-                // Debug: log l'URL complète
-                console.log('WhatsApp URL:', whatsappURL);
+                // Essayer avec l'API standard WhatsApp
+                const whatsappURL = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodedMsg}`;
+                
+                console.log('=== DEBUG WHATSAPP ===');
+                console.log('Phone:', phoneNumber);
+                console.log('Message brut:', msg);
+                console.log('URL complète:', whatsappURL);
+                console.log('======================');
                 
                 // Ouvrir WhatsApp
-                window.open(whatsappURL, '_blank');
+                window.location.href = whatsappURL;
 
                 // Réinitialiser après envoi
                 setTimeout(() => {
@@ -1119,7 +1125,7 @@
                     triggerHaptic('success');
                     
                     // Toast de succès
-                    showToast('success', 'COMMANDE PRÉPARÉE', 'Ton message est prêt dans WhatsApp. Appuie sur ENVOYER pour finaliser !');
+                    showToast('success', 'REDIRECTION WHATSAPP', 'Tu vas être redirigé vers WhatsApp avec ton message prêt !');
                     
                     cart = [];
                     updateCartUI();
