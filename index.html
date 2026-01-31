@@ -1113,8 +1113,15 @@
                 console.log('URL complète:', whatsappURL);
                 console.log('======================');
                 
-                // Ouvrir WhatsApp
-                window.location.href = whatsappURL;
+                // FORCER L'OUVERTURE EXTERNE (pas dans Telegram WebView)
+                const tg = window.Telegram?.WebApp;
+                if (tg && tg.openLink) {
+                    // Méthode 1: Via Telegram WebApp API (ouvre dans navigateur/app externe)
+                    tg.openLink(whatsappURL);
+                } else {
+                    // Méthode 2: Fallback classique
+                    window.open(whatsappURL, '_blank');
+                }
 
                 // Réinitialiser après envoi
                 setTimeout(() => {
