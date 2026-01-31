@@ -425,30 +425,30 @@
         (function() {
             'use strict';
             
-            // Vérification Telegram WebApp
-            const tg = window.Telegram?.WebApp;
-            const isTelegram = !!tg;
-            
-            // Détection de bot basique
-            const isBot = /bot|crawler|spider|crawling/i.test(navigator.userAgent);
+            // Détection de bot basique (AVANT vérif Telegram)
+            const isBot = /bot|crawler|spider|crawling|scraper/i.test(navigator.userAgent);
             
             // Vérification honeypot (si un bot a rempli le champ invisible)
             const honeypotFilled = document.getElementById('contact_email')?.value !== '';
             
-            // BLOQUER si pas Telegram OU si bot détecté
-            if (!isTelegram || isBot || honeypotFilled) {
+            // BLOQUER UNIQUEMENT les bots évidents
+            if (isBot || honeypotFilled) {
                 document.getElementById('block-screen').style.display = 'flex';
                 document.body.innerHTML = document.getElementById('block-screen').outerHTML;
-                throw new Error('Access denied');
+                throw new Error('Bot detected');
             }
             
-            // Configuration Telegram
-            if (tg) {
-                tg.ready();
-                tg.expand();
-                tg.setHeaderColor('#000000');
-                tg.enableClosingConfirmation();
-            }
+            // Vérification Telegram (MODE PERMISSIF - juste pour setup)
+            // On attend un peu que Telegram charge si besoin
+            setTimeout(() => {
+                const tg = window.Telegram?.WebApp;
+                if (tg) {
+                    tg.ready();
+                    tg.expand();
+                    tg.setHeaderColor('#000000');
+                    tg.enableClosingConfirmation();
+                }
+            }, 100);
         })();
 
         // ========== PROTECTION DOM ==========
