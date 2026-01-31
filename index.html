@@ -621,33 +621,33 @@
         // Numéro admin encodé
         const _admin = _0x4a2b.d("MzM3NTk4NDA3NjQ="); // "33759840764"
 
-        // ========== CATALOGUE (légèrement obfusqué) ==========
+        // ========== CATALOGUE (avec emojis fixes) ==========
         const CATALOG = [
             {
-                id: 'JM', name: _0x4a2b.d("SkFVTkUgTU9VU1NFVVgg8J+nvA=="), cat: 'HASH', sub: "JAUNE MOUSSEUX", tag: "🇲🇦 TOP MOUSSE 🔥",
+                id: 'JM', name: "JAUNE MOUSSEUX 🧼", cat: 'HASH', sub: "JAUNE MOUSSEUX", tag: "🇲🇦 TOP MOUSSE 🔥",
                 desc: "Sourcing direct Atlas. Texture mousseuse ultra-malléable. Terpènes authentiques, filtration 2026. Propre, gras et puissant.",
-                mediaType: 'video', src: _0x4a2b.d("aHR0cHM6Ly9yZXMuY2xvdWRpbmFyeS5jb20vZGxtbXlsYXQ2L3ZpZGVvL3VwbG9hZC92MTc2OTc0MDc0Ny8xNzY2NjAwNjIyNDIyNTEzX2ZibGcyai5tb3Y="),
+                mediaType: 'video', src: "https://res.cloudinary.com/dlmmylat6/video/upload/v1769740747/1766600622422513_fblg2j.mov",
                 tiers: [{w:'10G',p:60}, {w:'20G',p:100}, {w:'50G',p:170}, {w:'100G',p:340}],
                 hasCustom: true, layout: 'col-span-2 h-72'
             },
             {
-                id: 'WZ', name: _0x4a2b.d("V0laQVJEIFRSRUVTIPCfp5nigI3imYDvuI8="), cat: 'HASH', sub: "OLIVES FROZEN SIFT", tag: "✨ CALI IMPORT",
+                id: 'WZ', name: "WIZARD TREES 🧙‍♀️", cat: 'HASH', sub: "OLIVES FROZEN SIFT", tag: "✨ CALI IMPORT",
                 desc: "Farm: WIZARD TREES. Frozen Sift Premium. Strains: FORBIDDEN FRUITS, OG DONUTS, DREAM QUEEN, HONEY BANANA, APPLE GELATO.",
-                mediaType: 'image', src: _0x4a2b.d("aHR0cHM6Ly9yZXMuY2xvdWRpbmFyeS5jb20vZGxtbXlsYXQ2L2ltYWdlL3VwbG9hZC92MTc2NTk5Mzg0MS9JTUdfMjA3M19mZm15ZmQuanBn"),
+                mediaType: 'image', src: "https://res.cloudinary.com/dlmmylat6/image/upload/v1765993841/IMG_2073_ffmyfd.jpg",
                 tiers: [{w:'5G (1/2)',p:80}, {w:'10G (1)',p:170}],
                 hasCustom: false, layout: 'col-span-1 h-60'
             },
             {
-                id: 'PK', name: _0x4a2b.d("UElOSyBLVVNIIPCfjLg="), cat: 'WEED', sub: "TOPSHELF CALI USA", tag: "🇺🇸 TOP SHELF",
+                id: 'PK', name: "PINK KUSH 🌸", cat: 'WEED', sub: "TOPSHELF CALI USA", tag: "🇺🇸 TOP SHELF",
                 desc: "CALI USA TOP SHELF - Strain PINK KUSH : Têtes compactes, terpenes explosifs en saveurs.",
-                mediaType: 'video', src: _0x4a2b.d("aHR0cHM6Ly9yZXMuY2xvdWRpbmFyeS5jb20vZGxtbXlsYXQ2L3ZpZGVvL3VwbG9hZC92MTc2NDkwNjI5MC8wNkFFQ0VGNS03QzBBLTQ5M0MtOTU4OC05OTQzM0I0NTRBNEVfMl8xX2hubHplZS5tb3Y="),
+                mediaType: 'video', src: "https://res.cloudinary.com/dlmmylat6/video/upload/v1764906290/06AECEF5-7C0A-493C-9588-99433B454A4E_2_1_hnlzee.mov",
                 tiers: [{w:'5G',p:60}, {w:'10G',p:120}, {w:'25G',p:220}, {w:'50G',p:380}, {w:'100G',p:780}],
                 hasCustom: true, layout: 'col-span-1 h-60'
             },
             {
-                id: 'MC', name: _0x4a2b.d("TU9OVEUgQ1JJU1RPIPCfkow="), cat: 'FESTIVITÉS', sub: "C0°¨¨KE", tag: "❄️ ÉCAILLES PURES",
+                id: 'MC', name: "MONTE CRISTO 💎", cat: 'FESTIVITÉS', sub: "C0°¨¨KE", tag: "❄️ ÉCAILLES PURES",
                 desc: "ÉCAILLES PURES 0,98%. Pureté brute Bolivie. Zéro coupe. Le top du top.",
-                mediaType: 'video', src: _0x4a2b.d("aHR0cHM6Ly9yZXMuY2xvdWRpbmFyeS5jb20vZGxtbXlsYXQ2L3ZpZGVvL3VwbG9hZC92MTc2NDkwNjMwNS9JTUdfMTYyOV9udGtqcmEubXA0"),
+                mediaType: 'video', src: "https://res.cloudinary.com/dlmmylat6/video/upload/v1764906305/IMG_1629_ntkjra.mp4",
                 tiers: [{w:'1G',p:60}, {w:'2G',p:120}, {w:'5G',p:260}, {w:'10G',p:450}, {w:'20G',p:800}],
                 hasCustom: true, layout: 'col-span-2 h-56'
             }
@@ -937,10 +937,33 @@
 
         function renderRecap() {
             const div = document.getElementById('checkout-recap');
-            let total = cart.reduce((a,b) => a + b.p, 0);
+            let subtotal = cart.reduce((a,b) => a + b.p, 0);
+            
+            // Calcul frais de livraison
+            let deliveryFee = 0;
+            if(currentMode === 'delivery') {
+                deliveryFee = 10; // IDF
+            } else if(currentMode === 'postal') {
+                deliveryFee = 20; // Limitrophes
+            }
+            
+            let total = subtotal + deliveryFee;
+            
             let html = '<ul class="space-y-2">';
             cart.forEach(c => html += `<li class="flex justify-between"><span>• ${c.name} (${c.w})</span> <span class="text-white font-bold">${c.p}€</span></li>`);
-            html += `</ul><div class="mt-4 pt-4 border-t border-[#333] flex justify-between font-black text-emerald-500 text-sm"><span>TOTAL</span><span>${total}€</span></div>`;
+            html += `</ul>`;
+            
+            html += `<div class="mt-4 pt-4 border-t border-[#333] space-y-2">`;
+            html += `<div class="flex justify-between text-xs text-gray-400"><span>Sous-total</span><span>${subtotal}€</span></div>`;
+            
+            if(deliveryFee > 0) {
+                const deliveryLabel = currentMode === 'delivery' ? 'Livraison IDF' : 'Envoi Postal';
+                html += `<div class="flex justify-between text-xs text-gray-400"><span>${deliveryLabel}</span><span>+${deliveryFee}€</span></div>`;
+            }
+            
+            html += `<div class="flex justify-between font-black text-emerald-500 text-sm pt-2 border-t border-[#333]"><span>TOTAL</span><span>${total}€</span></div>`;
+            html += `</div>`;
+            
             div.innerHTML = html;
         }
 
@@ -1020,49 +1043,71 @@
             document.getElementById('processing-screen').classList.remove('hidden');
 
             setTimeout(() => {
-                let total = cart.reduce((a,b) => a + b.p, 0);
+                let subtotal = cart.reduce((a,b) => a + b.p, 0);
                 let payment = document.getElementById('payment-method').value;
                 
-                // Construction du message ultra-détaillé (emojis simples pour compatibilité)
-                let msg = `═══════════════════════\n`;
-                msg += `  COMMANDE SOUTH VALLEY\n`;
-                msg += `═══════════════════════\n\n`;
-                
-                msg += `ARTICLES :\n`;
-                cart.forEach((c, index) => {
-                    msg += `   ${index + 1}. ${c.name}\n`;
-                    msg += `      - Quantité : ${c.w}\n`;
-                    msg += `      - Prix : ${c.p}€\n\n`;
-                });
-                
-                msg += `━━━━━━━━━━━━━━━━━━━━━\n`;
-                msg += `TOTAL : ${total}€\n`;
-                msg += `━━━━━━━━━━━━━━━━━━━━━\n\n`;
-                
-                msg += `PAIEMENT : ${payment}\n\n`;
-                
-                msg += `MES COORDONNÉES :\n`;
-                msg += `   WhatsApp : ${whatsappVal}\n\n`;
-                
-                msg += `MODE DE RÉCUPÉRATION :\n`;
-                if(currentMode === 'meetup') {
-                    msg += `   ✓ MEET-UP (92 Nord)\n`;
-                    msg += `   Heure souhaitée : ${timeVal}\n`;
-                } else if(currentMode === 'delivery') {
-                    msg += `   ✓ LIVRAISON IDF\n`;
-                    msg += `   Adresse :\n   ${addressVal}\n`;
+                // Calcul des frais de livraison
+                let deliveryFee = 0;
+                if(currentMode === 'delivery') {
+                    deliveryFee = 10; // IDF
                 } else if(currentMode === 'postal') {
-                    msg += `   ✓ ENVOI POSTAL\n`;
-                    msg += `   Coordonnées complètes :\n   ${addressVal}\n`;
+                    deliveryFee = 20; // Limitrophes
                 }
                 
-                msg += `\n━━━━━━━━━━━━━━━━━━━━━\n`;
-                msg += `PRÊT POUR VÉRIFICATION CNI + SELFIE\n`;
-                msg += `━━━━━━━━━━━━━━━━━━━━━\n\n`;
-                msg += `Merci pour ta confiance !\n`;
+                let total = subtotal + deliveryFee;
+                
+                // Construction du message WhatsApp (sans emojis complexes pour compatibilité)
+                let msg = `COMMANDE SOUTH VALLEY\n`;
+                msg += `========================\n\n`;
+                
+                msg += `ARTICLES:\n`;
+                cart.forEach((c, index) => {
+                    msg += `${index + 1}. ${c.name}\n`;
+                    msg += `   Quantite: ${c.w}\n`;
+                    msg += `   Prix: ${c.p}EUR\n\n`;
+                });
+                
+                msg += `------------------------\n`;
+                msg += `Sous-total: ${subtotal}EUR\n`;
+                
+                if(deliveryFee > 0) {
+                    msg += `Frais livraison: ${deliveryFee}EUR\n`;
+                }
+                
+                msg += `TOTAL: ${total}EUR\n`;
+                msg += `------------------------\n\n`;
+                
+                msg += `PAIEMENT: ${payment}\n\n`;
+                
+                msg += `MES COORDONNEES:\n`;
+                msg += `WhatsApp: ${whatsappVal}\n\n`;
+                
+                msg += `MODE RECUPERATION:\n`;
+                if(currentMode === 'meetup') {
+                    msg += `MEET-UP (92 Nord)\n`;
+                    msg += `Heure: ${timeVal}\n`;
+                } else if(currentMode === 'delivery') {
+                    msg += `LIVRAISON IDF\n`;
+                    msg += `Adresse:\n${addressVal}\n`;
+                } else if(currentMode === 'postal') {
+                    msg += `ENVOI POSTAL\n`;
+                    msg += `Coordonnees:\n${addressVal}\n`;
+                }
+                
+                msg += `\n------------------------\n`;
+                msg += `PRET POUR VERIFICATION\n`;
+                msg += `CNI + SELFIE\n`;
+                msg += `------------------------\n\n`;
+                msg += `Merci pour ta confiance!\n`;
 
-                // Ouvrir WhatsApp avec le message pré-rempli
-                const whatsappURL = `https://wa.me/33759840764?text=${encodeURIComponent(msg)}`;
+                // Encoder le message pour WhatsApp
+                const encodedMsg = encodeURIComponent(msg);
+                const whatsappURL = `https://wa.me/33759840764?text=${encodedMsg}`;
+                
+                // Debug: log l'URL complète
+                console.log('WhatsApp URL:', whatsappURL);
+                
+                // Ouvrir WhatsApp
                 window.open(whatsappURL, '_blank');
 
                 // Réinitialiser après envoi
