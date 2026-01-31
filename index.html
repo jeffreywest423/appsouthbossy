@@ -560,21 +560,15 @@
         (function() {
             'use strict';
             
-            // Détection de bot basique (AVANT vérif Telegram)
             const isBot = /bot|crawler|spider|crawling|scraper/i.test(navigator.userAgent);
-            
-            // Vérification honeypot (si un bot a rempli le champ invisible)
             const honeypotFilled = document.getElementById('contact_email')?.value !== '';
             
-            // BLOQUER UNIQUEMENT les bots évidents
             if (isBot || honeypotFilled) {
                 document.getElementById('block-screen').style.display = 'flex';
                 document.body.innerHTML = document.getElementById('block-screen').outerHTML;
                 throw new Error('Bot detected');
             }
             
-            // Vérification Telegram (MODE PERMISSIF - juste pour setup)
-            // On attend un peu que Telegram charge si besoin
             setTimeout(() => {
                 const tg = window.Telegram?.WebApp;
                 if (tg) {
@@ -586,11 +580,7 @@
             }, 100);
         })();
 
-        // ========== PROTECTION DOM ==========
-        // Désactiver clic droit
         document.addEventListener('contextmenu', e => e.preventDefault());
-        
-        // Désactiver F12, Ctrl+Shift+I, Ctrl+U
         document.addEventListener('keydown', e => {
             if (e.key === 'F12' || 
                 (e.ctrlKey && e.shiftKey && e.key === 'I') ||
@@ -599,11 +589,8 @@
                 return false;
             }
         });
-        
-        // Désactiver sélection de texte (déjà dans CSS mais renforcement JS)
         document.onselectstart = () => false;
         
-        // Détection DevTools (basique)
         setInterval(() => {
             const threshold = 160;
             if (window.outerWidth - window.innerWidth > threshold || 
@@ -612,16 +599,13 @@
             }
         }, 1000);
 
-        // ========== OBFUSCATION DONNÉES (Base64) ==========
         const _0x4a2b = {
             d: (s) => atob(s),
             e: (s) => btoa(s)
         };
 
-        // Numéro admin encodé
-        const _admin = _0x4a2b.d("MzM3NTk4NDA3NjQ="); // "33759840764"
+        const _admin = _0x4a2b.d("MzM3NTk4NDA3NjQ=");
 
-        // ========== CATALOGUE (avec emojis fixes) ==========
         const CATALOG = [
             {
                 id: 'JM', name: "JAUNE MOUSSEUX 🧼", cat: 'HASH', sub: "JAUNE MOUSSEUX", tag: "🇲🇦 TOP MOUSSE 🔥",
@@ -657,7 +641,6 @@
         let currentMode = 'meetup';
         let currentFilter = 'all';
 
-        // ========== TOAST NOTIFICATION SYSTEM ==========
         function showToast(type, title, message) {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -679,14 +662,12 @@
             
             container.appendChild(toast);
             
-            // Auto-remove après 4 secondes
             setTimeout(() => {
                 toast.style.animation = 'toastSlideOut 0.3s ease-out forwards';
                 setTimeout(() => toast.remove(), 300);
             }, 4000);
         }
 
-        // ========== CONFETTI CELEBRATION ==========
         function triggerConfetti() {
             const colors = ['#10B981', '#34D399', '#6EE7B7', '#FFF'];
             for (let i = 0; i < 50; i++) {
@@ -704,7 +685,6 @@
             }
         }
 
-        // ========== HAPTIC FEEDBACK (Telegram WebApp) ==========
         function triggerHaptic(type = 'light') {
             const tg = window.Telegram?.WebApp;
             if (tg?.HapticFeedback) {
@@ -716,7 +696,6 @@
             }
         }
 
-        // ========== VISUAL HAPTIC PULSE ==========
         function visualPulse(element) {
             element.classList.add('haptic-pulse');
             setTimeout(() => element.classList.remove('haptic-pulse'), 300);
@@ -785,14 +764,12 @@
             const container = document.getElementById('main-feed');
             const filtered = currentFilter === 'all' ? CATALOG : CATALOG.filter(i => i.cat === currentFilter);
             
-            // Show skeleton loaders first
             container.innerHTML = `
                 <div class="product-card col-span-2 h-72"><div class="skeleton w-full h-full"></div></div>
                 <div class="product-card col-span-1 h-60"><div class="skeleton w-full h-full"></div></div>
                 <div class="product-card col-span-1 h-60"><div class="skeleton w-full h-full"></div></div>
             `;
             
-            // Render actual content after slight delay for smooth transition
             setTimeout(() => {
                 let html = '';
                 filtered.forEach(item => {
@@ -840,7 +817,6 @@
                 triggerHaptic('light');
             }, 50);
             
-            // SWIPE TO CLOSE GESTURE
             setupSwipeToClose();
         }
 
@@ -860,7 +836,6 @@
                 currentY = e.touches[0].clientY;
                 const diff = currentY - startY;
                 
-                // Only allow downward swipe
                 if (diff > 0) {
                     panel.style.transform = `translateY(${diff}px)`;
                 }
@@ -870,12 +845,10 @@
                 if (!isDragging) return;
                 const diff = currentY - startY;
                 
-                // If swiped down more than 150px, close modal
                 if (diff > 150) {
                     closeModal();
                     triggerHaptic('light');
                 } else {
-                    // Snap back
                     panel.style.transform = 'translateY(0)';
                 }
                 
@@ -885,7 +858,7 @@
 
         function closeModal() {
             const panel = document.getElementById('modal-panel');
-            panel.style.transform = '';  // Reset inline style
+            panel.style.transform = '';
             panel.classList.add('translate-y-full');
             setTimeout(() => document.getElementById('product-modal').classList.add('hidden'), 400);
             triggerHaptic('light');
@@ -897,7 +870,6 @@
             updateCartUI();
             closeModal();
             
-            // Haptic feedback + Toast
             triggerHaptic('medium');
             showToast('success', 'AJOUTÉ AU PANIER', `${p.name} (${weight}) • ${price}€`);
         }
@@ -939,12 +911,11 @@
             const div = document.getElementById('checkout-recap');
             let subtotal = cart.reduce((a,b) => a + b.p, 0);
             
-            // Calcul frais de livraison
             let deliveryFee = 0;
             if(currentMode === 'delivery') {
-                deliveryFee = 10; // IDF
+                deliveryFee = 10;
             } else if(currentMode === 'postal') {
-                deliveryFee = 20; // Limitrophes
+                deliveryFee = 20;
             }
             
             let total = subtotal + deliveryFee;
@@ -976,7 +947,6 @@
             ['meetup', 'delivery', 'postal'].forEach(m => document.getElementById(`fields-${m}`).classList.add('hidden'));
             document.getElementById(`fields-${mode}`).classList.remove('hidden');
             
-            // Recalculer le récap pour mettre à jour les frais
             renderRecap();
         }
 
@@ -994,6 +964,7 @@
             visualPulse(el);
         }
 
+        // ========== FONCTION CORRIGÉE D'ENVOI WHATSAPP ==========
         function submitOrder() {
             if(!document.getElementById('check-id').checked) { 
                 showToast('error', 'ERREUR', 'Validation du protocole sécurité obligatoire');
@@ -1005,7 +976,6 @@
             let addressVal = "";
             let timeVal = "";
             
-            // Récupérer les infos selon le mode
             if(currentMode === 'meetup') { 
                 whatsappVal = document.getElementById('mu-whatsapp').value.trim();
                 timeVal = document.getElementById('mu-time').value.trim();
@@ -1019,7 +989,6 @@
                 addressVal = document.getElementById('post-address').value.trim();
             }
 
-            // Vérification des champs obligatoires
             if(!whatsappVal) { 
                 showToast('error', 'CHAMP REQUIS', 'Numéro WhatsApp obligatoire');
                 triggerHaptic('error');
@@ -1038,10 +1007,8 @@
                 return;
             }
 
-            // Haptic + Visual feedback
             triggerHaptic('heavy');
 
-            // Afficher l'écran de chiffrement
             document.getElementById('checkout-modal').classList.add('hidden');
             document.getElementById('processing-screen').classList.remove('hidden');
 
@@ -1049,90 +1016,105 @@
                 let subtotal = cart.reduce((a,b) => a + b.p, 0);
                 let payment = document.getElementById('payment-method').value;
                 
-                // Calcul des frais de livraison
                 let deliveryFee = 0;
                 if(currentMode === 'delivery') {
-                    deliveryFee = 10; // IDF
+                    deliveryFee = 10;
                 } else if(currentMode === 'postal') {
-                    deliveryFee = 20; // Limitrophes
+                    deliveryFee = 20;
                 }
                 
                 let total = subtotal + deliveryFee;
                 
-                // Construction du message WhatsApp - SUPER SIMPLIFIÉ pour compatibilité max
-                let msg = `*COMMANDE SOUTH VALLEY*\n\n`;
+                // ========== MESSAGE WHATSAPP OPTIMISÉ (SANS EMOJIS) ==========
+                let msgLines = [];
+                msgLines.push('COMMANDE SOUTH VALLEY');
+                msgLines.push('');
+                msgLines.push('=== ARTICLES ===');
                 
-                msg += `*ARTICLES:*\n`;
                 cart.forEach((c, index) => {
-                    // Enlever les emojis du nom pour le message WhatsApp
-                    const cleanName = c.name.replace(/[\u{1F300}-\u{1F9FF}]/gu, '').trim();
-                    msg += `${index + 1}. ${cleanName}\n`;
-                    msg += `Quantite: ${c.w} - Prix: ${c.p}EUR\n\n`;
+                    // Enlever TOUS les emojis du nom
+                    const cleanName = c.name.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '').trim();
+                    msgLines.push(`${index + 1}. ${cleanName}`);
+                    msgLines.push(`   Quantite: ${c.w}`);
+                    msgLines.push(`   Prix: ${c.p} EUR`);
                 });
                 
-                msg += `------------------\n`;
-                msg += `Sous-total: ${subtotal}EUR\n`;
-                
+                msgLines.push('');
+                msgLines.push('=== TOTAL ===');
+                msgLines.push(`Sous-total: ${subtotal} EUR`);
                 if(deliveryFee > 0) {
-                    msg += `Frais livraison: ${deliveryFee}EUR\n`;
+                    msgLines.push(`Frais livraison: +${deliveryFee} EUR`);
                 }
+                msgLines.push(`TOTAL: ${total} EUR`);
+                msgLines.push('');
+                msgLines.push('=== PAIEMENT ===');
+                msgLines.push(payment);
+                msgLines.push('');
+                msgLines.push('=== MES INFOS ===');
+                msgLines.push(`WhatsApp: ${whatsappVal}`);
                 
-                msg += `*TOTAL: ${total}EUR*\n`;
-                msg += `------------------\n\n`;
-                
-                msg += `*PAIEMENT:* ${payment}\n\n`;
-                
-                msg += `*MES INFOS:*\n`;
-                msg += `WhatsApp: ${whatsappVal}\n\n`;
-                
-                msg += `*MODE:*\n`;
                 if(currentMode === 'meetup') {
-                    msg += `MEET-UP (92 Nord)\n`;
-                    msg += `Heure: ${timeVal}\n`;
+                    msgLines.push('Mode: MEET-UP (92 Nord)');
+                    msgLines.push(`Heure: ${timeVal}`);
                 } else if(currentMode === 'delivery') {
-                    msg += `LIVRAISON IDF\n`;
-                    msg += `Adresse: ${addressVal}\n`;
+                    msgLines.push('Mode: LIVRAISON IDF');
+                    msgLines.push(`Adresse: ${addressVal}`);
                 } else if(currentMode === 'postal') {
-                    msg += `ENVOI POSTAL\n`;
-                    msg += `Adresse: ${addressVal}\n`;
+                    msgLines.push('Mode: ENVOI POSTAL');
+                    msgLines.push(`Adresse: ${addressVal}`);
                 }
                 
-                msg += `\nPret pour verification CNI + Selfie\n`;
-                msg += `Merci pour ta confiance!`;
-
-                // Construction de l'URL WhatsApp - Format API standard
-                const phoneNumber = '33759840764'; // Sans espaces ni +
+                msgLines.push('');
+                msgLines.push('Pret pour verification CNI + Selfie');
+                
+                const msg = msgLines.join('\n');
+                
+                // ========== CONSTRUCTION URL WHATSAPP ==========
+                const phoneNumber = '33759840764'; // Format international sans espaces
                 const encodedMsg = encodeURIComponent(msg);
                 
-                // Essayer avec l'API standard WhatsApp
+                // URL WhatsApp standard (fonctionne sur mobile ET desktop)
                 const whatsappURL = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodedMsg}`;
                 
                 console.log('=== DEBUG WHATSAPP ===');
                 console.log('Phone:', phoneNumber);
-                console.log('Message brut:', msg);
-                console.log('URL complète:', whatsappURL);
+                console.log('Message:', msg);
+                console.log('URL:', whatsappURL);
                 console.log('======================');
                 
-                // FORCER L'OUVERTURE EXTERNE (pas dans Telegram WebView)
+                // ========== MÉTHODES D'OUVERTURE (AVEC FALLBACKS) ==========
                 const tg = window.Telegram?.WebApp;
+                
+                // Méthode 1: Telegram WebApp openLink (MEILLEURE pour Mini Apps)
                 if (tg && tg.openLink) {
-                    // Méthode 1: Via Telegram WebApp API (ouvre dans navigateur/app externe)
+                    console.log('✅ Ouverture via Telegram openLink');
                     tg.openLink(whatsappURL);
-                } else {
-                    // Méthode 2: Fallback classique
-                    window.open(whatsappURL, '_blank');
                 }
+                // Méthode 2: Fallback avec window.location.href (pour navigateurs classiques)
+                else {
+                    console.log('✅ Fallback: window.location.href');
+                    window.location.href = whatsappURL;
+                }
+                
+                // ALTERNATIVE SUPPLÉMENTAIRE (en commentaire, si ça marche pas)
+                // Décommentez si les méthodes ci-dessus ne fonctionnent pas :
+                /*
+                setTimeout(() => {
+                    const link = document.createElement('a');
+                    link.href = whatsappURL;
+                    link.target = '_blank';
+                    link.rel = 'noopener noreferrer';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }, 100);
+                */
 
-                // Réinitialiser après envoi
                 setTimeout(() => {
                     document.getElementById('processing-screen').classList.add('hidden');
-                    
-                    // CONFETTI CELEBRATION !
                     triggerConfetti();
                     triggerHaptic('success');
-                    
-                    // Toast de succès
-                    showToast('success', 'REDIRECTION WHATSAPP', 'Tu vas être redirigé vers WhatsApp avec ton message prêt !');
+                    showToast('success', 'REDIRECTION WHATSAPP', 'Ouverture de WhatsApp avec ta commande !');
                     
                     cart = [];
                     updateCartUI();
@@ -1140,7 +1122,15 @@
             }, 2000);
         }
         
-        function contactStaff() { window.open(`https://wa.me/${_admin}`, '_blank'); }
+        function contactStaff() { 
+            const whatsappURL = `https://api.whatsapp.com/send?phone=33759840764`;
+            const tg = window.Telegram?.WebApp;
+            if (tg && tg.openLink) {
+                tg.openLink(whatsappURL);
+            } else {
+                window.location.href = whatsappURL;
+            }
+        }
     </script>
 </body>
 </html>
