@@ -3,14 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>South Valley // Cercle Privé</title> 
-    <meta name="robots" content="noindex, nofollow">
+    <title>Application</title>
+    
+    <!-- ANTI-INDEXING STRICT -->
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="googlebot" content="noindex, nofollow">
+    <meta name="bingbot" content="noindex, nofollow">
+    <meta http-equiv="X-Robots-Tag" content="noindex, nofollow">
+    <meta name="referrer" content="no-referrer">
+    
+    <!-- HONEYPOT INVISIBLE (PIÈGE POUR BOTS) -->
+    <div style="position:absolute;left:-9999px;top:-9999px;">
+        <input type="text" name="contact_email" id="contact_email" tabindex="-1" autocomplete="off">
+        <a href="/admin/login">Admin Panel</a>
+        <a href="/api/users">User API</a>
+    </div>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
 
     <style>
-        /* --- CHARTE GRAPHIQUE "SOUTH VALLEY" --- */
         :root {
             --bg-deep: #050505;
             --bg-card: #0F0F0F;
@@ -26,6 +38,11 @@
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
             -webkit-tap-highlight-color: transparent;
+            /* PROTECTION DOM */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
 
         .brand-font { font-family: 'Montserrat', sans-serif; letter-spacing: -0.03em; }
@@ -104,9 +121,28 @@
             animation: scan 1.5s linear infinite;
         }
         @keyframes scan { 0% { transform: translateY(-50px); opacity: 0; } 50% { opacity: 1; } 100% { transform: translateY(50px); opacity: 0; } }
+        
+        /* ÉCRAN DE BLOCAGE */
+        #block-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: #000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
     </style>
 </head>
 <body class="antialiased pb-28">
+
+    <!-- ÉCRAN DE BLOCAGE (si non-Telegram ou bot détecté) -->
+    <div id="block-screen">
+        <h1 class="text-3xl font-black text-red-500 mb-4">⛔ ACCÈS REFUSÉ</h1>
+        <p class="text-sm text-gray-400 text-center">Cette application nécessite Telegram.</p>
+    </div>
 
     <div id="splash-screen">
         <h1 class="text-4xl font-black text-white brand-font italic pulse-logo tracking-tighter">SOUTH VALLEY</h1>
@@ -134,7 +170,6 @@
         </div>
     </header>
 
-    <!-- MARKET STATUS DYNAMIQUE -->
     <div class="px-4 pt-4">
         <div class="flex items-center justify-between bg-[#0F0F0F] border border-[#222] rounded-lg px-3 py-2">
             <div class="flex items-center gap-2">
@@ -386,34 +421,98 @@
     </div>
 
     <script>
-        const ADMIN_PHONE = "33759840764"; 
+        // ========== SÉCURITÉ NIVEAU 1: VÉRIFICATION TELEGRAM + ANTI-BOT ==========
+        (function() {
+            'use strict';
+            
+            // Vérification Telegram WebApp
+            const tg = window.Telegram?.WebApp;
+            const isTelegram = !!tg;
+            
+            // Détection de bot basique
+            const isBot = /bot|crawler|spider|crawling/i.test(navigator.userAgent);
+            
+            // Vérification honeypot (si un bot a rempli le champ invisible)
+            const honeypotFilled = document.getElementById('contact_email')?.value !== '';
+            
+            // BLOQUER si pas Telegram OU si bot détecté
+            if (!isTelegram || isBot || honeypotFilled) {
+                document.getElementById('block-screen').style.display = 'flex';
+                document.body.innerHTML = document.getElementById('block-screen').outerHTML;
+                throw new Error('Access denied');
+            }
+            
+            // Configuration Telegram
+            if (tg) {
+                tg.ready();
+                tg.expand();
+                tg.setHeaderColor('#000000');
+                tg.enableClosingConfirmation();
+            }
+        })();
 
+        // ========== PROTECTION DOM ==========
+        // Désactiver clic droit
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        
+        // Désactiver F12, Ctrl+Shift+I, Ctrl+U
+        document.addEventListener('keydown', e => {
+            if (e.key === 'F12' || 
+                (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+                (e.ctrlKey && e.key === 'u')) {
+                e.preventDefault();
+                return false;
+            }
+        });
+        
+        // Désactiver sélection de texte (déjà dans CSS mais renforcement JS)
+        document.onselectstart = () => false;
+        
+        // Détection DevTools (basique)
+        setInterval(() => {
+            const threshold = 160;
+            if (window.outerWidth - window.innerWidth > threshold || 
+                window.outerHeight - window.innerHeight > threshold) {
+                document.body.innerHTML = '<h1 style="color:red;text-align:center;margin-top:50vh;">⛔ DEVTOOLS DÉTECTÉ</h1>';
+            }
+        }, 1000);
+
+        // ========== OBFUSCATION DONNÉES (Base64) ==========
+        const _0x4a2b = {
+            d: (s) => atob(s),
+            e: (s) => btoa(s)
+        };
+
+        // Numéro admin encodé
+        const _admin = _0x4a2b.d("MzM3NTk4NDA3NjQ="); // "33759840764"
+
+        // ========== CATALOGUE (légèrement obfusqué) ==========
         const CATALOG = [
             {
-                id: 'JM', name: "JAUNE MOUSSEUX 🧼", cat: 'HASH', sub: "JAUNE MOUSSEUX", tag: "🇲🇦 TOP MOUSSE 🔥",
+                id: 'JM', name: _0x4a2b.d("SkFVTkUgTU9VU1NFVVgg8J+nvA=="), cat: 'HASH', sub: "JAUNE MOUSSEUX", tag: "🇲🇦 TOP MOUSSE 🔥",
                 desc: "Sourcing direct Atlas. Texture mousseuse ultra-malléable. Terpènes authentiques, filtration 2026. Propre, gras et puissant.",
-                mediaType: 'video', src: "https://res.cloudinary.com/dlmmylat6/video/upload/v1769740747/1766600622422513_fblg2j.mov",
+                mediaType: 'video', src: _0x4a2b.d("aHR0cHM6Ly9yZXMuY2xvdWRpbmFyeS5jb20vZGxtbXlsYXQ2L3ZpZGVvL3VwbG9hZC92MTc2OTc0MDc0Ny8xNzY2NjAwNjIyNDIyNTEzX2ZibGcyai5tb3Y="),
                 tiers: [{w:'10G',p:60}, {w:'20G',p:100}, {w:'50G',p:170}, {w:'100G',p:340}],
                 hasCustom: true, layout: 'col-span-2 h-72'
             },
             {
-                id: 'WZ', name: "WIZARD TREES 🧙‍♀️", cat: 'HASH', sub: "OLIVES FROZEN SIFT", tag: "✨ CALI IMPORT",
+                id: 'WZ', name: _0x4a2b.d("V0laQVJEIFRSRUVTIPCfp5nigI3imYDvuI8="), cat: 'HASH', sub: "OLIVES FROZEN SIFT", tag: "✨ CALI IMPORT",
                 desc: "Farm: WIZARD TREES. Frozen Sift Premium. Strains: FORBIDDEN FRUITS, OG DONUTS, DREAM QUEEN, HONEY BANANA, APPLE GELATO.",
-                mediaType: 'image', src: "https://res.cloudinary.com/dlmmylat6/image/upload/v1765993841/IMG_2073_ffmyfd.jpg",
+                mediaType: 'image', src: _0x4a2b.d("aHR0cHM6Ly9yZXMuY2xvdWRpbmFyeS5jb20vZGxtbXlsYXQ2L2ltYWdlL3VwbG9hZC92MTc2NTk5Mzg0MS9JTUdfMjA3M19mZm15ZmQuanBn"),
                 tiers: [{w:'5G (1/2)',p:80}, {w:'10G (1)',p:170}],
                 hasCustom: false, layout: 'col-span-1 h-60'
             },
             {
-                id: 'PK', name: "PINK KUSH 🌸", cat: 'WEED', sub: "TOPSHELF CALI USA", tag: "🇺🇸 TOP SHELF",
+                id: 'PK', name: _0x4a2b.d("UElOSyBLVVNIIPCfjLg="), cat: 'WEED', sub: "TOPSHELF CALI USA", tag: "🇺🇸 TOP SHELF",
                 desc: "CALI USA TOP SHELF - Strain PINK KUSH : Têtes compactes, terpenes explosifs en saveurs.",
-                mediaType: 'video', src: "https://res.cloudinary.com/dlmmylat6/video/upload/v1764906290/06AECEF5-7C0A-493C-9588-99433B454A4E_2_1_hnlzee.mov",
+                mediaType: 'video', src: _0x4a2b.d("aHR0cHM6Ly9yZXMuY2xvdWRpbmFyeS5jb20vZGxtbXlsYXQ2L3ZpZGVvL3VwbG9hZC92MTc2NDkwNjI5MC8wNkFFQ0VGNS03QzBBLTQ5M0MtOTU4OC05OTQzM0I0NTRBNEVfMl8xX2hubHplZS5tb3Y="),
                 tiers: [{w:'5G',p:60}, {w:'10G',p:120}, {w:'25G',p:220}, {w:'50G',p:380}, {w:'100G',p:780}],
                 hasCustom: true, layout: 'col-span-1 h-60'
             },
             {
-                id: 'MC', name: "MONTE CRISTO 💎", cat: 'FESTIVITÉS', sub: "C0°¨¨KE", tag: "❄️ ÉCAILLES PURES",
+                id: 'MC', name: _0x4a2b.d("TU9OVEUgQ1JJU1RPIPCfkow="), cat: 'FESTIVITÉS', sub: "C0°¨¨KE", tag: "❄️ ÉCAILLES PURES",
                 desc: "ÉCAILLES PURES 0,98%. Pureté brute Bolivie. Zéro coupe. Le top du top.",
-                mediaType: 'video', src: "https://res.cloudinary.com/dlmmylat6/video/upload/v1764906305/IMG_1629_ntkjra.mp4",
+                mediaType: 'video', src: _0x4a2b.d("aHR0cHM6Ly9yZXMuY2xvdWRpbmFyeS5jb20vZGxtbXlsYXQ2L3ZpZGVvL3VwbG9hZC92MTc2NDkwNjMwNS9JTUdfMTYyOV9udGtqcmEubXA0"),
                 tiers: [{w:'1G',p:60}, {w:'2G',p:120}, {w:'5G',p:260}, {w:'10G',p:450}, {w:'20G',p:800}],
                 hasCustom: true, layout: 'col-span-2 h-56'
             }
@@ -445,8 +544,6 @@
         };
 
         window.onload = () => {
-            const tg = window.Telegram?.WebApp;
-            if(tg) { tg.expand(); tg.setHeaderColor('#000000'); }
             setTimeout(() => {
                 document.getElementById('splash-screen').style.opacity = '0';
                 setTimeout(() => document.getElementById('splash-screen').remove(), 800);
@@ -610,11 +707,11 @@
                     msg += `📍 Adresse : ${addressVal}\n`;
                 }
 
-                window.open(`https://wa.me/${ADMIN_PHONE}?text=${encodeURIComponent(msg)}`, '_blank');
+                window.open(`https://wa.me/${_admin}?text=${encodeURIComponent(msg)}`, '_blank');
             }, 2000);
         }
         
-        function contactStaff() { window.open(`https://wa.me/${ADMIN_PHONE}`, '_blank'); }
+        function contactStaff() { window.open(`https://wa.me/${_admin}`, '_blank'); }
     </script>
 </body>
 </html>
