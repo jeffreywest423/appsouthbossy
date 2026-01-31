@@ -1082,36 +1082,34 @@
                 console.log('URL:', whatsappURL);
                 console.log('======================');
                 
-                // ========== FORCER OUVERTURE DANS NAVIGATEUR EXTERNE ==========
+                // ========== OUVERTURE WHATSAPP GARANTIE ==========
                 const tg = window.Telegram?.WebApp;
                 
-                // MÉTHODE ULTIME: openTelegramLink pour forcer ouverture externe
-                // Cela ouvre le lien HORS de Telegram, dans le navigateur par défaut
-                if (tg && tg.openTelegramLink) {
-                    console.log('✅ Ouverture externe via openTelegramLink');
-                    tg.openTelegramLink(whatsappURL);
-                }
-                // Si openTelegramLink n'existe pas, utiliser openLink avec try-catch
-                else if (tg && tg.openLink) {
-                    console.log('✅ Tentative openLink');
-                    try {
-                        // On essaie de forcer l'ouverture externe
-                        tg.openLink(whatsappURL, {try_instant_view: false});
-                    } catch(e) {
+                console.log('=== DEBUG WHATSAPP ===');
+                console.log('Phone:', phoneNumber);
+                console.log('Message:', msg);
+                console.log('URL:', whatsappURL);
+                console.log('======================');
+                
+                // SOLUTION ULTIME: Redirection directe sans Telegram WebView
+                // On force la sortie complète de l'app Telegram
+                if (tg) {
+                    // Fermer la confirmation de sortie pour permettre la navigation
+                    tg.disableClosingConfirmation();
+                    
+                    // Méthode 1: Ouvrir dans navigateur externe (PRIORITAIRE)
+                    if (tg.openLink) {
+                        console.log('✅ Méthode 1: tg.openLink');
                         tg.openLink(whatsappURL);
+                    } else {
+                        // Méthode 2: Forcer avec window.open
+                        console.log('✅ Méthode 2: window.open');
+                        window.open(whatsappURL, '_blank', 'noopener,noreferrer');
                     }
-                }
-                // Fallback ultime : création de lien invisible + clic
-                else {
-                    console.log('✅ Fallback: création lien DOM');
-                    const link = document.createElement('a');
-                    link.href = whatsappURL;
-                    link.target = '_blank';
-                    link.rel = 'noopener noreferrer';
-                    link.style.display = 'none';
-                    document.body.appendChild(link);
-                    link.click();
-                    setTimeout(() => document.body.removeChild(link), 100);
+                } else {
+                    // Pas dans Telegram, utiliser méthode standard
+                    console.log('✅ Méthode 3: window.location');
+                    window.location.href = whatsappURL;
                 }
 
                 setTimeout(() => {
@@ -1130,24 +1128,15 @@
             const whatsappURL = `https://api.whatsapp.com/send?phone=33759840764`;
             const tg = window.Telegram?.WebApp;
             
-            // Forcer ouverture dans navigateur externe
-            if (tg && tg.openTelegramLink) {
-                tg.openTelegramLink(whatsappURL);
-            } else if (tg && tg.openLink) {
-                try {
-                    tg.openLink(whatsappURL, {try_instant_view: false});
-                } catch(e) {
+            if (tg) {
+                tg.disableClosingConfirmation();
+                if (tg.openLink) {
                     tg.openLink(whatsappURL);
+                } else {
+                    window.open(whatsappURL, '_blank');
                 }
             } else {
-                const link = document.createElement('a');
-                link.href = whatsappURL;
-                link.target = '_blank';
-                link.rel = 'noopener noreferrer';
-                link.style.display = 'none';
-                document.body.appendChild(link);
-                link.click();
-                setTimeout(() => document.body.removeChild(link), 100);
+                window.location.href = whatsappURL;
             }
         }
     </script>
