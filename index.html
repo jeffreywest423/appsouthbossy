@@ -77,8 +77,8 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            opacity: 0.03;
-            filter: blur(2px);
+            opacity: 0.05;
+            filter: blur(1px);
             z-index: -1;
             pointer-events: none;
         }
@@ -103,8 +103,8 @@
         }
 
         .splash-logo {
-            width: 140px;
-            height: 140px;
+            width: 200px;
+            height: 200px;
             margin-bottom: 2rem;
             animation: logoFloatGlow 3s ease-in-out infinite;
             filter: drop-shadow(0 10px 40px rgba(139, 92, 246, 0.6)) drop-shadow(0 0 20px rgba(139, 92, 246, 0.4));
@@ -744,7 +744,7 @@
         }
 
         @media (max-width: 640px) {
-            .splash-logo { width: 100px; height: 100px; }
+            .splash-logo { width: 160px; height: 160px; }
             .splash-title { font-size: 2rem; }
             .toast { min-width: 280px; }
         }
@@ -769,8 +769,6 @@
         <img src="https://res.cloudinary.com/dlmmylat6/image/upload/v1770002783/Design_sans_titre_8_mesps5.png" 
              alt="South Valley" 
              class="splash-logo">
-        <h1 class="splash-title brand-font">SOUTH VALLEY</h1>
-        <p class="text-[10px] text-violet-500 font-bold tracking-[0.5em] mt-4 uppercase">TON PLUG NUMÉRO 1</p>
     </div>
 
     <!-- HEADER -->
@@ -907,14 +905,15 @@
 
     <!-- INFOS MODAL -->
     <div id="infos-modal" class="fixed inset-0 z-[70] bg-[var(--bg-deep)] hidden flex flex-col">
-        <div class="flex items-center p-6 border-b border-[var(--border-accent)] header-glass">
+        <div class="absolute inset-0 bg-[url('https://res.cloudinary.com/dlmmylat6/image/upload/v1770004112/0453086a-aa8b-480c-9227-6ceb099b3530_z111qu.png')] bg-cover bg-center opacity-[0.03] pointer-events-none"></div>
+        <div class="flex items-center p-6 border-b border-[var(--border-accent)] header-glass relative z-10">
             <button onclick="closeInfos()" class="bg-[var(--bg-elevated)] w-10 h-10 rounded-full flex items-center justify-center text-white mr-4 active:scale-90 border border-[var(--border-accent)]">
                 ←
             </button>
             <h2 class="text-xl font-black text-white brand-font tracking-tighter">INFOS & SERVICES</h2>
         </div>
         
-        <div class="flex-1 overflow-y-auto p-5 space-y-6 no-scrollbar">
+        <div class="flex-1 overflow-y-auto p-5 space-y-6 no-scrollbar relative z-10">
             
             <section class="grid grid-cols-1 gap-3">
                 <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl">
@@ -1022,14 +1021,15 @@
 
     <!-- CHECKOUT MODAL -->
     <div id="checkout-modal" class="fixed inset-0 z-[80] bg-black hidden flex flex-col">
-        <div class="flex items-center justify-between p-6 border-b border-[var(--border-accent)] header-glass">
+        <div class="absolute inset-0 bg-[url('https://res.cloudinary.com/dlmmylat6/image/upload/v1770004112/0453086a-aa8b-480c-9227-6ceb099b3530_z111qu.png')] bg-cover bg-center opacity-[0.03] pointer-events-none"></div>
+        <div class="flex items-center justify-between p-6 border-b border-[var(--border-accent)] header-glass relative z-10">
             <h2 class="text-xl font-black text-white brand-font tracking-tighter uppercase">VALIDATION</h2>
             <button onclick="closeCheckout()" class="bg-[var(--bg-elevated)] w-10 h-10 rounded-full flex items-center justify-center text-white active:scale-90 border border-[var(--border-accent)]">
                 ✕
             </button>
         </div>
 
-        <div class="grid grid-cols-3 p-4 gap-3 bg-[var(--bg-deep)]">
+        <div class="grid grid-cols-3 p-4 gap-3 bg-[var(--bg-deep)] relative z-10">
             <button onclick="switchTab('meetup')" id="tab-meetup" class="tab-btn active py-3.5 rounded-xl text-[10px] uppercase tracking-tighter">
                 <span>MEET-UP</span>
             </button>
@@ -1041,7 +1041,7 @@
             </button>
         </div>
 
-        <div class="flex-1 overflow-y-auto p-6 no-scrollbar">
+        <div class="flex-1 overflow-y-auto p-6 no-scrollbar relative z-10">
             <div id="checkout-recap" class="mb-6 p-5 bg-[var(--bg-card)] border border-[var(--border-accent)] rounded-xl text-[11px] text-gray-400 font-mono shadow-inner"></div>
             
             <form id="checkout-form" class="space-y-6">
@@ -1113,7 +1113,7 @@
             </form>
         </div>
 
-        <div class="p-6 bg-black border-t border-[var(--border-accent)]">
+        <div class="p-6 bg-black border-t border-[var(--border-accent)] relative z-10">
             <button onclick="submitOrder()" class="w-full py-5 bg-violet-500 text-white font-black uppercase text-xs rounded-xl shadow-[0_5px_30px_rgba(139,92,246,0.3)] active:scale-95 transition-transform tracking-[0.2em]">
                 ENVOYER AU STAFF ➤
             </button>
