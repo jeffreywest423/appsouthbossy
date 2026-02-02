@@ -42,9 +42,9 @@
             --bg-deep: #000000;
             --bg-card: #0a0a0a;
             --bg-elevated: #111111;
-            --accent: #10B981;
-            --accent-glow: rgba(16, 185, 129, 0.25);
-            --accent-dim: rgba(16, 185, 129, 0.1);
+            --accent: #8b5cf6;
+            --accent-glow: rgba(139, 92, 246, 0.32);
+            --accent-dim: rgba(139, 92, 246, 0.12);
             --text-main: #FFFFFF;
             --text-secondary: #9CA3AF;
             --border: #1a1a1a;
@@ -106,18 +106,24 @@
             width: 140px;
             height: 140px;
             margin-bottom: 2rem;
-            animation: logoFloat 3s ease-in-out infinite;
-            filter: drop-shadow(0 10px 40px rgba(16, 185, 129, 0.4));
+            animation: logoFloatGlow 3s ease-in-out infinite;
+            filter: drop-shadow(0 10px 40px rgba(139, 92, 246, 0.6)) drop-shadow(0 0 20px rgba(139, 92, 246, 0.4));
         }
 
-        @keyframes logoFloat {
-            0%, 100% { transform: translateY(0px) scale(1); }
-            50% { transform: translateY(-10px) scale(1.02); }
+        @keyframes logoFloatGlow {
+            0%, 100% { 
+                transform: translateY(0px) scale(1) rotate(0deg); 
+                filter: drop-shadow(0 10px 40px rgba(139, 92, 246, 0.6)) drop-shadow(0 0 20px rgba(139, 92, 246, 0.4));
+            }
+            50% { 
+                transform: translateY(-10px) scale(1.05) rotate(2deg); 
+                filter: drop-shadow(0 15px 50px rgba(139, 92, 246, 0.8)) drop-shadow(0 0 30px rgba(139, 92, 246, 0.6));
+            }
         }
 
         .splash-title {
             font-size: 2.5rem;
-            background: linear-gradient(135deg, #10B981 0%, #34D399 100%);
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -125,8 +131,8 @@
         }
 
         @keyframes textGlow {
-            0%, 100% { filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.5)); }
-            50% { filter: drop-shadow(0 0 30px rgba(16, 185, 129, 0.8)); }
+            0%, 100% { filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.5)); }
+            50% { filter: drop-shadow(0 0 30px rgba(139, 92, 246, 0.8)); }
         }
 
         /* HEADER */
@@ -140,12 +146,12 @@
         .header-logo {
             width: 45px;
             height: 45px;
-            filter: drop-shadow(0 4px 12px rgba(16, 185, 129, 0.3));
+            filter: drop-shadow(0 4px 12px rgba(139, 92, 246, 0.3));
         }
 
         /* MARQUEE */
         .marquee-container {
-            background: linear-gradient(90deg, var(--accent) 0%, #34D399 100%);
+            background: linear-gradient(90deg, var(--accent) 0%, #a78bfa 100%);
             overflow: hidden;
             position: relative;
         }
@@ -187,7 +193,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.1), transparent);
+            background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.1), transparent);
             animation: shimmer 3s infinite;
         }
 
@@ -204,7 +210,7 @@
 
         .status-dot.online {
             background: var(--accent);
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2),
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2),
                         0 0 10px var(--accent);
             animation: pulse-dot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
@@ -237,10 +243,10 @@
 
         .filter-chip.active {
             background: var(--accent);
-            color: #000;
+            color: #fff;
             border-color: var(--accent);
             box-shadow: 0 0 20px var(--accent-glow),
-                        0 4px 12px rgba(16, 185, 129, 0.3);
+                        0 4px 12px rgba(139, 92, 246, 0.3);
         }
 
         /* PRODUCT CARDS */
@@ -263,7 +269,7 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(135deg, transparent 0%, rgba(16, 185, 129, 0.05) 100%);
+            background: linear-gradient(135deg, transparent 0%, rgba(139, 92, 246, 0.05) 100%);
             opacity: 0;
             transition: opacity 0.3s;
             z-index: 1;
@@ -277,14 +283,14 @@
         .badge-premium {
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            background: rgba(16, 185, 129, 0.9);
-            color: #000;
+            background: rgba(139, 92, 246, 0.9);
+            color: #fff;
             font-weight: 900;
             font-size: 8px;
             letter-spacing: 0.1em;
             padding: 4px 10px;
             border-radius: 6px;
-            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4);
             text-transform: uppercase;
         }
 
@@ -330,7 +336,7 @@
         }
 
         .price-save {
-            background: rgba(16, 185, 129, 0.15);
+            background: rgba(139, 92, 246, 0.15);
             color: var(--accent);
             font-size: 9px;
             font-weight: 800;
@@ -362,7 +368,7 @@
             margin-bottom: 8px;
             animation: slideInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1), fadeOut 0.5s 4.5s forwards;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5),
-                        0 0 0 1px rgba(16, 185, 129, 0.1);
+                        0 0 0 1px rgba(139, 92, 246, 0.1);
         }
 
         @keyframes slideInUp {
@@ -385,7 +391,7 @@
 
         .social-proof-icon {
             font-size: 18px;
-            filter: drop-shadow(0 2px 4px rgba(16, 185, 129, 0.3));
+            filter: drop-shadow(0 2px 4px rgba(139, 92, 246, 0.3));
         }
 
         /* ACTIVITY */
@@ -393,8 +399,8 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.2);
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.2);
             color: var(--accent);
             padding: 4px 10px;
             border-radius: 8px;
@@ -418,7 +424,7 @@
             -webkit-backdrop-filter: blur(30px) saturate(180%);
             border: 1px solid var(--border-accent);
             box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.3),
-                        0 0 0 1px rgba(16, 185, 129, 0.05);
+                        0 0 0 1px rgba(139, 92, 246, 0.05);
         }
 
         .nav-btn {
@@ -452,7 +458,7 @@
         .modal-panel {
             background: linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-card) 100%);
             box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.6),
-                        0 0 0 1px rgba(16, 185, 129, 0.1);
+                        0 0 0 1px rgba(139, 92, 246, 0.1);
         }
 
         .swipe-indicator {
@@ -480,7 +486,7 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(135deg, transparent, rgba(16, 185, 129, 0.05));
+            background: linear-gradient(135deg, transparent, rgba(139, 92, 246, 0.05));
             opacity: 0;
             transition: opacity 0.3s;
         }
@@ -496,7 +502,7 @@
 
         .tier-card.popular {
             border-color: var(--accent);
-            background: rgba(16, 185, 129, 0.05);
+            background: rgba(139, 92, 246, 0.05);
         }
 
         .tier-card.popular::after {
@@ -505,7 +511,7 @@
             top: 8px;
             right: -25px;
             background: var(--accent);
-            color: #000;
+            color: #fff;
             font-size: 8px;
             font-weight: 900;
             padding: 2px 30px;
@@ -527,7 +533,7 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(135deg, var(--accent) 0%, #34D399 100%);
+            background: linear-gradient(135deg, var(--accent) 0%, #a78bfa 100%);
             opacity: 0;
             transition: opacity 0.3s;
         }
@@ -537,7 +543,7 @@
         }
 
         .tab-btn.active {
-            color: #000;
+            color: #fff;
             border-color: var(--accent);
             font-weight: 900;
             box-shadow: 0 0 20px var(--accent-glow);
@@ -562,7 +568,7 @@
         }
 
         .pay-card.selected {
-            background: rgba(16, 185, 129, 0.1);
+            background: rgba(139, 92, 246, 0.1);
             border-color: var(--accent);
             box-shadow: 0 0 20px var(--accent-glow);
         }
@@ -617,7 +623,7 @@
             min-width: 300px;
             max-width: 400px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5),
-                        0 0 0 1px rgba(16, 185, 129, 0.1);
+                        0 0 0 1px rgba(139, 92, 246, 0.1);
             animation: toastSlideIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             display: flex;
             align-items: flex-start;
@@ -626,7 +632,7 @@
         
         .toast.success { 
             border-color: var(--accent);
-            box-shadow: 0 10px 40px rgba(16, 185, 129, 0.3);
+            box-shadow: 0 10px 40px rgba(139, 92, 246, 0.3);
         }
         
         .toast.error { 
@@ -760,32 +766,32 @@
 
     <!-- SPLASH SCREEN -->
     <div id="splash-screen">
-        <img src="https://res.cloudinary.com/dlmmylat6/image/upload/v1770004112/0453086a-aa8b-480c-9227-6ceb099b3530_z111qu.png" 
+        <img src="https://res.cloudinary.com/dlmmylat6/image/upload/v1770002783/Design_sans_titre_8_mesps5.png" 
              alt="South Valley" 
              class="splash-logo">
         <h1 class="splash-title brand-font">SOUTH VALLEY</h1>
-        <p class="text-[10px] text-emerald-500 font-bold tracking-[0.5em] mt-4 uppercase">TON PLUG NUMÉRO 1</p>
+        <p class="text-[10px] text-violet-500 font-bold tracking-[0.5em] mt-4 uppercase">TON PLUG NUMÉRO 1</p>
     </div>
 
     <!-- HEADER -->
     <header class="header-glass sticky top-0 z-40">
         <div class="px-5 h-20 flex items-center justify-between">
             <div class="flex items-center gap-3" onclick="resetHome()">
-                <img src="https://res.cloudinary.com/dlmmylat6/image/upload/v1770004112/0453086a-aa8b-480c-9227-6ceb099b3530_z111qu.png" 
+                <img src="https://res.cloudinary.com/dlmmylat6/image/upload/v1770002783/Design_sans_titre_8_mesps5.png" 
                      alt="Logo" 
                      class="header-logo">
                 <div class="flex flex-col">
                     <h1 class="text-2xl text-white brand-font tracking-tighter leading-none">SOUTH VALLEY</h1>
-                    <span class="text-[9px] text-emerald-500 font-bold tracking-[0.15em] uppercase mt-1">Top French Plug • Cercle Privé</span>
+                    <span class="text-[9px] text-violet-500 font-bold tracking-[0.15em] uppercase mt-1">Top French Plug • Cercle Privé</span>
                 </div>
             </div>
-            <button onclick="openInfos()" class="w-11 h-11 bg-[var(--bg-elevated)] border border-[var(--border-accent)] rounded-full flex items-center justify-center active:scale-90 transition-transform shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+            <button onclick="openInfos()" class="w-11 h-11 bg-[var(--bg-elevated)] border border-[var(--border-accent)] rounded-full flex items-center justify-center active:scale-90 transition-transform shadow-[0_0_15px_rgba(139,92,246,0.2)]">
                 <span class="text-lg">💎</span>
             </button>
         </div>
         
         <!-- MARQUEE -->
-        <div class="marquee-container py-1.5 border-y border-emerald-500/50">
+        <div class="marquee-container py-1.5 border-y border-violet-500/50">
             <div class="marquee-track">
                 <span class="marquee-item">🛡️ CNI + SELFIE OBLIGATOIRE (NOUVEAUX CLIENTS)</span>
                 <span class="marquee-item">⚡ LIVRAISON EXPRESS IDF + ZONES LIMITROPHES</span>
@@ -853,7 +859,7 @@
         <button onclick="openCart()" class="nav-btn flex flex-col items-center relative opacity-50 transition-all hover:opacity-100">
             <div class="relative">
                 <span class="text-2xl">👜</span>
-                <span id="cart-badge" class="absolute -top-1 -right-2 w-5 h-5 bg-emerald-500 text-black text-[10px] font-black rounded-full hidden items-center justify-center border-2 border-black">0</span>
+                <span id="cart-badge" class="absolute -top-1 -right-2 w-5 h-5 bg-violet-500 text-white text-[10px] font-black rounded-full hidden items-center justify-center border-2 border-black">0</span>
             </div>
             <span class="text-[9px] font-black uppercase text-gray-400 mt-1 tracking-wider">PANIER</span>
         </button>
@@ -884,14 +890,14 @@
             </div>
             
             <div class="p-6 flex-1 overflow-y-auto no-scrollbar">
-                <p id="modal-desc" class="text-xs text-gray-400 leading-relaxed mb-8 font-mono border-l-2 border-emerald-500 pl-4"></p>
+                <p id="modal-desc" class="text-xs text-gray-400 leading-relaxed mb-8 font-mono border-l-2 border-violet-500 pl-4"></p>
                 
-                <h3 class="text-[10px] font-black text-emerald-500 uppercase mb-4 tracking-[0.2em]">QUANTITÉ</h3>
+                <h3 class="text-[10px] font-black text-violet-500 uppercase mb-4 tracking-[0.2em]">QUANTITÉ</h3>
                 <div id="tiers-list" class="grid grid-cols-2 gap-3 mb-8"></div>
                 
-                <div id="custom-req-btn" class="hidden p-4 bg-[var(--bg-elevated)] border border-[var(--border-accent)] rounded-xl text-center cursor-pointer hover:border-emerald-500 transition-colors" onclick="contactStaff()">
+                <div id="custom-req-btn" class="hidden p-4 bg-[var(--bg-elevated)] border border-[var(--border-accent)] rounded-xl text-center cursor-pointer hover:border-violet-500 transition-colors" onclick="contactStaff()">
                     <p class="text-[10px] font-black text-white uppercase">GROS VOLUME (500G+)</p>
-                    <p class="text-[9px] text-emerald-500 font-bold mt-1">VOIR AVEC LE STAFF</p>
+                    <p class="text-[9px] text-violet-500 font-bold mt-1">VOIR AVEC LE STAFF</p>
                 </div>
                 
                 <div class="h-24"></div>
@@ -920,7 +926,7 @@
                         Expédition 24h après paiement.<br>
                         Zone: France & Europe.<br>
                         Sécurité: Double sous-vide, tracking chiffré.<br>
-                        <span class="text-emerald-500 font-bold">Risque 0 garanti.</span>
+                        <span class="text-violet-500 font-bold">Risque 0 garanti.</span>
                     </p>
                 </div>
                 
@@ -932,22 +938,22 @@
                     <p class="text-[10px] text-gray-400 font-mono leading-relaxed">
                         <span class="text-white font-bold">MEET-UP :</span> 92 Nord (Min 50€) - Accès rapide via : RER C / A86 / LIGNE 13<br>
                         <span class="text-white font-bold">LIVRAISON IDF :</span> 75/91/92/93/94/95<br>
-                        ↳ <span class="text-emerald-500 font-bold">Min 60€ à 100€ selon distance.</span><br>
+                        ↳ <span class="text-violet-500 font-bold">Min 60€ à 100€ selon distance.</span><br>
                         <span class="text-white font-bold">ZONE LIMITROPHES :</span> 77/78/60/45/28... (Maximum 2H)<br>
-                        ↳ <span class="text-emerald-500 font-bold">Minimum 150€ exigé.</span>
+                        ↳ <span class="text-violet-500 font-bold">Minimum 150€ exigé.</span>
                     </p>
                 </div>
             </section>
 
             <section class="space-y-3">
-                <h3 class="text-[9px] font-black text-emerald-500 tracking-[0.2em] uppercase opacity-80">HIÉRARCHIE & BONUS</h3>
+                <h3 class="text-[9px] font-black text-violet-500 tracking-[0.2em] uppercase opacity-80">HIÉRARCHIE & BONUS</h3>
                 
-                <div class="bg-gradient-to-r from-emerald-900/20 to-black border border-emerald-500/20 p-4 rounded-xl">
+                <div class="bg-gradient-to-r from-violet-900/20 to-black border border-violet-500/20 p-4 rounded-xl">
                     <h4 class="text-white font-black text-xs uppercase mb-2">🎁 CADEAUX PARRAINAGE</h4>
                     <p class="text-[10px] text-gray-300 mb-2">Tu parraines un ami ? Il commande ? = Cadeau immédiat.</p>
                     <div class="flex gap-2">
-                        <span class="bg-emerald-500/10 text-emerald-500 text-[9px] font-bold px-2 py-1 rounded border border-emerald-500/30">1G OFFERT</span>
-                        <span class="bg-emerald-500/10 text-emerald-500 text-[9px] font-bold px-2 py-1 rounded border border-emerald-500/30">OU 10€ CRÉDIT</span>
+                        <span class="bg-violet-500/10 text-violet-500 text-[9px] font-bold px-2 py-1 rounded border border-violet-500/30">1G OFFERT</span>
+                        <span class="bg-violet-500/10 text-violet-500 text-[9px] font-bold px-2 py-1 rounded border border-violet-500/30">OU 10€ CRÉDIT</span>
                     </div>
                 </div>
                 
@@ -963,15 +969,15 @@
                             <span class="text-[9px] text-gray-500">3 - 9 Commandes</span>
                         </div>
                         <div class="flex justify-between items-center">
-                            <span class="text-[10px] text-emerald-400 font-bold">3. V.I.P (BOSS)</span> 
-                            <span class="text-[9px] text-emerald-600 font-bold">10+ Commandes</span>
+                            <span class="text-[10px] text-violet-400 font-bold">3. V.I.P (BOSS)</span> 
+                            <span class="text-[9px] text-violet-600 font-bold">10+ Commandes</span>
                         </div>
                     </div>
                 </div>
             </section>
 
             <section class="space-y-3">
-                <h3 class="text-[9px] font-black text-emerald-500 tracking-[0.2em] uppercase opacity-80">AVIS</h3>
+                <h3 class="text-[9px] font-black text-violet-500 tracking-[0.2em] uppercase opacity-80">AVIS</h3>
                 <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl space-y-3">
                     <div class="border-b border-[var(--border-accent)] pb-2">
                         <div class="flex justify-between mb-1">
@@ -998,7 +1004,7 @@
             </section>
 
             <section class="grid grid-cols-2 gap-3">
-                <button onclick="window.open('https://dympt.org/SouthV', '_blank')" class="w-full bg-emerald-500 p-3 rounded-xl flex justify-center items-center shadow-lg shadow-emerald-500/20 text-black font-black text-[10px] uppercase">
+                <button onclick="window.open('https://dympt.org/SouthV', '_blank')" class="w-full bg-violet-500 p-3 rounded-xl flex justify-center items-center shadow-lg shadow-violet-500/20 text-white font-black text-[10px] uppercase">
                     🥔 THE POTATO
                 </button>
                 <button onclick="window.open('https://threema.id/UC2YW86F', '_blank')" class="w-full bg-[var(--bg-elevated)] border border-[var(--border-accent)] p-3 rounded-xl flex justify-center items-center text-white font-black text-[10px] uppercase">
@@ -1044,7 +1050,7 @@
                     <p class="text-[10px] text-white font-bold">📸 SELFIE + CNI OBLIGATOIRE SUR WHATSAPP</p>
                     <p class="text-[9px] text-gray-500 mt-1">*Rien n'est conservé, tout est supprimé instantanément après confirmation.</p>
                     <div class="flex items-center gap-3 pt-2">
-                        <input type="checkbox" id="check-id" class="w-5 h-5 accent-emerald-500 rounded bg-[var(--bg-elevated)] border border-[var(--border-accent)]">
+                        <input type="checkbox" id="check-id" class="w-5 h-5 accent-violet-500 rounded bg-[var(--bg-elevated)] border border-[var(--border-accent)]">
                         <label for="check-id" class="text-[10px] font-bold text-gray-400 uppercase cursor-pointer">J'AI COMPRIS</label>
                     </div>
                 </div>
@@ -1108,7 +1114,7 @@
         </div>
 
         <div class="p-6 bg-black border-t border-[var(--border-accent)]">
-            <button onclick="submitOrder()" class="w-full py-5 bg-emerald-500 text-black font-black uppercase text-xs rounded-xl shadow-[0_5px_30px_rgba(16,185,129,0.2)] active:scale-95 transition-transform tracking-[0.2em]">
+            <button onclick="submitOrder()" class="w-full py-5 bg-violet-500 text-white font-black uppercase text-xs rounded-xl shadow-[0_5px_30px_rgba(139,92,246,0.3)] active:scale-95 transition-transform tracking-[0.2em]">
                 ENVOYER AU STAFF ➤
             </button>
         </div>
@@ -1117,12 +1123,12 @@
     <!-- PROCESSING SCREEN -->
     <div id="processing-screen" class="fixed inset-0 z-[100] bg-black hidden flex flex-col items-center justify-center p-8">
         <div class="relative w-32 h-32 flex items-center justify-center mb-8">
-            <div class="absolute inset-0 border border-emerald-900 rounded-full"></div>
+            <div class="absolute inset-0 border border-violet-900 rounded-full"></div>
             <div class="radar-scan absolute top-1/2 left-0"></div>
             <div class="text-4xl">🔒</div>
         </div>
         <h2 class="text-2xl font-black text-white brand-font uppercase tracking-tighter text-center mb-2">CHIFFREMENT...</h2>
-        <p class="text-[10px] text-emerald-500 font-bold uppercase tracking-[0.3em] animate-pulse">Envoi sécurisé au Staff</p>
+        <p class="text-[10px] text-violet-500 font-bold uppercase tracking-[0.3em] animate-pulse">Envoi sécurisé au Staff</p>
     </div>
 
     <script>
@@ -1337,7 +1343,7 @@
 
         // ========== CONFETTI ==========
         function triggerConfetti() {
-            const colors = ['#10B981', '#34D399', '#6EE7B7', '#FFF'];
+            const colors = ['#8b5cf6', '#a78bfa', '#c4b5fd', '#FFF'];
             for (let i = 0; i < 50; i++) {
                 setTimeout(() => {
                     const confetti = document.createElement('div');
@@ -1380,7 +1386,7 @@
             if (isShopOpen) {
                 dot.className = "status-dot online";
                 text.innerText = "OPEN / ACTIF";
-                text.className = "text-emerald-500 font-bold";
+                text.className = "text-violet-500 font-bold";
             } else {
                 dot.className = "status-dot offline";
                 text.innerText = "OFF / DODO";
@@ -1431,7 +1437,7 @@
             if(cat !== 'all') {
                 const subs = [...new Set(CATALOG.filter(i => i.cat === cat).map(i => i.sub))];
                 subBar.innerHTML = subs.map(s => `
-                    <span class="text-[9px] font-black text-emerald-500 uppercase tracking-widest border border-emerald-500/30 px-3 py-1 rounded-full bg-emerald-500/5">
+                    <span class="text-[9px] font-black text-violet-500 uppercase tracking-widest border border-violet-500/30 px-3 py-1 rounded-full bg-violet-500/5">
                         ${s}
                     </span>
                 `).join('');
@@ -1543,7 +1549,7 @@
                 return `
                 <button onclick="addToCart('${p.id}', '${t.w}', ${t.p})" 
                         class="tier-card ${isPopular ? 'popular' : ''} p-4 rounded-xl flex flex-col items-center transition-all active:scale-95 group">
-                    <span class="text-white font-black text-sm group-hover:text-emerald-500 transition-colors">${t.w}</span>
+                    <span class="text-white font-black text-sm group-hover:text-violet-500 transition-colors">${t.w}</span>
                     <div class="price-display mt-2">
                         ${t.oldPrice ? `<span class="price-old">${t.oldPrice}€</span>` : ''}
                         <span class="price-current">${t.p}€</span>
@@ -1699,7 +1705,7 @@
                 html += `<div class="flex justify-between text-xs text-gray-400"><span>${deliveryLabel}</span><span>+${deliveryFee}€</span></div>`;
             }
             
-            html += `<div class="flex justify-between font-black text-emerald-500 text-sm pt-2 border-t border-[var(--border-accent)]"><span>TOTAL</span><span>${total}€</span></div>`;
+            html += `<div class="flex justify-between font-black text-violet-500 text-sm pt-2 border-t border-[var(--border-accent)]"><span>TOTAL</span><span>${total}€</span></div>`;
             html += `</div>`;
             
             div.innerHTML = html;
