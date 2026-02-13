@@ -13,12 +13,8 @@
     <meta http-equiv="X-Robots-Tag" content="noindex, nofollow">
     <meta name="referrer" content="no-referrer">
     
-    <!-- HONEYPOT INVISIBLE -->
-    <div style="position:absolute;left:-9999px;top:-9999px;">
-        <input type="text" name="contact_email" id="contact_email" tabindex="-1" autocomplete="off">
-        <a href="/admin/login">Admin Panel</a>
-        <a href="/api/users">User API</a>
-    </div>
+    <!-- ⚠️ IMPORTANT : SDK TELEGRAM (AVANT TOUT LE RESTE) -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
     <!-- Google Analytics 4 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
@@ -777,6 +773,13 @@
 </head>
 <body class="antialiased pb-32">
 
+    <!-- HONEYPOT INVISIBLE (CORRECTEMENT PLACÉ DANS LE BODY) -->
+    <div style="position:absolute;left:-9999px;top:-9999px;">
+        <input type="text" name="contact_email" id="contact_email" tabindex="-1" autocomplete="off">
+        <a href="/admin/login">Admin Panel</a>
+        <a href="/api/users">User API</a>
+    </div>
+
     <!-- TOAST CONTAINER -->
     <div class="toast-container" id="toast-container"></div>
 
@@ -786,7 +789,8 @@
     <!-- BLOCK SCREEN -->
     <div id="block-screen" class="fixed inset-0 z-[9999] bg-black hidden flex-col items-center justify-center p-8">
         <h1 class="text-3xl font-black text-red-500 mb-4">⛔ ACCÈS REFUSÉ</h1>
-        <p class="text-sm text-gray-400 text-center">Cette application nécessite Telegram.</p>
+        <p class="text-sm text-gray-400 text-center mb-4" id="block-reason">Cette application nécessite Telegram.</p>
+        <p class="text-xs text-gray-600 text-center font-mono" id="block-details"></p>
     </div>
 
     <!-- SPLASH SCREEN -->
@@ -1163,84 +1167,151 @@
     </div>
 
     <script>
-        // ========== SECURITY ==========
+        // ========== SECURITY (VERSION CORRIGÉE) ==========
 
-        // URL du backend Railway — même origine que le bot
         const BACKEND_URL = 'https://tuvasrientrouver.up.railway.app';
+        const DEBUG_MODE = true; // Mettre à false en production
 
-        function blockAccess(reason) {
+        function debugLog(msg, data = null) {
+            if (DEBUG_MODE) {
+                console.log(`🔍 [DEBUG] ${msg}`, data || '');
+            }
+        }
+
+        function blockAccess(reason, details = '') {
             const screen = document.getElementById('block-screen');
-            screen.querySelector('p').textContent = reason || 'Cette application nécessite Telegram.';
+            document.getElementById('block-reason').textContent = reason;
+            document.getElementById('block-details').textContent = details;
             screen.style.display = 'flex';
-            // Vider le body pour éviter tout accès au contenu
+            
+            // Vider le body après un délai pour éviter tout accès
             setTimeout(() => {
                 document.body.innerHTML = screen.outerHTML;
-            }, 50);
+            }, 100);
         }
 
         async function initSecurity() {
             'use strict';
+            debugLog('🚀 Démarrage vérification sécurité...');
 
-            // 1. Détection bot/crawler basique
+            // 1. Détection bot/crawler
             const isBot = /bot|crawler|spider|crawling|scraper/i.test(navigator.userAgent);
             const honeypotFilled = document.getElementById('contact_email')?.value !== '';
-            if (isBot || honeypotFilled) {
-                blockAccess('Accès non autorisé.');
+            
+            if (isBot) {
+                debugLog('❌ Bot détecté', navigator.userAgent);
+                blockAccess('Accès refusé : Bot détecté');
+                return false;
+            }
+            
+            if (honeypotFilled) {
+                debugLog('❌ Honeypot rempli');
+                blockAccess('Accès refusé');
                 return false;
             }
 
-            // 2. Vérifier la présence de Telegram WebApp
+            // 2. Vérifier Telegram WebApp SDK
+            debugLog('Vérification Telegram WebApp...');
             const tg = window.Telegram?.WebApp;
-            if (!tg || !tg.initData || tg.initData.trim() === '') {
-                blockAccess('Cette application est accessible uniquement via Telegram.');
+            
+            if (!tg) {
+                debugLog('❌ Telegram.WebApp non disponible');
+                blockAccess('Cette application fonctionne uniquement dans Telegram', 'window.Telegram.WebApp non trouvé');
                 return false;
             }
+
+            debugLog('✅ Telegram WebApp détecté', {
+                platform: tg.platform,
+                version: tg.version,
+                initDataUnsafe: tg.initDataUnsafe
+            });
 
             // 3. Initialiser Telegram
-            tg.ready();
-            tg.expand();
-            tg.setHeaderColor('#000000');
-            tg.enableClosingConfirmation();
+            try {
+                tg.ready();
+                tg.expand();
+                tg.setHeaderColor('#000000');
+                tg.enableClosingConfirmation();
+                debugLog('✅ Telegram initialisé');
+            } catch (err) {
+                debugLog('⚠️ Erreur init Telegram', err);
+            }
 
-            // 4. Vérification HMAC côté serveur
+            // 4. Vérifier initData (IMPORTANT)
+            const initData = tg.initData || '';
+            debugLog('InitData présent ?', initData ? 'OUI (' + initData.length + ' chars)' : 'NON (vide)');
+
+            // ⚠️ EN MODE DEV : Si initData vide, on peut laisser passer avec warning
+            // EN PRODUCTION : Bloquer si vide
+            if (!initData || initData.trim() === '') {
+                if (DEBUG_MODE) {
+                    debugLog('⚠️ Mode DEV : initData vide mais passage autorisé');
+                    console.warn('⚠️ ATTENTION : En production, ceci bloquerait l\'accès');
+                    // return true; // Décommenter pour tester sans backend
+                } else {
+                    debugLog('❌ initData vide en production');
+                    blockAccess('Session Telegram invalide', 'initData manquant - relance le bot');
+                    return false;
+                }
+            }
+
+            // 5. Vérification HMAC backend
+            debugLog('Envoi vers backend pour vérification HMAC...');
             try {
                 const response = await fetch(`${BACKEND_URL}/api/verify`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ initData: tg.initData })
+                    body: JSON.stringify({ initData: initData })
                 });
 
+                debugLog('Réponse backend', { status: response.status, ok: response.ok });
+
                 if (!response.ok) {
-                    blockAccess('Vérification échouée. Accès refusé.');
+                    debugLog('❌ Backend refuse la connexion');
+                    blockAccess('Vérification échouée', `Code HTTP: ${response.status}`);
                     return false;
                 }
 
                 const data = await response.json();
+                debugLog('Data backend', data);
+
                 if (!data.ok) {
-                    blockAccess('Session invalide. Relance le bot.');
+                    debugLog('❌ Backend: session invalide');
+                    blockAccess('Session invalide', data.error || 'Relance le bot Telegram');
                     return false;
                 }
 
-                console.log('✅ Accès Telegram vérifié');
+                debugLog('✅✅ Accès Telegram validé par le backend !');
                 return true;
 
             } catch (err) {
-                // Si le backend est injoignable, on laisse passer en mode dégradé
-                // pour ne pas bloquer les utilisateurs légitimes en cas de downtime Railway
-                console.warn('⚠️ Vérification backend indisponible, mode dégradé');
-                return true;
+                debugLog('⚠️ Erreur backend', err);
+                
+                // EN PRODUCTION : NE PAS LAISSER PASSER si backend down
+                if (DEBUG_MODE) {
+                    console.warn('⚠️ Backend injoignable, accès autorisé en mode DEV uniquement');
+                    return true;
+                } else {
+                    blockAccess('Service temporairement indisponible', 'Backend inaccessible');
+                    return false;
+                }
             }
         }
 
-        // Masquer le contenu jusqu'à validation
+        // Masquer le contenu par défaut
         document.getElementById('main-feed').style.visibility = 'hidden';
 
+        // Lancer la sécurité au chargement
         initSecurity().then(authorized => {
             if (authorized) {
+                debugLog('🎉 Accès autorisé, affichage du contenu');
                 document.getElementById('main-feed').style.visibility = 'visible';
+            } else {
+                debugLog('🚫 Accès refusé');
             }
         });
 
+        // Protection DevTools
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.addEventListener('keydown', e => {
             if (e.key === 'F12' || 
@@ -1252,6 +1323,7 @@
         });
         document.onselectstart = () => false;
         
+        // Détection DevTools ouvert
         setInterval(() => {
             const threshold = 160;
             if (window.outerWidth - window.innerWidth > threshold || 
@@ -1376,7 +1448,6 @@
         let currentMode = 'meetup';
         let currentFilter = 'all';
         let isShopOpen = false;
-        // Strain sélectionnée par produit
         let selectedStrains = {};
 
         // ========== SOCIAL PROOF ENGINE ==========
@@ -1574,7 +1645,6 @@
             setTimeout(() => {
                 let html = '';
                 filtered.forEach(item => {
-                    // Pour le Filtré 73U on affiche la thumbnail photo en card
                     let mediaSrc = item.src;
                     if (item.thumbnail) {
                         mediaSrc = item.thumbnail;
@@ -1600,7 +1670,6 @@
                         activity = `<div class="activity-badge mt-2"><div class="activity-dot"></div>${viewers} CONSULTATIONS</div>`;
                     }
 
-                    // Badge multi-strain
                     let strainBadge = '';
                     if (item.multiStrain) {
                         strainBadge = `<span class="badge-premium mt-1" style="background:rgba(234,179,8,0.85);">2 STRAINS DISPO</span>`;
@@ -1636,12 +1705,10 @@
             const customBtn = document.getElementById('custom-req-btn');
             p.hasCustom ? customBtn.classList.remove('hidden') : customBtn.classList.add('hidden');
 
-            // Gestion strain selector
             const strainWrap = document.getElementById('strain-selector-wrap');
             const strainSel = document.getElementById('strain-selector');
             if (p.multiStrain && p.strains) {
                 strainWrap.classList.remove('hidden');
-                // Init strain par défaut si pas encore sélectionnée
                 if (!selectedStrains[id]) {
                     selectedStrains[id] = p.defaultStrain || p.strains[0];
                 }
@@ -1721,7 +1788,6 @@
         function selectStrain(productId, strainName, btn) {
             selectedStrains[productId] = strainName;
             triggerHaptic('light');
-            // Update UI des boutons
             document.querySelectorAll('#strain-selector .strain-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
         }
@@ -1775,7 +1841,6 @@
         function addToCart(id, weight, price) {
             const p = CATALOG.find(x => x.id === id);
             
-            // Pour les produits multi-strain, inclure la strain choisie
             let strainInfo = '';
             if (p.multiStrain && selectedStrains[id]) {
                 strainInfo = ` [${selectedStrains[id]}]`;
