@@ -2083,18 +2083,16 @@
                 
                 if (tg) {
                     tg.disableClosingConfirmation();
-                    if (tg.openTelegramLink) {
-                        tg.openTelegramLink(waURL);
+                    // openLink() pour les URLs externes (WhatsApp, web, etc.)
+                    // openTelegramLink() uniquement pour t.me/*
+                    if (tg.openLink) {
+                        tg.openLink(waURL, { try_instant_view: false });
                     } else {
-                        const link = document.createElement('a');
-                        link.href = waURL;
-                        link.target = '_system';
-                        link.style.display = 'none';
-                        document.body.appendChild(link);
-                        link.click();
-                        setTimeout(() => document.body.removeChild(link), 100);
+                        // Fallback pour anciennes versions
+                        window.open(waURL, '_blank');
                     }
                 } else {
+                    // Si pas dans Telegram, redirection normale
                     window.location.href = waURL;
                 }
 
@@ -2129,16 +2127,10 @@
             
             if (tg) {
                 tg.disableClosingConfirmation();
-                if (tg.openTelegramLink) {
-                    tg.openTelegramLink(waURL);
+                if (tg.openLink) {
+                    tg.openLink(waURL, { try_instant_view: false });
                 } else {
-                    const link = document.createElement('a');
-                    link.href = waURL;
-                    link.target = '_system';
-                    link.style.display = 'none';
-                    document.body.appendChild(link);
-                    link.click();
-                    setTimeout(() => document.body.removeChild(link), 100);
+                    window.open(waURL, '_blank');
                 }
             } else {
                 window.location.href = waURL;
