@@ -735,6 +735,31 @@
             100% { transform: translateY(50px); opacity: 0; } 
         }
 
+        /* STRAIN SELECTOR */
+        .strain-btn {
+            background: var(--bg-elevated);
+            border: 2px solid var(--border-accent);
+            color: var(--text-secondary);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 800;
+            font-size: 10px;
+            letter-spacing: 0.08em;
+            padding: 10px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .strain-btn:active {
+            transform: scale(0.96);
+        }
+
+        .strain-btn.active {
+            background: rgba(139, 92, 246, 0.15);
+            color: #fff;
+            border-color: var(--accent);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
         /* UTILITY */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .fade-in { animation: fadeIn 0.4s ease-out forwards; }
@@ -889,6 +914,12 @@
             
             <div class="p-6 flex-1 overflow-y-auto no-scrollbar">
                 <p id="modal-desc" class="text-xs text-gray-400 leading-relaxed mb-8 font-mono border-l-2 border-violet-500 pl-4"></p>
+
+                <!-- STRAIN SELECTOR (visible seulement si multiStrain) -->
+                <div id="strain-selector-wrap" class="hidden mb-6">
+                    <h3 class="text-[10px] font-black text-violet-500 uppercase mb-3 tracking-[0.2em]">STRAIN</h3>
+                    <div id="strain-selector" class="flex gap-3"></div>
+                </div>
                 
                 <h3 class="text-[10px] font-black text-violet-500 uppercase mb-4 tracking-[0.2em]">QUANTITÉ</h3>
                 <div id="tiers-list" class="grid grid-cols-2 gap-3 mb-8"></div>
@@ -1133,28 +1164,82 @@
 
     <script>
         // ========== SECURITY ==========
-        (function() {
+
+        // URL du backend Railway — même origine que le bot
+        const BACKEND_URL = 'https://tuvasrientrouver.up.railway.app';
+
+        function blockAccess(reason) {
+            const screen = document.getElementById('block-screen');
+            screen.querySelector('p').textContent = reason || 'Cette application nécessite Telegram.';
+            screen.style.display = 'flex';
+            // Vider le body pour éviter tout accès au contenu
+            setTimeout(() => {
+                document.body.innerHTML = screen.outerHTML;
+            }, 50);
+        }
+
+        async function initSecurity() {
             'use strict';
-            
+
+            // 1. Détection bot/crawler basique
             const isBot = /bot|crawler|spider|crawling|scraper/i.test(navigator.userAgent);
             const honeypotFilled = document.getElementById('contact_email')?.value !== '';
-            
             if (isBot || honeypotFilled) {
-                document.getElementById('block-screen').style.display = 'flex';
-                document.body.innerHTML = document.getElementById('block-screen').outerHTML;
-                throw new Error('Bot detected');
+                blockAccess('Accès non autorisé.');
+                return false;
             }
-            
-            setTimeout(() => {
-                const tg = window.Telegram?.WebApp;
-                if (tg) {
-                    tg.ready();
-                    tg.expand();
-                    tg.setHeaderColor('#000000');
-                    tg.enableClosingConfirmation();
+
+            // 2. Vérifier la présence de Telegram WebApp
+            const tg = window.Telegram?.WebApp;
+            if (!tg || !tg.initData || tg.initData.trim() === '') {
+                blockAccess('Cette application est accessible uniquement via Telegram.');
+                return false;
+            }
+
+            // 3. Initialiser Telegram
+            tg.ready();
+            tg.expand();
+            tg.setHeaderColor('#000000');
+            tg.enableClosingConfirmation();
+
+            // 4. Vérification HMAC côté serveur
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/verify`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ initData: tg.initData })
+                });
+
+                if (!response.ok) {
+                    blockAccess('Vérification échouée. Accès refusé.');
+                    return false;
                 }
-            }, 100);
-        })();
+
+                const data = await response.json();
+                if (!data.ok) {
+                    blockAccess('Session invalide. Relance le bot.');
+                    return false;
+                }
+
+                console.log('✅ Accès Telegram vérifié');
+                return true;
+
+            } catch (err) {
+                // Si le backend est injoignable, on laisse passer en mode dégradé
+                // pour ne pas bloquer les utilisateurs légitimes en cas de downtime Railway
+                console.warn('⚠️ Vérification backend indisponible, mode dégradé');
+                return true;
+            }
+        }
+
+        // Masquer le contenu jusqu'à validation
+        document.getElementById('main-feed').style.visibility = 'hidden';
+
+        initSecurity().then(authorized => {
+            if (authorized) {
+                document.getElementById('main-feed').style.visibility = 'visible';
+            }
+        });
 
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.addEventListener('keydown', e => {
@@ -1203,6 +1288,29 @@
                 layout: 'col-span-2 h-72',
                 bestseller: true,
                 stock: 'low'
+            },
+            {
+                id: 'F73', 
+                name: "FILTRÉ 73U 🔬", 
+                cat: 'HASH', 
+                sub: "FILTRÉ PREMIUM MAROC",
+                tag: "🇲🇦 FILTRÉ PREMIUM",
+                desc: "Filtré 73 microns, provenance Maroc. Extraction à sec sur fleur fraîche, trichomes intacts, couleur sable dorée caractéristique. Deux strains au choix : Lemon Kush (agrumes, citron zesté, finish peppery) & GMO Cookies (notes terreuses, diesel, fuel). Consistance souple, fonte rapide. Réservé aux connaisseurs.",
+                mediaType: 'video',
+                src: "https://res.cloudinary.com/dlmmylat6/video/upload/v1770940296/ScreenRecording_02-12-2026_20-01-22_1_wstkxb.mov",
+                thumbnail: "https://res.cloudinary.com/dlmmylat6/image/upload/v1770940493/IMG_2860_uvetqy.jpg",
+                tiers: [
+                    {w:'10G', p:80},
+                    {w:'25G', p:160},
+                    {w:'50G', p:250},
+                    {w:'100G', p:480}
+                ],
+                hasCustom: false,
+                layout: 'col-span-2 h-72',
+                stock: 'medium',
+                multiStrain: true,
+                strains: ['LEMON KUSH 🍋', 'GMO COOKIES 🍪'],
+                defaultStrain: 'LEMON KUSH 🍋'
             },
             {
                 id: 'WZ', 
@@ -1268,6 +1376,8 @@
         let currentMode = 'meetup';
         let currentFilter = 'all';
         let isShopOpen = false;
+        // Strain sélectionnée par produit
+        let selectedStrains = {};
 
         // ========== SOCIAL PROOF ENGINE ==========
         const SOCIAL_PROOF_MESSAGES = [
@@ -1464,9 +1574,15 @@
             setTimeout(() => {
                 let html = '';
                 filtered.forEach(item => {
-                    const media = item.mediaType === 'video' 
-                        ? `<video src="${item.src}" class="w-full h-full object-cover opacity-70" loop muted playsinline autoplay webkit-playsinline></video>`
-                        : `<img src="${item.src}" class="w-full h-full object-cover opacity-70">`;
+                    // Pour le Filtré 73U on affiche la thumbnail photo en card
+                    let mediaSrc = item.src;
+                    if (item.thumbnail) {
+                        mediaSrc = item.thumbnail;
+                    }
+                    
+                    const media = (item.mediaType === 'video' && !item.thumbnail)
+                        ? `<video src="${mediaSrc}" class="w-full h-full object-cover opacity-70" loop muted playsinline autoplay webkit-playsinline></video>`
+                        : `<img src="${mediaSrc}" class="w-full h-full object-cover opacity-70">`;
                     
                     let badges = `<span class="badge-premium">${item.tag}</span>`;
                     if (item.bestseller) {
@@ -1483,6 +1599,12 @@
                         const viewers = Math.floor(Math.random() * 8) + 2;
                         activity = `<div class="activity-badge mt-2"><div class="activity-dot"></div>${viewers} CONSULTATIONS</div>`;
                     }
+
+                    // Badge multi-strain
+                    let strainBadge = '';
+                    if (item.multiStrain) {
+                        strainBadge = `<span class="badge-premium mt-1" style="background:rgba(234,179,8,0.85);">2 STRAINS DISPO</span>`;
+                    }
                     
                     html += `
                     <div class="product-card ${item.layout} fade-in cursor-pointer group" onclick="openProduct('${item.id}')">
@@ -1490,6 +1612,7 @@
                         <div class="absolute bottom-0 left-0 w-full p-4 z-20 bg-gradient-to-t from-black via-black/90 to-transparent">
                             ${badges}
                             ${stockBadge}
+                            ${strainBadge}
                             <h3 class="text-white font-black text-base leading-none uppercase mb-1 tracking-tighter mt-2">${item.name}</h3>
                             <p class="text-[8px] text-gray-400 font-bold uppercase tracking-widest">${item.sub}</p>
                             ${activity}
@@ -1512,6 +1635,26 @@
             
             const customBtn = document.getElementById('custom-req-btn');
             p.hasCustom ? customBtn.classList.remove('hidden') : customBtn.classList.add('hidden');
+
+            // Gestion strain selector
+            const strainWrap = document.getElementById('strain-selector-wrap');
+            const strainSel = document.getElementById('strain-selector');
+            if (p.multiStrain && p.strains) {
+                strainWrap.classList.remove('hidden');
+                // Init strain par défaut si pas encore sélectionnée
+                if (!selectedStrains[id]) {
+                    selectedStrains[id] = p.defaultStrain || p.strains[0];
+                }
+                strainSel.innerHTML = p.strains.map(s => `
+                    <button onclick="selectStrain('${id}', '${s}', this)" 
+                            class="strain-btn ${selectedStrains[id] === s ? 'active' : ''}">
+                        ${s}
+                    </button>
+                `).join('');
+            } else {
+                strainWrap.classList.add('hidden');
+                strainSel.innerHTML = '';
+            }
             
             const v = document.getElementById('modal-video');
             const i = document.getElementById('modal-image');
@@ -1533,6 +1676,9 @@
             if (p.stock === 'low') {
                 badgesHTML += '<span class="badge-premium badge-stock mt-2">STOCK LIMITÉ</span>';
             }
+            if (p.multiStrain) {
+                badgesHTML += '<span class="badge-premium mt-2" style="background:rgba(234,179,8,0.85);">2 STRAINS</span>';
+            }
             document.getElementById('modal-badges').innerHTML = badgesHTML;
 
             let activityHTML = '';
@@ -1542,6 +1688,18 @@
             }
             document.getElementById('modal-activity').innerHTML = activityHTML;
 
+            renderTiers(p);
+            
+            document.getElementById('product-modal').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('modal-panel').classList.remove('translate-y-full');
+                triggerHaptic('light');
+            }, 50);
+            
+            setupSwipeToClose();
+        }
+
+        function renderTiers(p) {
             document.getElementById('tiers-list').innerHTML = p.tiers.map((t, index) => {
                 const isPopular = index === 1 || index === 2;
                 const savings = t.oldPrice ? t.oldPrice - t.p : 0;
@@ -1557,14 +1715,15 @@
                     ${savings > 0 ? `<span class="price-save mt-1">Économise ${savings}€</span>` : ''}
                 </button>
             `}).join('');
-            
-            document.getElementById('product-modal').classList.remove('hidden');
-            setTimeout(() => {
-                document.getElementById('modal-panel').classList.remove('translate-y-full');
-                triggerHaptic('light');
-            }, 50);
-            
-            setupSwipeToClose();
+        }
+
+        // ========== STRAIN SELECTOR ==========
+        function selectStrain(productId, strainName, btn) {
+            selectedStrains[productId] = strainName;
+            triggerHaptic('light');
+            // Update UI des boutons
+            document.querySelectorAll('#strain-selector .strain-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
         }
 
         // ========== SWIPE TO CLOSE ==========
@@ -1615,12 +1774,19 @@
         // ========== CART ==========
         function addToCart(id, weight, price) {
             const p = CATALOG.find(x => x.id === id);
-            cart.push({name: p.name, w: weight, p: price});
+            
+            // Pour les produits multi-strain, inclure la strain choisie
+            let strainInfo = '';
+            if (p.multiStrain && selectedStrains[id]) {
+                strainInfo = ` [${selectedStrains[id]}]`;
+            }
+
+            cart.push({name: p.name, w: weight, p: price, strain: strainInfo});
             updateCartUI();
             closeModal();
             
             triggerHaptic('medium');
-            showToast('success', 'AJOUTÉ AU PANIER', `${p.name} (${weight}) • ${price}€`);
+            showToast('success', 'AJOUTÉ AU PANIER', `${p.name}${strainInfo} (${weight}) • ${price}€`);
             
             trackEvent('add_to_cart', {
                 product_id: id,
@@ -1693,7 +1859,8 @@
             let html = '<ul class="space-y-2">';
             cart.forEach(c => {
                 const cleanName = c.name.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '').trim();
-                html += `<li class="flex justify-between"><span>• ${cleanName} (${c.w})</span> <span class="text-white font-bold">${c.p}€</span></li>`;
+                const strainDisplay = c.strain ? `<span class="text-violet-400">${c.strain}</span>` : '';
+                html += `<li class="flex justify-between"><span>• ${cleanName}${strainDisplay} (${c.w})</span> <span class="text-white font-bold">${c.p}€</span></li>`;
             });
             html += `</ul>`;
             
@@ -1807,6 +1974,9 @@
                 cart.forEach((c, index) => {
                     const cleanName = c.name.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '').trim();
                     msgLines.push(`${index + 1}. ${cleanName}`);
+                    if (c.strain) {
+                        msgLines.push(`   Strain: ${c.strain.replace(/[\[\]]/g, '').trim()}`);
+                    }
                     msgLines.push(`   Quantite: ${c.w}`);
                     msgLines.push(`   Prix: ${c.p} EUR`);
                 });
