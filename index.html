@@ -1370,15 +1370,9 @@
             }
         }
 
-        document.getElementById('main-feed').style.visibility = 'hidden';
-
+        // MODE SIMPLIFIÉ - PAS DE BLOCAGE
         initSecurity().then(authorized => {
-            if (authorized) {
-                debugLog('🎉 Accès autorisé, affichage du contenu');
-                document.getElementById('main-feed').style.visibility = 'visible';
-            } else {
-                debugLog('🚫 Accès refusé');
-            }
+            debugLog(authorized ? '✅ Sécurité OK' : '⚠️ Mode dégradé');
         });
 
         document.addEventListener('contextmenu', e => e.preventDefault());
