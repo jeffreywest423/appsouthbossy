@@ -1167,65 +1167,147 @@
     </div>
 
     <script>
-        // ========== SECURITY (VERSION CORRIGÉE) ==========
+// ============================================
+// FRONTEND SIMPLIFIÉ - L'ESSENTIEL SEULEMENT
+// ============================================
+// 📋 REMPLACE ton code <script> de sécurité par celui-ci
 
-        const BACKEND_URL = 'https://tuvasrientrouver.up.railway.app';
-        const DEBUG_MODE = true; // Mettre à false en production
+// ⚠️ REMPLACE PAR TON URL BACKEND RAILWAY
+const BACKEND_URL = 'tuvasrientrouver.up.railway.app';
 
-        function debugLog(msg, data = null) {
-            if (DEBUG_MODE) {
-                console.log(`🔍 [DEBUG] ${msg}`, data || '');
-            }
-        }
+// ========== DÉTECTION BOT BASIQUE ==========
+function isBot() {
+  const ua = navigator.userAgent.toLowerCase();
+  return /bot|crawler|spider|scraper|headless|phantom|puppeteer/i.test(ua) ||
+         navigator.webdriver === true;
+}
 
-        function blockAccess(reason, details = '') {
-            const screen = document.getElementById('block-screen');
-            document.getElementById('block-reason').textContent = reason;
-            document.getElementById('block-details').textContent = details;
-            screen.style.display = 'flex';
-            
-            // Vider le body après un délai pour éviter tout accès
-            setTimeout(() => {
-                document.body.innerHTML = screen.outerHTML;
-            }, 100);
-        }
+// ========== RATE LIMITING LOCAL ==========
+const rateLimiter = {
+  attempts: [],
+  maxAttempts: 5,
+  windowMs: 60000, // 1 minute
+  
+  check() {
+    const now = Date.now();
+    this.attempts = this.attempts.filter(t => now - t < this.windowMs);
+    
+    if (this.attempts.length >= this.maxAttempts) {
+      return false;
+    }
+    
+    this.attempts.push(now);
+    return true;
+  }
+};
 
-        async function initSecurity() {
-            'use strict';
-            debugLog('🚀 Démarrage vérification sécurité...');
+// ========== BLOQUER ACCÈS ==========
+function blockAccess(reason) {
+  document.body.innerHTML = `
+    <div style="position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center;flex-direction:column;">
+      <h1 style="color:#ef4444;font-size:2rem;margin-bottom:1rem;">⛔ ACCÈS REFUSÉ</h1>
+      <p style="color:#666;font-size:1rem;">${reason}</p>
+    </div>
+  `;
+}
 
-            // 1. Détection bot/crawler
-            const isBot = /bot|crawler|spider|crawling|scraper/i.test(navigator.userAgent);
-            const honeypotFilled = document.getElementById('contact_email')?.value !== '';
-            
-            if (isBot) {
-                debugLog('❌ Bot détecté', navigator.userAgent);
-                blockAccess('Accès refusé : Bot détecté');
-                return false;
-            }
-            
-            if (honeypotFilled) {
-                debugLog('❌ Honeypot rempli');
-                blockAccess('Accès refusé');
-                return false;
-            }
+// ========== VÉRIFICATION PRINCIPALE ==========
+async function initSecurity() {
+  
+  // 1. Bloquer bots évidents
+  if (isBot()) {
+    blockAccess('Navigateur non autorisé');
+    return false;
+  }
 
-            // 2. Vérifier Telegram WebApp SDK
-            debugLog('Vérification Telegram WebApp...');
-            const tg = window.Telegram?.WebApp;
-            
-            if (!tg) {
-                debugLog('❌ Telegram.WebApp non disponible');
-                blockAccess('Cette application fonctionne uniquement dans Telegram', 'window.Telegram.WebApp non trouvé');
-                return false;
-            }
+  // 2. Rate limiting local
+  if (!rateLimiter.check()) {
+    blockAccess('Trop de tentatives - Réessaye dans 1 minute');
+    return false;
+  }
 
-            debugLog('✅ Telegram WebApp détecté', {
-                platform: tg.platform,
-                version: tg.version,
-                initDataUnsafe: tg.initDataUnsafe
-            });
+  // 3. Vérifier Telegram
+  const tg = window.Telegram?.WebApp;
+  
+  if (!tg) {
+    blockAccess('Application Telegram requise');
+    return false;
+  }
 
+  // Initialiser Telegram
+  try {
+    tg.ready();
+    tg.expand();
+    tg.setHeaderColor('#000000');
+    tg.enableClosingConfirmation();
+  } catch (err) {
+    console.error('Erreur Telegram:', err);
+  }
+
+  // 4. Vérifier initData
+  const initData = tg.initData || '';
+  
+  if (!initData || initData.trim() === '') {
+    blockAccess('Session invalide - Relance le bot');
+    return false;
+  }
+
+  // 5. Vérifier avec backend (HMAC)
+  try {
+    const response = await fetch(`${BACKEND_URL}/api/verify`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ initData: initData }),
+      signal: AbortSignal.timeout(8000)
+    });
+
+    if (!response.ok) {
+      if (response.status === 429) {
+        blockAccess('Trop de requêtes - Réessaye dans 1 minute');
+        return false;
+      }
+      blockAccess('Vérification échouée');
+      return false;
+    }
+
+    const data = await response.json();
+
+    if (!data.ok) {
+      blockAccess('Session invalide');
+      return false;
+    }
+
+    console.log('✅ Accès autorisé');
+    return true;
+
+  } catch (err) {
+    console.error('Erreur backend:', err);
+    blockAccess('Service temporairement indisponible');
+    return false;
+  }
+}
+
+// ========== PROTECTION DEVTOOLS (OPTIONNEL) ==========
+// Décommenter si tu veux bloquer la console
+/*
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('keydown', e => {
+  if (e.key === 'F12' || 
+      (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+      (e.ctrlKey && e.key === 'u')) {
+    e.preventDefault();
+  }
+});
+*/
+
+// ========== LANCER AU CHARGEMENT ==========
+document.getElementById('main-feed').style.visibility = 'hidden';
+
+initSecurity().then(authorized => {
+  if (authorized) {
+    document.getElementById('main-feed').style.visibility = 'visible';
+  }
+});
             // 3. Initialiser Telegram
             try {
                 tg.ready();
