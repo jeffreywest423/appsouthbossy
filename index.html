@@ -1456,21 +1456,26 @@ v<!DOCTYPE html>
                 stock: 'medium'
             },
             {
-                id: 'PK', 
+               {
+                id: 'CM', 
                 name: "CEREAL MILK 🍼🥣", 
                 cat: 'WEED', 
                 sub: "TOPSHELF CALI USA", 
                 tag: "🇺🇸 TOP SHELF",
                 desc: "CALI USA TOP SHELF - Strain Cereal Milk : Têtes compactes, couleur violette nuancée, Terps Ultra-Savoureux. Effets : Relaxation corporelle profonde & Euphorie, un régal pour les amateurs de Zaza !",
-                mediaType: 'video', 
+                mediaType: 'image',  // ← CHANGÉ de 'video' à 'image'
                 src: "https://res.cloudinary.com/dpojixeiy/image/upload/v1771124699/FILTRE%CC%81_3x_4_xzewtb.png",
                 tiers: [
-                    {w:'5G', p:60, oldPrice: 70},
-                    {w:'10G', p:110, oldPrice: 140},
-                    {w:'25G', p:250, oldPrice: 280},
-                    {w:'50G', p:380, oldPrice: 500},
-                    {w:'100G', p:780, oldPrice: 1000}
-                ],
+                {w:'5G', p:60, oldPrice: 70},
+                {w:'10G', p:110, oldPrice: 140},
+                {w:'25G', p:250, oldPrice: 280},
+                {w:'50G', p:380, oldPrice: 500},
+                {w:'100G', p:780, oldPrice: 1000}
+    ],
+    hasCustom: true,  // ← AJOUTÉ (pour "Gros volume")
+    layout: 'col-span-1 h-60',  // ← AJOUTÉ (taille de la carte)
+    stock: 'high'  // ← AJOUTÉ (niveau de stock)
+},
                 hasCustom: true, 
                 layout: 'col-span-1 h-60',
                 stock: 'high'
