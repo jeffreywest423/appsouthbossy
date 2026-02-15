@@ -1,4 +1,4 @@
-v<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -764,6 +764,96 @@ v<!DOCTYPE html>
             to { opacity: 1; transform: translateY(0); } 
         }
 
+        /* ========== STYLES OPTIMISÉS PREMIUM ========== */
+
+        /* Product cards - Vidéos/Images remplissage optimal */
+        .product-card video,
+        .product-card img {
+            object-fit: cover;
+            object-position: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Modal - Vidéos/Images sans bords noirs */
+        #modal-video,
+        #modal-image {
+            min-height: 100%;
+            background: #000;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        /* Gradient overlay amélioré - Cards */
+        .product-card .bg-gradient-to-t {
+            background: linear-gradient(
+                to top,
+                rgba(0, 0, 0, 1) 0%,
+                rgba(0, 0, 0, 0.85) 30%,
+                rgba(0, 0, 0, 0.3) 70%,
+                transparent 100%
+            );
+        }
+
+        /* Gradient overlay amélioré - Modal */
+        .modal-panel .bg-gradient-to-t {
+            background: linear-gradient(
+                to top,
+                rgba(0, 0, 0, 1) 0%,
+                rgba(0, 0, 0, 0.9) 20%,
+                rgba(0, 0, 0, 0.4) 60%,
+                transparent 100%
+            );
+        }
+
+        /* Badge premium avec glow animé */
+        .badge-premium[style*="gradient"] {
+            box-shadow: 
+                0 0 20px rgba(139, 92, 246, 0.6),
+                0 4px 12px rgba(139, 92, 246, 0.4);
+        }
+
+        /* Layouts produits premium */
+        .col-span-2.h-80 {
+            grid-column: span 2;
+            min-height: 320px;
+        }
+
+        .col-span-1.h-64 {
+            grid-column: span 1;
+            min-height: 256px;
+        }
+
+        /* Animation badge premium pulse */
+        @keyframes badgePulse {
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(139, 92, 246, 0.6),
+                            0 4px 12px rgba(139, 92, 246, 0.4);
+            }
+            50% { 
+                box-shadow: 0 0 30px rgba(139, 92, 246, 0.8),
+                            0 6px 20px rgba(139, 92, 246, 0.6);
+            }
+        }
+
+        /* Lazy loading fade-in images */
+        .product-card img {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* Responsive mobile optimisé */
+        @media (max-width: 640px) {
+            .product-card {
+                grid-column: span 2 !important;
+            }
+            .col-span-2.h-80 {
+                min-height: 280px;
+            }
+            .col-span-1.h-64 {
+                min-height: 240px;
+            }
+        }
+
         @media (max-width: 640px) {
             .splash-logo { width: 160px; height: 160px; }
             .splash-title { font-size: 2rem; }
@@ -1393,8 +1483,67 @@ v<!DOCTYPE html>
             }
         }
 
-        // ========== CATALOG DATA ==========
+        // ========== CATALOG DATA OPTIMISÉ PREMIUM ==========
         const CATALOG = [
+            // ============================================
+            // 🌟 PRODUITS PREMIUM - AFFICHAGE PRIORITAIRE
+            // ============================================
+            
+            // 🔬 FILTRÉ 73U - PREMIUM HASH (Grande carte 2 colonnes)
+            {
+                id: 'F73', 
+                name: "FILTRÉ 73U 🔬", 
+                cat: 'HASH', 
+                sub: "FILTRÉ PREMIUM MAROC",
+                tag: "🇲🇦 FILTRÉ PREMIUM",
+                desc: "Filtré 73 microns, provenance Maroc. Extraction à sec sur fleur fraîche, trichomes intacts, couleur sable dorée caractéristique. Deux strains au choix : Lemon Kush (agrumes, citron zesté, finish peppery) & GMO Cookies (notes terreuses, diesel, fuel). Consistance souple, fonte rapide. Réservé aux connaisseurs.",
+                mediaType: 'image',
+                src: "https://res.cloudinary.com/dlmmylat6/image/upload/v1770940493/IMG_2860_uvetqy.jpg",
+                videoSrc: "https://res.cloudinary.com/dlmmylat6/video/upload/v1770940296/ScreenRecording_02-12-2026_20-01-22_1_wstkxb.mov",
+                tiers: [
+                    {w:'10G', p:80},
+                    {w:'25G', p:160},
+                    {w:'50G', p:250},
+                    {w:'100G', p:480}
+                ],
+                hasCustom: true,
+                layout: 'col-span-2 h-80',
+                stock: 'medium',
+                multiStrain: true,
+                strains: ['LEMON KUSH 🍋', 'GMO COOKIES 🍪'],
+                defaultStrain: 'LEMON KUSH 🍋',
+                premium: true
+            },
+            
+            // 🍼 CEREAL MILK - PREMIUM WEED (Grande carte 2 colonnes)
+            {
+                id: 'CM', 
+                name: "CEREAL MILK 🍼🥣", 
+                cat: 'WEED', 
+                sub: "TOPSHELF CALI USA", 
+                tag: "🇺🇸 CALI IMPORT",
+                desc: "CALI USA TOP SHELF - Strain Cereal Milk : Têtes compactes, couleur violette nuancée, Terps Ultra-Savoureux. Effets : Relaxation corporelle profonde & Euphorie, un régal pour les amateurs de Zaza ! Génétique légendaire, cultivation indoor premium.",
+                mediaType: 'image',
+                src: "https://res.cloudinary.com/dpojixeiy/image/upload/v1771124699/FILTRE%CC%81_3x_4_xzewtb.png",
+                tiers: [
+                    {w:'5G', p:60, oldPrice: 70},
+                    {w:'10G', p:110, oldPrice: 140},
+                    {w:'25G', p:250, oldPrice: 280},
+                    {w:'50G', p:380, oldPrice: 500},
+                    {w:'100G', p:780, oldPrice: 1000}
+                ],
+                hasCustom: true,
+                layout: 'col-span-2 h-80',
+                stock: 'high',
+                bestseller: true,
+                premium: true
+            },
+            
+            // ============================================
+            // PRODUITS STANDARDS - AFFICHAGE NORMAL
+            // ============================================
+            
+            // 🧼 JAUNE MOUSSEUX - TOP MOUSSE
             {
                 id: 'JM', 
                 name: "JAUNE MOUSSEUX 🧼", 
@@ -1411,82 +1560,37 @@ v<!DOCTYPE html>
                     {w:'100G', p:340, oldPrice: 450}
                 ],
                 hasCustom: true, 
-                layout: 'col-span-2 h-72',
-                bestseller: true,
+                layout: 'col-span-1 h-64',
                 stock: 'low'
             },
-            {
-                id: 'F73', 
-                name: "FILTRÉ 73U 🔬", 
-                cat: 'HASH', 
-                sub: "FILTRÉ PREMIUM MAROC",
-                tag: "🇲🇦 FILTRÉ PREMIUM",
-                desc: "Filtré 73 microns, provenance Maroc. Extraction à sec sur fleur fraîche, trichomes intacts, couleur sable dorée caractéristique. Deux strains au choix : Lemon Kush (agrumes, citron zesté, finish peppery) & GMO Cookies (notes terreuses, diesel, fuel). Consistance souple, fonte rapide. Réservé aux connaisseurs.",
-                mediaType: 'video',
-                src: "https://res.cloudinary.com/dlmmylat6/video/upload/v1770940296/ScreenRecording_02-12-2026_20-01-22_1_wstkxb.mov",
-                thumbnail: "https://res.cloudinary.com/dlmmylat6/image/upload/v1770940493/IMG_2860_uvetqy.jpg",
-                tiers: [
-                    {w:'10G', p:80},
-                    {w:'25G', p:160},
-                    {w:'50G', p:250},
-                    {w:'100G', p:480}
-                ],
-                hasCustom: false,
-                layout: 'col-span-2 h-72',
-                stock: 'medium',
-                multiStrain: true,
-                strains: ['LEMON KUSH 🍋', 'GMO COOKIES 🍪'],
-                defaultStrain: 'LEMON KUSH 🍋'
-            },
+            
+            // 🧙‍♀️ WIZARD TREES - FROZEN SIFT CALI
             {
                 id: 'WZ', 
                 name: "WIZARD TREES 🧙‍♀️", 
                 cat: 'HASH', 
                 sub: "OLIVES FROZEN SIFT", 
                 tag: "✨ CALI IMPORT",
-                desc: "Farm: WIZARD TREES. Frozen Sift Premium. Strains: FORBIDDEN FRUITS, OG DONUTS, DREAM QUEEN, HONEY BANANA, APPLE GELATO.",
-                mediaType: 'image', 
+                desc: "Farm: WIZARD TREES. Frozen Sift Premium. Strains: FORBIDDEN FRUITS, OG DONUTS, DREAM QUEEN, HONEY BANANA, APPLE GELATO. Texture onctueuse, arômes intenses, puissance maximale.",
+                mediaType: 'video',
                 src: "https://res.cloudinary.com/dpojixeiy/video/upload/v1770248040/ScreenRecording_02-03-2026_16-46-02_1_wqrj9c.mov",
                 tiers: [
                     {w:'5G (1/2)', p:80, oldPrice: 100},
                     {w:'10G (1)', p:170, oldPrice: 200}
                 ],
                 hasCustom: false, 
-                layout: 'col-span-1 h-60',
+                layout: 'col-span-1 h-64',
                 stock: 'medium'
             },
-            {
-               {
-                id: 'CM', 
-                name: "CEREAL MILK 🍼🥣", 
-                cat: 'WEED', 
-                sub: "TOPSHELF CALI USA", 
-                tag: "🇺🇸 TOP SHELF",
-                desc: "CALI USA TOP SHELF - Strain Cereal Milk : Têtes compactes, couleur violette nuancée, Terps Ultra-Savoureux. Effets : Relaxation corporelle profonde & Euphorie, un régal pour les amateurs de Zaza !",
-                mediaType: 'image',  // ← CHANGÉ de 'video' à 'image'
-                src: "https://res.cloudinary.com/dpojixeiy/image/upload/v1771124699/FILTRE%CC%81_3x_4_xzewtb.png",
-                tiers: [
-                {w:'5G', p:60, oldPrice: 70},
-                {w:'10G', p:110, oldPrice: 140},
-                {w:'25G', p:250, oldPrice: 280},
-                {w:'50G', p:380, oldPrice: 500},
-                {w:'100G', p:780, oldPrice: 1000}
-    ],
-    hasCustom: true,  // ← AJOUTÉ (pour "Gros volume")
-    layout: 'col-span-1 h-60',  // ← AJOUTÉ (taille de la carte)
-    stock: 'high'  // ← AJOUTÉ (niveau de stock)
-},
-                hasCustom: true, 
-                layout: 'col-span-1 h-60',
-                stock: 'high'
-            },
+            
+            // 💎 MONTE CRISTO - FESTIVITÉS
             {
                 id: 'MC', 
                 name: "MONTE CRISTO 💎", 
                 cat: 'FESTIVITÉS', 
                 sub: "C0KE", 
                 tag: "❄️ ÉCAILLES PURES",
-                desc: "ÉCAILLES PURES 0,98%. Pureté brute Bolivie. Zéro coupe. Le top du top.",
+                desc: "ÉCAILLES PURES 0,98%. Pureté brute Bolivie. Zéro coupe. Le top du top. Provenance directe, qualité irréprochable.",
                 mediaType: 'video', 
                 src: "https://res.cloudinary.com/dlmmylat6/video/upload/v1764906305/IMG_1629_ntkjra.mp4",
                 tiers: [
@@ -1497,7 +1601,7 @@ v<!DOCTYPE html>
                     {w:'20G', p:800, oldPrice: 1100}
                 ],
                 hasCustom: true, 
-                layout: 'col-span-2 h-56',
+                layout: 'col-span-2 h-64',
                 stock: 'low'
             }
         ];
@@ -1711,55 +1815,75 @@ v<!DOCTYPE html>
             const filtered = currentFilter === 'all' ? CATALOG : CATALOG.filter(i => i.cat === currentFilter);
             
             container.innerHTML = `
-                <div class="product-card col-span-2 h-72"><div class="skeleton w-full h-full"></div></div>
-                <div class="product-card col-span-1 h-60"><div class="skeleton w-full h-full"></div></div>
-                <div class="product-card col-span-1 h-60"><div class="skeleton w-full h-full"></div></div>
+                <div class="product-card col-span-2 h-80"><div class="skeleton w-full h-full"></div></div>
+                <div class="product-card col-span-1 h-64"><div class="skeleton w-full h-full"></div></div>
+                <div class="product-card col-span-1 h-64"><div class="skeleton w-full h-full"></div></div>
             `;
             
             setTimeout(() => {
                 let html = '';
                 filtered.forEach(item => {
                     let mediaSrc = item.src;
-                    if (item.thumbnail) {
-                        mediaSrc = item.thumbnail;
+                    
+                    const media = (item.mediaType === 'video')
+                        ? `<video src="${mediaSrc}" class="w-full h-full object-cover opacity-80" loop muted playsinline autoplay webkit-playsinline></video>`
+                        : `<img src="${mediaSrc}" class="w-full h-full object-cover opacity-80" loading="lazy">`;
+                    
+                    let badges = '';
+                    if (item.premium) {
+                        badges = `<span class="badge-premium" style="background:linear-gradient(135deg,#8b5cf6,#a78bfa);animation:badgePulse 2s ease-in-out infinite;">⭐ PREMIUM</span>`;
+                    } else {
+                        badges = `<span class="badge-premium">${item.tag}</span>`;
                     }
                     
-                    const media = (item.mediaType === 'video' && !item.thumbnail)
-                        ? `<video src="${mediaSrc}" class="w-full h-full object-cover opacity-70" loop muted playsinline autoplay webkit-playsinline></video>`
-                        : `<img src="${mediaSrc}" class="w-full h-full object-cover opacity-70">`;
-                    
-                    let badges = `<span class="badge-premium">${item.tag}</span>`;
                     if (item.bestseller) {
-                        badges = `<span class="badge-premium badge-bestseller">⭐ BEST SELLER</span>`;
+                        badges += `<span class="badge-premium badge-bestseller mt-1">🔥 BEST SELLER</span>`;
                     }
                     
                     let stockBadge = '';
                     if (item.stock === 'low') {
-                        stockBadge = '<span class="badge-premium badge-stock mt-1">STOCK LIMITÉ</span>';
+                        stockBadge = '<span class="badge-premium badge-stock mt-1">⚠️ STOCK LIMITÉ</span>';
+                    }
+                    
+                    let strainBadge = '';
+                    if (item.multiStrain) {
+                        strainBadge = `<span class="badge-premium mt-1" style="background:rgba(234,179,8,0.9);">🔄 ${item.strains.length} STRAINS</span>`;
                     }
                     
                     let activity = '';
                     if (isShopOpen && Math.random() > 0.5) {
-                        const viewers = Math.floor(Math.random() * 8) + 2;
+                        const viewers = Math.floor(Math.random() * 12) + 3;
                         activity = `<div class="activity-badge mt-2"><div class="activity-dot"></div>${viewers} CONSULTATIONS</div>`;
-                    }
-
-                    let strainBadge = '';
-                    if (item.multiStrain) {
-                        strainBadge = `<span class="badge-premium mt-1" style="background:rgba(234,179,8,0.85);">2 STRAINS DISPO</span>`;
                     }
                     
                     html += `
                     <div class="product-card ${item.layout} fade-in cursor-pointer group" onclick="openProduct('${item.id}')">
-                        <div class="absolute inset-0 bg-black">${media}</div>
-                        <div class="absolute bottom-0 left-0 w-full p-4 z-20 bg-gradient-to-t from-black via-black/90 to-transparent">
+                        <div class="absolute inset-0 bg-black overflow-hidden">
+                            ${media}
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
+                        </div>
+                        <div class="absolute bottom-0 left-0 w-full p-5 z-20">
                             ${badges}
                             ${stockBadge}
                             ${strainBadge}
-                            <h3 class="text-white font-black text-base leading-none uppercase mb-1 tracking-tighter mt-2">${item.name}</h3>
-                            <p class="text-[8px] text-gray-400 font-bold uppercase tracking-widest">${item.sub}</p>
+                            <h3 class="text-white font-black text-lg leading-tight uppercase mb-2 tracking-tighter mt-3">${item.name}</h3>
+                            <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mb-1">${item.sub}</p>
+                            
+                            <div class="flex items-center gap-2 mt-2">
+                                <span class="text-violet-500 font-black text-sm">À partir de ${item.tiers[0].p}€</span>
+                                ${item.tiers[0].oldPrice ? `<span class="text-gray-600 line-through text-xs">${item.tiers[0].oldPrice}€</span>` : ''}
+                            </div>
+                            
                             ${activity}
                         </div>
+                        
+                        ${item.premium ? `
+                        <div class="absolute top-4 left-4 z-20">
+                            <div class="bg-violet-600 text-white px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-wider shadow-lg shadow-violet-500/50 border border-violet-400">
+                                ⭐ PREMIUM
+                            </div>
+                        </div>
+                        ` : ''}
                     </div>`;
                 });
                 container.innerHTML = html;
@@ -1797,35 +1921,64 @@ v<!DOCTYPE html>
                 strainSel.innerHTML = '';
             }
             
+            // AFFICHAGE MEDIA OPTIMISÉ
             const v = document.getElementById('modal-video');
             const i = document.getElementById('modal-image');
-            if(p.mediaType === 'video') { 
-                i.classList.add('hidden'); 
-                v.classList.remove('hidden'); 
-                v.src = p.src; 
-                v.play(); 
-            } else { 
-                v.classList.add('hidden'); 
-                i.classList.remove('hidden'); 
-                i.src = p.src; 
+            
+            const videoUrl = p.videoSrc || (p.mediaType === 'video' ? p.src : null);
+            const imageUrl = p.mediaType === 'image' ? p.src : (p.thumbnail || null);
+            
+            if (videoUrl) {
+                i.classList.add('hidden');
+                v.classList.remove('hidden');
+                v.src = videoUrl;
+                v.play().catch(err => {
+                    console.log('Autoplay bloqué, affichage image de secours');
+                    if (imageUrl) {
+                        v.classList.add('hidden');
+                        i.classList.remove('hidden');
+                        i.src = imageUrl;
+                    }
+                });
+            } else if (imageUrl) {
+                v.classList.add('hidden');
+                i.classList.remove('hidden');
+                i.src = imageUrl;
             }
 
+            // BADGES OVERLAY
             let badgesHTML = '';
+            if (p.premium) {
+                badgesHTML += '<span class="badge-premium" style="background:linear-gradient(135deg,#8b5cf6,#a78bfa);animation:badgePulse 2s ease-in-out infinite;">⭐ PREMIUM</span>';
+            }
             if (p.bestseller) {
-                badgesHTML += '<span class="badge-premium badge-bestseller">⭐ BEST SELLER</span>';
+                badgesHTML += '<span class="badge-premium badge-bestseller mt-2">🔥 BEST SELLER</span>';
             }
             if (p.stock === 'low') {
-                badgesHTML += '<span class="badge-premium badge-stock mt-2">STOCK LIMITÉ</span>';
+                badgesHTML += '<span class="badge-premium badge-stock mt-2">⚠️ STOCK LIMITÉ</span>';
             }
             if (p.multiStrain) {
-                badgesHTML += '<span class="badge-premium mt-2" style="background:rgba(234,179,8,0.85);">2 STRAINS</span>';
+                badgesHTML += `<span class="badge-premium mt-2" style="background:rgba(234,179,8,0.9);">🔄 ${p.strains.length} STRAINS DISPO</span>`;
             }
             document.getElementById('modal-badges').innerHTML = badgesHTML;
 
+            // ACTIVITY INDICATOR
             let activityHTML = '';
             if (isShopOpen) {
-                const viewers = Math.floor(Math.random() * 12) + 3;
-                activityHTML = `<div class="activity-badge"><div class="activity-dot"></div>${viewers} personnes consultent ce produit</div>`;
+                const viewers = Math.floor(Math.random() * 15) + 5;
+                const orders = Math.floor(Math.random() * 8) + 2;
+                activityHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="activity-badge">
+                            <div class="activity-dot"></div>
+                            ${viewers} personnes consultent
+                        </div>
+                        <div class="activity-badge" style="background:rgba(34,197,94,0.1);border-color:rgba(34,197,94,0.2);color:#22c55e;">
+                            <div class="activity-dot" style="background:#22c55e;"></div>
+                            ${orders} ventes aujourd'hui
+                        </div>
+                    </div>
+                `;
             }
             document.getElementById('modal-activity').innerHTML = activityHTML;
 
