@@ -1167,147 +1167,65 @@
     </div>
 
     <script>
-// ============================================
-// FRONTEND SIMPLIFIÉ - L'ESSENTIEL SEULEMENT
-// ============================================
-// 📋 REMPLACE ton code <script> de sécurité par celui-ci
+        // ========== SECURITY (VERSION CORRIGÉE) ==========
 
-// ⚠️ REMPLACE PAR TON URL BACKEND RAILWAY
-const BACKEND_URL = 'https://tuvasrientrouver.up.railway.app';;
+        const BACKEND_URL = 'https://tuvasrientrouver.up.railway.app';
+        const DEBUG_MODE = true; // Mettre à false en production
 
-// ========== DÉTECTION BOT BASIQUE ==========
-function isBot() {
-  const ua = navigator.userAgent.toLowerCase();
-  return /bot|crawler|spider|scraper|headless|phantom|puppeteer/i.test(ua) ||
-         navigator.webdriver === true;
-}
+        function debugLog(msg, data = null) {
+            if (DEBUG_MODE) {
+                console.log(`🔍 [DEBUG] ${msg}`, data || '');
+            }
+        }
 
-// ========== RATE LIMITING LOCAL ==========
-const rateLimiter = {
-  attempts: [],
-  maxAttempts: 5,
-  windowMs: 60000, // 1 minute
-  
-  check() {
-    const now = Date.now();
-    this.attempts = this.attempts.filter(t => now - t < this.windowMs);
-    
-    if (this.attempts.length >= this.maxAttempts) {
-      return false;
-    }
-    
-    this.attempts.push(now);
-    return true;
-  }
-};
+        function blockAccess(reason, details = '') {
+            const screen = document.getElementById('block-screen');
+            document.getElementById('block-reason').textContent = reason;
+            document.getElementById('block-details').textContent = details;
+            screen.style.display = 'flex';
+            
+            // Vider le body après un délai pour éviter tout accès
+            setTimeout(() => {
+                document.body.innerHTML = screen.outerHTML;
+            }, 100);
+        }
 
-// ========== BLOQUER ACCÈS ==========
-function blockAccess(reason) {
-  document.body.innerHTML = `
-    <div style="position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center;flex-direction:column;">
-      <h1 style="color:#ef4444;font-size:2rem;margin-bottom:1rem;">⛔ ACCÈS REFUSÉ</h1>
-      <p style="color:#666;font-size:1rem;">${reason}</p>
-    </div>
-  `;
-}
+        async function initSecurity() {
+            'use strict';
+            debugLog('🚀 Démarrage vérification sécurité...');
 
-// ========== VÉRIFICATION PRINCIPALE ==========
-async function initSecurity() {
-  
-  // 1. Bloquer bots évidents
-  if (isBot()) {
-    blockAccess('Navigateur non autorisé');
-    return false;
-  }
+            // 1. Détection bot/crawler
+            const isBot = /bot|crawler|spider|crawling|scraper/i.test(navigator.userAgent);
+            const honeypotFilled = document.getElementById('contact_email')?.value !== '';
+            
+            if (isBot) {
+                debugLog('❌ Bot détecté', navigator.userAgent);
+                blockAccess('Accès refusé : Bot détecté');
+                return false;
+            }
+            
+            if (honeypotFilled) {
+                debugLog('❌ Honeypot rempli');
+                blockAccess('Accès refusé');
+                return false;
+            }
 
-  // 2. Rate limiting local
-  if (!rateLimiter.check()) {
-    blockAccess('Trop de tentatives - Réessaye dans 1 minute');
-    return false;
-  }
+            // 2. Vérifier Telegram WebApp SDK
+            debugLog('Vérification Telegram WebApp...');
+            const tg = window.Telegram?.WebApp;
+            
+            if (!tg) {
+                debugLog('❌ Telegram.WebApp non disponible');
+                blockAccess('Cette application fonctionne uniquement dans Telegram', 'window.Telegram.WebApp non trouvé');
+                return false;
+            }
 
-  // 3. Vérifier Telegram
-  const tg = window.Telegram?.WebApp;
-  
-  if (!tg) {
-    blockAccess('Application Telegram requise');
-    return false;
-  }
+            debugLog('✅ Telegram WebApp détecté', {
+                platform: tg.platform,
+                version: tg.version,
+                colorScheme: tg.colorScheme
+            });
 
-  // Initialiser Telegram
-  try {
-    tg.ready();
-    tg.expand();
-    tg.setHeaderColor('#000000');
-    tg.enableClosingConfirmation();
-  } catch (err) {
-    console.error('Erreur Telegram:', err);
-  }
-
-  // 4. Vérifier initData
-  const initData = tg.initData || '';
-  
-  if (!initData || initData.trim() === '') {
-    blockAccess('Session invalide - Relance le bot');
-    return false;
-  }
-
-  // 5. Vérifier avec backend (HMAC)
-  try {
-    const response = await fetch(`${BACKEND_URL}/api/verify`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ initData: initData }),
-      signal: AbortSignal.timeout(8000)
-    });
-
-    if (!response.ok) {
-      if (response.status === 429) {
-        blockAccess('Trop de requêtes - Réessaye dans 1 minute');
-        return false;
-      }
-      blockAccess('Vérification échouée');
-      return false;
-    }
-
-    const data = await response.json();
-
-    if (!data.ok) {
-      blockAccess('Session invalide');
-      return false;
-    }
-
-    console.log('✅ Accès autorisé');
-    return true;
-
-  } catch (err) {
-    console.error('Erreur backend:', err);
-    blockAccess('Service temporairement indisponible');
-    return false;
-  }
-}
-
-// ========== PROTECTION DEVTOOLS (OPTIONNEL) ==========
-// Décommenter si tu veux bloquer la console
-/*
-document.addEventListener('contextmenu', e => e.preventDefault());
-document.addEventListener('keydown', e => {
-  if (e.key === 'F12' || 
-      (e.ctrlKey && e.shiftKey && e.key === 'I') ||
-      (e.ctrlKey && e.key === 'u')) {
-    e.preventDefault();
-  }
-});
-*/
-
-// ========== LANCER AU CHARGEMENT ==========
-document.getElementById('main-feed').style.visibility = 'hidden';
-
-initSecurity().then(authorized => {
-  if (authorized) {
-    document.getElementById('main-feed').style.visibility = 'visible';
-  }
-});
             // 3. Initialiser Telegram
             try {
                 tg.ready();
@@ -1316,20 +1234,20 @@ initSecurity().then(authorized => {
                 tg.enableClosingConfirmation();
                 debugLog('✅ Telegram initialisé');
             } catch (err) {
-                debugLog('⚠️ Erreur init Telegram', err);
+                debugLog('⚠️ Erreur init Telegram (non-bloquant)', err);
             }
 
             // 4. Vérifier initData (IMPORTANT)
             const initData = tg.initData || '';
-            debugLog('InitData présent ?', initData ? 'OUI (' + initData.length + ' chars)' : 'NON (vide)');
+            debugLog('InitData présent ?', initData ? `OUI (${initData.length} chars)` : 'NON (vide)');
+            debugLog('InitData preview:', initData.substring(0, 100) + '...');
 
             // ⚠️ EN MODE DEV : Si initData vide, on peut laisser passer avec warning
-            // EN PRODUCTION : Bloquer si vide
             if (!initData || initData.trim() === '') {
                 if (DEBUG_MODE) {
                     debugLog('⚠️ Mode DEV : initData vide mais passage autorisé');
                     console.warn('⚠️ ATTENTION : En production, ceci bloquerait l\'accès');
-                    // return true; // Décommenter pour tester sans backend
+                    return true; // Bypass en dev
                 } else {
                     debugLog('❌ initData vide en production');
                     blockAccess('Session Telegram invalide', 'initData manquant - relance le bot');
@@ -1337,19 +1255,42 @@ initSecurity().then(authorized => {
                 }
             }
 
-            // 5. Vérification HMAC backend
+            // 5. Vérification HMAC backend avec TIMEOUT
             debugLog('Envoi vers backend pour vérification HMAC...');
+            debugLog('Backend URL:', BACKEND_URL);
+            
             try {
+                // Créer un timeout de 10 secondes
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 10000);
+
                 const response = await fetch(`${BACKEND_URL}/api/verify`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ initData: initData })
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ initData: initData }),
+                    signal: controller.signal
                 });
 
-                debugLog('Réponse backend', { status: response.status, ok: response.ok });
+                clearTimeout(timeoutId);
+                debugLog('Réponse backend', { 
+                    status: response.status, 
+                    ok: response.ok,
+                    statusText: response.statusText 
+                });
 
                 if (!response.ok) {
-                    debugLog('❌ Backend refuse la connexion');
+                    const errorText = await response.text();
+                    debugLog('❌ Backend refuse la connexion', errorText);
+                    
+                    // En mode dev, on laisse passer quand même
+                    if (DEBUG_MODE) {
+                        console.warn('⚠️ Vérification backend échouée mais passage autorisé en DEV');
+                        return true;
+                    }
+                    
                     blockAccess('Vérification échouée', `Code HTTP: ${response.status}`);
                     return false;
                 }
@@ -1359,7 +1300,14 @@ initSecurity().then(authorized => {
 
                 if (!data.ok) {
                     debugLog('❌ Backend: session invalide');
-                    blockAccess('Session invalide', data.error || 'Relance le bot Telegram');
+                    
+                    // En mode dev, on laisse passer quand même
+                    if (DEBUG_MODE) {
+                        console.warn('⚠️ Session invalide mais passage autorisé en DEV');
+                        return true;
+                    }
+                    
+                    blockAccess('Session invalide', data.reason || 'Relance le bot Telegram');
                     return false;
                 }
 
@@ -1367,14 +1315,26 @@ initSecurity().then(authorized => {
                 return true;
 
             } catch (err) {
-                debugLog('⚠️ Erreur backend', err);
+                debugLog('⚠️ Erreur backend', {
+                    name: err.name,
+                    message: err.message,
+                    isTimeout: err.name === 'AbortError'
+                });
                 
-                // EN PRODUCTION : NE PAS LAISSER PASSER si backend down
+                // Si c'est un timeout ou une erreur réseau
+                if (err.name === 'AbortError') {
+                    console.warn('⏱️ Timeout backend (10s) - passage en mode dégradé');
+                } else {
+                    console.warn('⚠️ Erreur connexion backend:', err.message);
+                }
+                
+                // EN DEV : on laisse passer en mode dégradé
                 if (DEBUG_MODE) {
-                    console.warn('⚠️ Backend injoignable, accès autorisé en mode DEV uniquement');
+                    console.warn('⚠️ Mode DEV : accès autorisé malgré l\'erreur backend');
                     return true;
                 } else {
-                    blockAccess('Service temporairement indisponible', 'Backend inaccessible');
+                    // EN PROD : on bloque si le backend est inaccessible (sécurité max)
+                    blockAccess('Service temporairement indisponible', 'Backend inaccessible - réessaye dans 1 minute');
                     return false;
                 }
             }
@@ -1385,11 +1345,23 @@ initSecurity().then(authorized => {
 
         // Lancer la sécurité au chargement
         initSecurity().then(authorized => {
+            debugLog('🎬 Résultat final de la sécurité:', authorized ? 'AUTORISÉ ✅' : 'REFUSÉ ❌');
+            
             if (authorized) {
                 debugLog('🎉 Accès autorisé, affichage du contenu');
                 document.getElementById('main-feed').style.visibility = 'visible';
             } else {
                 debugLog('🚫 Accès refusé');
+            }
+        }).catch(err => {
+            debugLog('💥 ERREUR CRITIQUE dans initSecurity:', err);
+            
+            // Même en cas d'erreur, on laisse passer en mode DEV
+            if (DEBUG_MODE) {
+                console.error('💥 Erreur critique mais passage forcé en DEV:', err);
+                document.getElementById('main-feed').style.visibility = 'visible';
+            } else {
+                blockAccess('Erreur système', err.message);
             }
         });
 
@@ -1485,19 +1457,19 @@ initSecurity().then(authorized => {
             },
             {
                 id: 'PK', 
-                name: "🥛 CEREAL MILK 🥣", 
+                name: "PINK KUSH 🌸", 
                 cat: 'WEED', 
                 sub: "TOPSHELF CALI USA", 
                 tag: "🇺🇸 TOP SHELF",
-                desc: "CALI USA TOP SHELF - Strain Cereal Milk 🍼🥣: hybride équilibré, croisement Cookies & Cherry Pie. Terps explosifs, notes crémeuses lactées, vanille douce et agrumes légères. Têtes denses & violettes recouvertes de trichomes givrés, Effets puissants : euphorie, & relaxation corporelle profonde. Réservé aux connaisseurs.",
-                mediaType: 'image', 
-                src: "https://res.cloudinary.com/ddfwjgogp/image/upload/v1771077256/FILTR%C3%89_3x_4_ydqt5m.png",
+                desc: "CALI USA TOP SHELF - Strain PINK KUSH : Têtes compactes, terpenes explosifs en saveurs.",
+                mediaType: 'video', 
+                src: "https://res.cloudinary.com/dlmmylat6/video/upload/v1764906290/06AECEF5-7C0A-493C-9588-99433B454A4E_2_1_hnlzee.mov",
                 tiers: [
-                    {w:'5G', p:60},
-                    {w:'10G', p:120},
-                    {w:'25G', p:220},
-                    {w:'50G', p:380},
-                    {w:'100G', p:750}
+                    {w:'5G', p:60, oldPrice: 75},
+                    {w:'10G', p:120, oldPrice: 150},
+                    {w:'25G', p:220, oldPrice: 280},
+                    {w:'50G', p:380, oldPrice: 500},
+                    {w:'100G', p:780, oldPrice: 1000}
                 ],
                 hasCustom: true, 
                 layout: 'col-span-1 h-60',
@@ -1505,11 +1477,11 @@ initSecurity().then(authorized => {
             },
             {
                 id: 'MC', 
-                name: "🌬️ MONTE CRISTO 💎", 
+                name: "MONTE CRISTO 💎", 
                 cat: 'FESTIVITÉS', 
-                sub: "C0KE", 
+                sub: "C0°¨¨KE", 
                 tag: "❄️ ÉCAILLES PURES",
-                desc: "ÉCAILLES PURES 0,92%. Pureté Bolivienne. Pas sèche, elle n'irite pas, Zéro coupe. Le top du top.",
+                desc: "ÉCAILLES PURES 0,98%. Pureté brute Bolivie. Zéro coupe. Le top du top.",
                 mediaType: 'video', 
                 src: "https://res.cloudinary.com/dlmmylat6/video/upload/v1764906305/IMG_1629_ntkjra.mp4",
                 tiers: [
@@ -1659,9 +1631,24 @@ initSecurity().then(authorized => {
 
         // ========== INIT ==========
         window.onload = () => {
+            // Fermeture FORCÉE du splash après 3 secondes max (sécurité anti-blocage)
+            const splashTimeout = setTimeout(() => {
+                console.warn('⚠️ Fermeture forcée du splash (timeout 3s)');
+                const splash = document.getElementById('splash-screen');
+                if (splash) {
+                    splash.style.opacity = '0';
+                    setTimeout(() => splash.remove(), 800);
+                }
+            }, 3000);
+            
+            // Fermeture normale après 1.8s
             setTimeout(() => {
-                document.getElementById('splash-screen').style.opacity = '0';
-                setTimeout(() => document.getElementById('splash-screen').remove(), 800);
+                clearTimeout(splashTimeout); // Annuler le timeout de sécurité
+                const splash = document.getElementById('splash-screen');
+                if (splash) {
+                    splash.style.opacity = '0';
+                    setTimeout(() => splash.remove(), 800);
+                }
             }, 1800);
             
             updateStatus();
@@ -1733,8 +1720,8 @@ initSecurity().then(authorized => {
                     }
                     
                     const media = (item.mediaType === 'video' && !item.thumbnail)
-    ? `<video src="${mediaSrc}" class="w-full h-full object-contain opacity-70" loop muted playsinline autoplay webkit-playsinline style="background: rgba(0,0,0,0.3);"></video>`
-    : `<img src="${mediaSrc}" class="w-full h-full object-contain opacity-70" style="background: rgba(0,0,0,0.3);">`;
+                        ? `<video src="${mediaSrc}" class="w-full h-full object-cover opacity-70" loop muted playsinline autoplay webkit-playsinline></video>`
+                        : `<img src="${mediaSrc}" class="w-full h-full object-cover opacity-70">`;
                     
                     let badges = `<span class="badge-premium">${item.tag}</span>`;
                     if (item.bestseller) {
