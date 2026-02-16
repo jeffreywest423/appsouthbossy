@@ -910,16 +910,16 @@
         <!-- MARQUEE -->
         <div class="marquee-container py-1.5 border-y border-violet-500/50">
             <div class="marquee-track">
-                <span class="marquee-item">🛡️ CNI + SELFIE OBLIGATOIRE (NOUVEAUX CLIENTS)</span>
-                <span class="marquee-item">⚡ LIVRAISON EXPRESS IDF + ZONES LIMITROPHES</span>
-                <span class="marquee-item">🤝 MEET-UP 92 NORD DISCRET & SÉCURISÉ</span>
-                <span class="marquee-item">📦 SERVICE POSTAL ULTRA-SÉCURISÉ</span>
-                <span class="marquee-item">💶 PAIEMENT CASH & CRYPTO UNIQUEMENT</span>
-                <span class="marquee-item">🛡️ CNI + SELFIE OBLIGATOIRE (NOUVEAUX CLIENTS)</span>
-                <span class="marquee-item">⚡ LIVRAISON EXPRESS IDF + ZONES LIMITROPHES</span>
-                <span class="marquee-item">🤝 MEET-UP 92 NORD DISCRET & SÉCURISÉ</span>
-                <span class="marquee-item">📦 SERVICE POSTAL ULTRA-SÉCURISÉ</span>
-                <span class="marquee-item">💶 PAIEMENT CASH & CRYPTO UNIQUEMENT</span>
+                <span class="marquee-item">🎁 PACK DÉCOUVERTE : FILTRÉ 73U + CEREAL MILK = 125€ (-15€)</span>
+                <span class="marquee-item">⚡ HAPPY HOUR 14H-16H : -10€ SUR COMMANDES +100€</span>
+                <span class="marquee-item">🆕 NOUVEAU CLIENT : -10€ + 2G OFFERTS 2ÈME COMMANDE</span>
+                <span class="marquee-item">🎉 WEEKEND WARRIOR : PACK 220€ AU LIEU DE 250€</span>
+                <span class="marquee-item">💎 GRADE VIP +500€ : -10% À VIE + CADEAUX</span>
+                <span class="marquee-item">👥 PARRAINAGE X2 : 15€ CRÉDIT OU 2G OFFERTS</span>
+                <span class="marquee-item">🎁 PACK DÉCOUVERTE : FILTRÉ 73U + CEREAL MILK = 125€ (-15€)</span>
+                <span class="marquee-item">⚡ HAPPY HOUR 14H-16H : -10€ SUR COMMANDES +100€</span>
+                <span class="marquee-item">🆕 NOUVEAU CLIENT : -10€ + 2G OFFERTS 2ÈME COMMANDE</span>
+                <span class="marquee-item">🎉 WEEKEND WARRIOR : PACK 220€ AU LIEU DE 250€</span>
             </div>
         </div>
     </header>
@@ -968,6 +968,11 @@
         <button onclick="resetHome()" class="nav-btn active flex flex-col items-center transition-transform">
             <span class="text-2xl">⚡</span>
             <span class="text-[9px] font-black uppercase text-white mt-1 tracking-wider">STOCK</span>
+        </button>
+        <button onclick="openOffers()" class="nav-btn flex flex-col items-center opacity-50 transition-all hover:opacity-100 relative">
+            <span class="text-2xl">🎁</span>
+            <span class="text-[9px] font-black uppercase text-gray-400 mt-1 tracking-wider">OFFRES</span>
+            <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse"></span>
         </button>
         <button onclick="openInfos()" class="nav-btn flex flex-col items-center opacity-50 transition-all hover:opacity-100">
             <span class="text-2xl">🏴‍☠️</span>
@@ -1139,6 +1144,264 @@
             <button onclick="window.open('https://t.me/+-2I0rCCwKAI0ZTU0', '_blank')" class="w-full py-3 bg-[var(--bg-elevated)] border border-[var(--border-accent)] rounded-lg text-[10px] font-bold text-white uppercase hover:bg-[var(--border-accent)] mt-2 transition-colors">
                 VOIR TOUS LES AVIS TELEGRAM
             </button>
+
+            <div class="h-10"></div>
+        </div>
+    </div>
+
+    <!-- OFFRES MODAL -->
+    <div id="offers-modal" class="fixed inset-0 z-[70] bg-[var(--bg-deep)] hidden flex flex-col">
+        <div class="absolute inset-0 bg-[url('https://res.cloudinary.com/dlmmylat6/image/upload/v1770004112/0453086a-aa8b-480c-9227-6ceb099b3530_z111qu.png')] bg-cover bg-center opacity-[0.03] pointer-events-none"></div>
+        <div class="flex items-center p-6 border-b border-[var(--border-accent)] header-glass relative z-10">
+            <button onclick="closeOffers()" class="bg-[var(--bg-elevated)] w-10 h-10 rounded-full flex items-center justify-center text-white mr-4 active:scale-90 border border-[var(--border-accent)]">
+                ←
+            </button>
+            <h2 class="text-xl font-black text-white brand-font tracking-tighter">OFFRES & PROMOS 🎁</h2>
+        </div>
+        
+        <div class="flex-1 overflow-y-auto p-5 space-y-4 no-scrollbar relative z-10">
+            
+            <!-- OFFRES LIMITÉES -->
+            <section>
+                <h3 class="text-[9px] font-black text-red-500 tracking-[0.2em] uppercase mb-3 flex items-center gap-2">
+                    <span class="animate-pulse">🔥</span> OFFRES LIMITÉES
+                </h3>
+                
+                <div class="space-y-3">
+                    <div class="bg-gradient-to-r from-violet-900/30 to-black border-2 border-violet-500 p-4 rounded-xl relative overflow-hidden">
+                        <div class="absolute top-2 right-2 bg-red-500 text-white text-[8px] font-black px-2 py-1 rounded-full animate-pulse">
+                            JUSQU'À DIMANCHE
+                        </div>
+                        <div class="text-2xl mb-2">🎯</div>
+                        <h4 class="text-white font-black text-sm uppercase mb-1">PACK DÉCOUVERTE PREMIUM</h4>
+                        <p class="text-[10px] text-gray-400 mb-2">Filtré 73U (10G) + Cereal Milk (5G)</p>
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-violet-500 font-black text-lg">125€</span>
+                            <span class="text-gray-600 line-through text-sm">140€</span>
+                            <span class="bg-red-500 text-white text-[9px] font-black px-2 py-1 rounded">-15€</span>
+                        </div>
+                        <button onclick="contactStaff('PREMIUM15')" class="w-full bg-violet-500 text-white font-black text-[10px] py-2 rounded-lg mt-2 active:scale-95 transition-transform">
+                            COMMANDER • CODE: PREMIUM15
+                        </button>
+                    </div>
+
+                    <div class="bg-[var(--bg-card)] border border-yellow-500/50 p-4 rounded-xl">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-2xl">⚡</span>
+                            <h4 class="text-white font-black text-sm uppercase">HAPPY HOUR 14H-16H</h4>
+                        </div>
+                        <p class="text-[10px] text-gray-400 mb-2">TOUS LES JOURS • -10€ sur commandes +100€ • Livraison IDF OFFERTE</p>
+                        <div class="bg-yellow-500/10 border border-yellow-500/30 p-2 rounded text-center">
+                            <span class="text-yellow-500 font-black text-[9px]">MENTIONNE "HAPPYHOUR" AU STAFF</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-2xl">🆕</span>
+                            <h4 class="text-white font-black text-sm uppercase">FIRST TIMER BONUS</h4>
+                        </div>
+                        <p class="text-[10px] text-gray-400 mb-2">Nouveau client ? Jaune Mousseux 20G = 90€ au lieu de 100€</p>
+                        <div class="bg-green-500/10 text-green-500 text-[9px] font-bold p-2 rounded text-center">
+                            + 2G OFFERTS SUR TA 2ÈME COMMANDE 🎁
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PACKS / BUNDLES -->
+            <section>
+                <h3 class="text-[9px] font-black text-violet-500 tracking-[0.2em] uppercase mb-3">
+                    📦 PACKS & BUNDLES
+                </h3>
+                
+                <div class="space-y-3">
+                    <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl">
+                        <div class="text-2xl mb-2">🎉</div>
+                        <h4 class="text-white font-black text-sm uppercase mb-1">WEEKEND WARRIOR</h4>
+                        <div class="text-[10px] text-gray-400 space-y-1 mb-2">
+                            <p>• Cereal Milk 10G</p>
+                            <p>• Jaune Mousseux 20G</p>
+                            <p>• Monte Cristo 2G</p>
+                            <p class="text-violet-500 font-bold">+ Papier OCB Slim OFFERT</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-violet-500 font-black text-lg">220€</span>
+                            <span class="text-gray-600 line-through">250€</span>
+                            <span class="bg-violet-500/20 text-violet-500 text-[9px] font-bold px-2 py-1 rounded">-30€</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl">
+                        <div class="text-2xl mb-2">🧼</div>
+                        <h4 class="text-white font-black text-sm uppercase mb-1">HASH LOVER PACK</h4>
+                        <div class="text-[10px] text-gray-400 space-y-1 mb-2">
+                            <p>• Filtré 73U 25G (2 strains au choix)</p>
+                            <p>• Jaune Mousseux 50G</p>
+                            <p class="text-red-500 font-bold">⚠️ STOCK ULTRA-LIMITÉ</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-violet-500 font-black text-lg">300€</span>
+                            <span class="text-gray-600 line-through">330€</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-r from-amber-900/20 to-black border border-amber-500/30 p-4 rounded-xl">
+                        <div class="text-2xl mb-2">🇺🇸</div>
+                        <h4 class="text-white font-black text-sm uppercase mb-1">CALI COLLECTION</h4>
+                        <p class="text-[10px] text-amber-500 font-bold mb-2">100% IMPORT USA • LE MUST DU MUST</p>
+                        <div class="text-[10px] text-gray-400 space-y-1 mb-2">
+                            <p>• Cereal Milk 25G</p>
+                            <p>• Wizard Trees 10G (1 olive)</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-amber-500 font-black text-lg">380€</span>
+                            <span class="text-gray-600 line-through">420€</span>
+                            <span class="bg-amber-500/20 text-amber-500 text-[9px] font-bold px-2 py-1 rounded">-40€</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FIDÉLITÉ -->
+            <section>
+                <h3 class="text-[9px] font-black text-violet-500 tracking-[0.2em] uppercase mb-3">
+                    💎 PROGRAMME FIDÉLITÉ
+                </h3>
+                
+                <div class="space-y-3">
+                    <div class="bg-gradient-to-r from-violet-900/30 to-black border border-violet-500/50 p-4 rounded-xl">
+                        <div class="text-2xl mb-2">🎖️</div>
+                        <h4 class="text-white font-black text-sm uppercase mb-1">GRADE VIP AUTOMATIQUE</h4>
+                        <p class="text-[10px] text-gray-400 mb-2">Commande +500€ en une fois = Passage direct GRADE VIP</p>
+                        <div class="bg-violet-500/10 p-3 rounded space-y-1 text-[9px] text-gray-300">
+                            <p>✓ -10% sur TOUTES les futures commandes</p>
+                            <p>✓ Priorité livraison</p>
+                            <p>✓ Accès produits exclusifs</p>
+                            <p>✓ 1 cadeau mystère garanti</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl">
+                        <div class="text-2xl mb-2">👥</div>
+                        <h4 class="text-white font-black text-sm uppercase mb-1">PARRAINAGE BOOSTÉ X2</h4>
+                        <div class="text-[10px] text-gray-400 space-y-2">
+                            <p><span class="text-green-500 font-bold">TON AMI :</span> -15€ sur sa 1ère commande</p>
+                            <p><span class="text-violet-500 font-bold">TOI :</span> 15€ crédit OU 2G au choix</p>
+                            <div class="bg-amber-500/10 border border-amber-500/30 p-2 rounded mt-2">
+                                <p class="text-amber-500 font-bold text-center">3 PARRAINAGES = 1 PRODUIT OFFERT (50€)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl">
+                        <div class="text-2xl mb-2">💰</div>
+                        <h4 class="text-white font-black text-sm uppercase mb-1">CASHBACK CRYPTO +5%</h4>
+                        <p class="text-[10px] text-gray-400 mb-2">Paie en crypto = +5% crédit offert</p>
+                        <div class="text-[9px] text-gray-400 space-y-1">
+                            <p>• 100€ en BTC = <span class="text-violet-500 font-bold">5€ crédit</span></p>
+                            <p>• 500€ en XMR = <span class="text-violet-500 font-bold">25€ crédit</span></p>
+                            <p class="text-[8px] text-gray-600 mt-1">Valable : USDT, BTC, Monero</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- OFFRES FLASH -->
+            <section>
+                <h3 class="text-[9px] font-black text-red-500 tracking-[0.2em] uppercase mb-3 flex items-center gap-2">
+                    <span class="animate-pulse">⚡</span> OFFRES FLASH
+                </h3>
+                
+                <div class="space-y-3">
+                    <div class="bg-[var(--bg-card)] border border-blue-500/30 p-4 rounded-xl">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-2xl">📅</span>
+                            <h4 class="text-white font-black text-sm uppercase">LUNDI BOOST</h4>
+                        </div>
+                        <p class="text-[10px] text-gray-400 mb-2">Tous les lundis 10H30-14H • 1 produit en promo surprise</p>
+                        <div class="bg-blue-500/10 text-blue-500 text-[9px] font-bold p-2 rounded text-center">
+                            -20% À -40% • ANNONCÉ SUR TELEGRAM 10H
+                        </div>
+                    </div>
+
+                    <div class="bg-[var(--bg-card)] border border-purple-500/30 p-4 rounded-xl">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-2xl">🌙</span>
+                            <h4 class="text-white font-black text-sm uppercase">MINUIT MADNESS</h4>
+                        </div>
+                        <p class="text-[10px] text-gray-400 mb-2">Vendredi & Samedi minuit-2H • Produit mystère à prix cassé</p>
+                        <p class="text-[9px] text-purple-500 font-bold">Annoncé 30min avant sur Telegram</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ÉVÉNEMENTIEL -->
+            <section>
+                <h3 class="text-[9px] font-black text-violet-500 tracking-[0.2em] uppercase mb-3">
+                    🎊 OFFRES ÉVÉNEMENTIELLES
+                </h3>
+                
+                <div class="space-y-3">
+                    <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl">
+                        <div class="text-2xl mb-2">🎂</div>
+                        <h4 class="text-white font-black text-sm uppercase mb-1">BIRTHDAY BONUS</h4>
+                        <p class="text-[10px] text-gray-400 mb-2">C'est ton anniv ? -20€ sur ta commande + cadeau surprise</p>
+                        <p class="text-[9px] text-gray-600">Envoie preuve CNI au Staff WhatsApp • Valable 7 jours autour de ta date</p>
+                    </div>
+
+                    <div class="bg-gradient-to-r from-red-900/20 to-black border border-red-500/30 p-4 rounded-xl">
+                        <div class="text-2xl mb-2">🖤</div>
+                        <h4 class="text-white font-black text-sm uppercase mb-1">BLACK WEEK</h4>
+                        <p class="text-[10px] text-gray-400 mb-2">1 semaine de folie (Nov/Fév)</p>
+                        <div class="text-[9px] text-gray-400 space-y-1">
+                            <p>• -20% sur TOUT le catalogue</p>
+                            <p>• Frais de port OFFERTS (tous modes)</p>
+                            <p>• Commande +300€ = Cadeau Premium</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VOLUME -->
+            <section>
+                <h3 class="text-[9px] font-black text-violet-500 tracking-[0.2em] uppercase mb-3">
+                    📊 OFFRES VOLUME
+                </h3>
+                
+                <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl">
+                    <div class="text-2xl mb-2">💎</div>
+                    <h4 class="text-white font-black text-sm uppercase mb-2">GROS VOLUME DÉGRESSIF</h4>
+                    <div class="text-[10px] text-gray-400 space-y-1 mb-3">
+                        <div class="flex justify-between">
+                            <span>100G :</span>
+                            <span class="text-violet-500 font-bold">-5%</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>250G :</span>
+                            <span class="text-violet-500 font-bold">-10%</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>500G :</span>
+                            <span class="text-violet-500 font-bold">-15%</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>1KG+ :</span>
+                            <span class="text-amber-500 font-bold">-20% + Négo</span>
+                        </div>
+                    </div>
+                    <button onclick="contactStaff('GROSVOLUME')" class="w-full bg-violet-500 text-white font-black text-[10px] py-2 rounded-lg active:scale-95 transition-transform">
+                        CONTACT STAFF POUR DEVIS
+                    </button>
+                </div>
+            </section>
+
+            <div class="bg-gradient-to-r from-violet-900/20 to-black border border-violet-500/30 p-4 rounded-xl text-center">
+                <p class="text-[10px] text-violet-500 font-bold mb-2">💬 UNE QUESTION SUR LES OFFRES ?</p>
+                <button onclick="contactStaff('OFFRES')" class="bg-violet-500 text-white font-black text-[10px] px-6 py-2 rounded-lg active:scale-95 transition-transform">
+                    CONTACT STAFF WHATSAPP
+                </button>
+            </div>
 
             <div class="h-10"></div>
         </div>
@@ -1774,6 +2037,7 @@
             window.scrollTo({top:0, behavior:'smooth'});
             document.getElementById('product-modal').classList.add('hidden');
             document.getElementById('infos-modal').classList.add('hidden');
+            document.getElementById('offers-modal').classList.add('hidden');
             document.getElementById('checkout-modal').classList.add('hidden');
             filterFeed('all');
             
@@ -1781,6 +2045,21 @@
             document.querySelectorAll('.nav-btn')[0].classList.add('active');
             
             trackEvent('navigate_home');
+        }
+        
+        function openOffers() { 
+            document.getElementById('offers-modal').classList.remove('hidden');
+            triggerHaptic('light');
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.nav-btn')[1].classList.add('active');
+            
+            trackEvent('view_offers');
+        }
+        
+        function closeOffers() { 
+            document.getElementById('offers-modal').classList.add('hidden');
+            triggerHaptic('light');
         }
 
         // ========== FILTERS ==========
@@ -2103,7 +2382,7 @@
                 triggerHaptic('medium');
                 
                 document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-                document.querySelectorAll('.nav-btn')[2].classList.add('active');
+                document.querySelectorAll('.nav-btn')[3].classList.add('active');
                 
                 trackEvent('begin_checkout', {
                     cart_items: cart.length,
@@ -2125,7 +2404,7 @@
             triggerHaptic('light');
             
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.nav-btn')[1].classList.add('active');
+            document.querySelectorAll('.nav-btn')[2].classList.add('active');
             
             trackEvent('view_info');
         }
@@ -2349,8 +2628,14 @@
             }, 2000);
         }
         
-        function contactStaff() { 
-            const waURL = `https://wa.me/33759840764`;
+        function contactStaff(promoCode = '') { 
+            let waURL = `https://wa.me/33759840764`;
+            
+            if (promoCode) {
+                const msg = encodeURIComponent(`Bonjour ! Je suis intéressé par l'offre : ${promoCode}`);
+                waURL += `?text=${msg}`;
+            }
+            
             const tg = window.Telegram?.WebApp;
             
             if (tg) {
@@ -2364,7 +2649,7 @@
                 window.location.href = waURL;
             }
             
-            trackEvent('contact_staff');
+            trackEvent('contact_staff', { promo_code: promoCode || 'none' });
         }
     </script>
 </body>
