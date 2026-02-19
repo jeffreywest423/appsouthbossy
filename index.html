@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>South Valley - Command Center</title>
+    <title>South Valley - Command Center V2</title>
     
     <!-- ANTI-INDEXING STRICT -->
     <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
@@ -13,7 +13,7 @@
     <meta http-equiv="X-Robots-Tag" content="noindex, nofollow">
     <meta name="referrer" content="no-referrer">
     
-    <!-- ⚠️ IMPORTANT : SDK TELEGRAM (AVANT TOUT LE RESTE) -->
+    <!-- ⚠️ SDK TELEGRAM (AVANT TOUT) -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
     <!-- Google Analytics 4 -->
@@ -221,59 +221,110 @@
             50% { opacity: 0.7; }
         }
 
-        /* FILTERS */
-        .filter-chip {
+        /* CARROUSEL PRODUITS FULL-SCREEN */
+        .product-carousel {
             position: relative;
-            background: var(--bg-elevated);
-            border: 1px solid var(--border-accent);
-            color: var(--text-secondary);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            font-weight: 800;
-            font-size: 10px;
-            letter-spacing: 0.08em;
-        }
-
-        .filter-chip:active {
-            transform: scale(0.96);
-        }
-
-        .filter-chip.active {
-            background: var(--accent);
-            color: #fff;
-            border-color: var(--accent);
-            box-shadow: 0 0 20px var(--accent-glow),
-                        0 4px 12px rgba(139, 92, 246, 0.3);
-        }
-
-        /* PRODUCT CARDS */
-        .product-card {
-            position: relative;
-            background: var(--bg-card);
-            border-radius: 20px;
+            width: 100%;
+            height: 70vh;
             overflow: hidden;
-            border: 1px solid var(--border);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
         }
 
-        .product-card:active { 
-            transform: scale(0.98); 
-            border-color: var(--accent);
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            height: 100%;
         }
 
-        .product-card::before {
-            content: '';
+        .carousel-slide {
+            min-width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .carousel-slide video,
+        .carousel-slide img {
             position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, transparent 0%, rgba(139, 92, 246, 0.05) 100%);
-            opacity: 0;
-            transition: opacity 0.3s;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .carousel-gradient {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60%;
+            background: linear-gradient(
+                to top,
+                rgba(0, 0, 0, 1) 0%,
+                rgba(0, 0, 0, 0.9) 20%,
+                rgba(0, 0, 0, 0.4) 60%,
+                transparent 100%
+            );
             z-index: 1;
         }
 
-        .product-card:hover::before {
-            opacity: 1;
+        .carousel-content {
+            position: relative;
+            z-index: 2;
+            padding: 2rem;
+            padding-bottom: 8rem;
         }
+
+        .carousel-indicators {
+            position: absolute;
+            bottom: 7rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.5rem;
+            z-index: 3;
+        }
+
+        .carousel-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transition: all 0.3s;
+        }
+
+        .carousel-indicator.active {
+            background: var(--accent);
+            width: 24px;
+            border-radius: 4px;
+        }
+
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 3;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .carousel-nav:active {
+            transform: translateY(-50%) scale(0.9);
+        }
+
+        .carousel-nav.prev { left: 1rem; }
+        .carousel-nav.next { right: 1rem; }
 
         /* BADGES */
         .badge-premium {
@@ -309,6 +360,11 @@
         @keyframes badgeUrgent {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
+        }
+
+        .badge-offer-active {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            animation: badgePulse 2s ease-in-out infinite;
         }
 
         /* PRICING */
@@ -756,6 +812,98 @@
             box-shadow: 0 0 15px var(--accent-glow);
         }
 
+        /* REVIEWS CAROUSEL */
+        .reviews-carousel {
+            position: relative;
+            overflow: hidden;
+            height: 200px;
+        }
+
+        .reviews-track {
+            display: flex;
+            animation: reviewsScroll 60s linear infinite;
+        }
+
+        .reviews-track:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes reviewsScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .review-card {
+            min-width: 300px;
+            margin-right: 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-accent);
+            border-radius: 16px;
+            padding: 1rem;
+            flex-shrink: 0;
+        }
+
+        /* COUNTDOWN TIMER */
+        .countdown-timer {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+
+        .countdown-number {
+            background: rgba(239, 68, 68, 0.2);
+            padding: 4px 8px;
+            border-radius: 4px;
+            min-width: 32px;
+            text-align: center;
+        }
+
+        /* OFFER BANNER */
+        .offer-banner {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border: 2px solid #10b981;
+            border-radius: 12px;
+            padding: 12px;
+            margin: 1rem 0;
+            animation: offerPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes offerPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(16, 185, 129, 0.6); }
+        }
+
+        /* ADMIN BUTTON */
+        .admin-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            border: 2px solid #ef4444;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+            animation: adminPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes adminPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
         /* UTILITY */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .fade-in { animation: fadeIn 0.4s ease-out forwards; }
@@ -764,106 +912,17 @@
             to { opacity: 1; transform: translateY(0); } 
         }
 
-        /* ========== STYLES OPTIMISÉS PREMIUM ========== */
-
-        /* Product cards - Vidéos/Images remplissage optimal */
-        .product-card video,
-        .product-card img {
-            object-fit: cover;
-            object-position: center;
-            width: 100%;
-            height: 100%;
-        }
-
-        /* Modal - Vidéos/Images sans bords noirs */
-        #modal-video,
-        #modal-image {
-            min-height: 100%;
-            background: #000;
-            object-fit: cover;
-            object-position: center;
-        }
-
-        /* Gradient overlay amélioré - Cards */
-        .product-card .bg-gradient-to-t {
-            background: linear-gradient(
-                to top,
-                rgba(0, 0, 0, 1) 0%,
-                rgba(0, 0, 0, 0.85) 30%,
-                rgba(0, 0, 0, 0.3) 70%,
-                transparent 100%
-            );
-        }
-
-        /* Gradient overlay amélioré - Modal */
-        .modal-panel .bg-gradient-to-t {
-            background: linear-gradient(
-                to top,
-                rgba(0, 0, 0, 1) 0%,
-                rgba(0, 0, 0, 0.9) 20%,
-                rgba(0, 0, 0, 0.4) 60%,
-                transparent 100%
-            );
-        }
-
-        /* Badge premium avec glow animé */
-        .badge-premium[style*="gradient"] {
-            box-shadow: 
-                0 0 20px rgba(139, 92, 246, 0.6),
-                0 4px 12px rgba(139, 92, 246, 0.4);
-        }
-
-        /* Layouts produits premium */
-        .col-span-2.h-80 {
-            grid-column: span 2;
-            min-height: 320px;
-        }
-
-        .col-span-1.h-64 {
-            grid-column: span 1;
-            min-height: 256px;
-        }
-
-        /* Animation badge premium pulse */
-        @keyframes badgePulse {
-            0%, 100% { 
-                box-shadow: 0 0 20px rgba(139, 92, 246, 0.6),
-                            0 4px 12px rgba(139, 92, 246, 0.4);
-            }
-            50% { 
-                box-shadow: 0 0 30px rgba(139, 92, 246, 0.8),
-                            0 6px 20px rgba(139, 92, 246, 0.6);
-            }
-        }
-
-        /* Lazy loading fade-in images */
-        .product-card img {
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        /* Responsive mobile optimisé */
-        @media (max-width: 640px) {
-            .product-card {
-                grid-column: span 2 !important;
-            }
-            .col-span-2.h-80 {
-                min-height: 280px;
-            }
-            .col-span-1.h-64 {
-                min-height: 240px;
-            }
-        }
-
         @media (max-width: 640px) {
             .splash-logo { width: 160px; height: 160px; }
             .splash-title { font-size: 2rem; }
             .toast { min-width: 280px; }
+            .carousel-content { padding: 1.5rem; padding-bottom: 7rem; }
         }
     </style>
 </head>
 <body class="antialiased pb-32">
 
-    <!-- HONEYPOT INVISIBLE (CORRECTEMENT PLACÉ DANS LE BODY) -->
+    <!-- HONEYPOT INVISIBLE -->
     <div style="position:absolute;left:-9999px;top:-9999px;">
         <input type="text" name="contact_email" id="contact_email" tabindex="-1" autocomplete="off">
         <a href="/admin/login">Admin Panel</a>
@@ -875,6 +934,9 @@
 
     <!-- SOCIAL PROOF TICKER -->
     <div class="social-proof-ticker" id="social-proof-ticker"></div>
+
+    <!-- ADMIN BUTTON (Visible uniquement pour ID 7998805372) -->
+    <button id="admin-btn" class="admin-btn" onclick="openAdmin()">⚙️</button>
 
     <!-- BLOCK SCREEN -->
     <div id="block-screen" class="fixed inset-0 z-[9999] bg-black hidden flex-col items-center justify-center p-8">
@@ -902,24 +964,22 @@
                     <span class="text-[9px] text-violet-500 font-bold tracking-[0.15em] uppercase mt-1">Top French Plug • Cercle Privé</span>
                 </div>
             </div>
-            <button onclick="openInfos()" class="w-11 h-11 bg-[var(--bg-elevated)] border border-[var(--border-accent)] rounded-full flex items-center justify-center active:scale-90 transition-transform shadow-[0_0_15px_rgba(139,92,246,0.2)]">
-                <span class="text-lg">💎</span>
+            <button onclick="openProfile()" class="w-11 h-11 bg-[var(--bg-elevated)] border border-[var(--border-accent)] rounded-full flex items-center justify-center active:scale-90 transition-transform shadow-[0_0_15px_rgba(139,92,246,0.2)]">
+                <span class="text-lg">👤</span>
             </button>
         </div>
         
-        <!-- MARQUEE -->
+        <!-- MARQUEE avec offre du jour dynamique -->
         <div class="marquee-container py-1.5 border-y border-violet-500/50">
-            <div class="marquee-track">
-                <span class="marquee-item">🎁 PACK DÉCOUVERTE : FILTRÉ 73U + CEREAL MILK = 125€ (-15€)</span>
-                <span class="marquee-item">⚡ HAPPY HOUR 14H-16H : -10€ SUR COMMANDES +100€</span>
+            <div class="marquee-track" id="marquee-track">
+                <span class="marquee-item" id="daily-offer-marquee">🎁 CHARGEMENT OFFRE...</span>
+                <span class="marquee-item">⚡ LIVRAISON RAPIDE IDF • POSTAL FRANCE/EUROPE</span>
                 <span class="marquee-item">🆕 NOUVEAU CLIENT : -10€ + 2G OFFERTS 2ÈME COMMANDE</span>
-                <span class="marquee-item">🎉 WEEKEND WARRIOR : PACK 220€ AU LIEU DE 250€</span>
-                <span class="marquee-item">💎 GRADE VIP +500€ : -10% À VIE + CADEAUX</span>
-                <span class="marquee-item">👥 PARRAINAGE X2 : 15€ CRÉDIT OU 2G OFFERTS</span>
-                <span class="marquee-item">🎁 PACK DÉCOUVERTE : FILTRÉ 73U + CEREAL MILK = 125€ (-15€)</span>
-                <span class="marquee-item">⚡ HAPPY HOUR 14H-16H : -10€ SUR COMMANDES +100€</span>
+                <span class="marquee-item">💎 GRADE VIP +10 COMMANDES : -10% À VIE + CADEAUX</span>
+                <span class="marquee-item" id="daily-offer-marquee-2">🎁 CHARGEMENT OFFRE...</span>
+                <span class="marquee-item">⚡ LIVRAISON RAPIDE IDF • POSTAL FRANCE/EUROPE</span>
                 <span class="marquee-item">🆕 NOUVEAU CLIENT : -10€ + 2G OFFERTS 2ÈME COMMANDE</span>
-                <span class="marquee-item">🎉 WEEKEND WARRIOR : PACK 220€ AU LIEU DE 250€</span>
+                <span class="marquee-item">💎 GRADE VIP +10 COMMANDES : -10% À VIE + CADEAUX</span>
             </div>
         </div>
     </header>
@@ -941,27 +1001,22 @@
         </div>
     </div>
 
-    <!-- FILTERS -->
-    <div class="px-4 py-4 space-y-3">
-        <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
-            <button onclick="filterFeed('all')" class="filter-chip active shrink-0 px-6 py-2.5 rounded-full uppercase tracking-widest" id="btn-all">
-                TOUT
-            </button>
-            <button onclick="filterFeed('HASH')" class="filter-chip shrink-0 px-6 py-2.5 rounded-full uppercase tracking-widest" id="btn-hash">
-                HASH
-            </button>
-            <button onclick="filterFeed('WEED')" class="filter-chip shrink-0 px-6 py-2.5 rounded-full uppercase tracking-widest" id="btn-weed">
-                WEED
-            </button>
-            <button onclick="filterFeed('FESTIVITÉS')" class="filter-chip shrink-0 px-6 py-2.5 rounded-full uppercase tracking-widest" id="btn-fest">
-                FESTIVITÉS
-            </button>
-        </div>
-        <div id="sub-filters" class="flex gap-4 px-2 overflow-x-auto no-scrollbar h-6 transition-all duration-300 opacity-0 pointer-events-none items-center"></div>
-    </div>
+    <!-- OFFRE DU JOUR BANNER -->
+    <div id="daily-offer-banner" class="px-4 pt-4"></div>
 
-    <!-- MAIN FEED -->
-    <main id="main-feed" class="p-4 grid grid-cols-2 gap-4"></main>
+    <!-- CARROUSEL PRODUITS FULL-SCREEN -->
+    <div class="product-carousel" id="product-carousel">
+        <div class="carousel-track" id="carousel-track"></div>
+        
+        <button class="carousel-nav prev" onclick="prevSlide()">
+            <span class="text-white text-xl">←</span>
+        </button>
+        <button class="carousel-nav next" onclick="nextSlide()">
+            <span class="text-white text-xl">→</span>
+        </button>
+        
+        <div class="carousel-indicators" id="carousel-indicators"></div>
+    </div>
 
     <!-- NAVIGATION -->
     <nav class="nav-glass fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-md h-20 rounded-2xl z-50 flex justify-around items-center px-4">
@@ -1014,7 +1069,7 @@
             <div class="p-6 flex-1 overflow-y-auto no-scrollbar">
                 <p id="modal-desc" class="text-xs text-gray-400 leading-relaxed mb-8 font-mono border-l-2 border-violet-500 pl-4"></p>
 
-                <!-- STRAIN SELECTOR (visible seulement si multiStrain) -->
+                <!-- STRAIN SELECTOR -->
                 <div id="strain-selector-wrap" class="hidden mb-6">
                     <h3 class="text-[10px] font-black text-violet-500 uppercase mb-3 tracking-[0.2em]">STRAIN</h3>
                     <div id="strain-selector" class="flex gap-3"></div>
@@ -1030,6 +1085,104 @@
                 
                 <div class="h-24"></div>
             </div>
+        </div>
+    </div>
+
+    <!-- PROFILE MODAL -->
+    <div id="profile-modal" class="fixed inset-0 z-[70] bg-[var(--bg-deep)] hidden flex flex-col">
+        <div class="absolute inset-0 bg-[url('https://res.cloudinary.com/dlmmylat6/image/upload/v1770004112/0453086a-aa8b-480c-9227-6ceb099b3530_z111qu.png')] bg-cover bg-center opacity-[0.03] pointer-events-none"></div>
+        <div class="flex items-center p-6 border-b border-[var(--border-accent)] header-glass relative z-10">
+            <button onclick="closeProfile()" class="bg-[var(--bg-elevated)] w-10 h-10 rounded-full flex items-center justify-center text-white mr-4 active:scale-90 border border-[var(--border-accent)]">
+                ←
+            </button>
+            <h2 class="text-xl font-black text-white brand-font tracking-tighter">MON PROFIL</h2>
+        </div>
+        
+        <div class="flex-1 overflow-y-auto p-5 space-y-6 no-scrollbar relative z-10">
+            <!-- User Info Card -->
+            <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] rounded-2xl p-6 text-center">
+                <div id="user-avatar" class="w-24 h-24 rounded-full bg-violet-500 mx-auto mb-4 flex items-center justify-center text-4xl"></div>
+                <h3 id="user-name" class="text-xl font-black text-white mb-2">Utilisateur</h3>
+                <div id="user-grade" class="inline-flex items-center gap-2 bg-violet-500/10 border border-violet-500/30 px-4 py-2 rounded-full">
+                    <span class="text-2xl">🥉</span>
+                    <span class="text-sm font-bold text-violet-500">TOURISTE</span>
+                </div>
+            </div>
+
+            <!-- Stats Card -->
+            <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] rounded-2xl p-6">
+                <h4 class="text-[10px] font-black text-violet-500 uppercase mb-4 tracking-[0.2em]">📊 MES STATS</h4>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs text-gray-400">Commandes validées</span>
+                        <span id="user-orders" class="text-white font-black">0</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs text-gray-400">Membre depuis</span>
+                        <span id="user-member-since" class="text-white font-black">Aujourd'hui</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress to VIP -->
+            <div class="bg-gradient-to-r from-violet-900/30 to-black border border-violet-500/50 rounded-2xl p-6">
+                <h4 class="text-[10px] font-black text-violet-500 uppercase mb-3 tracking-[0.2em]">🏆 PROGRESSION VIP</h4>
+                <div class="w-full bg-gray-800 rounded-full h-3 mb-2">
+                    <div id="progress-bar" class="bg-gradient-to-r from-violet-500 to-purple-500 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+                <p id="progress-text" class="text-[10px] text-gray-400 text-center">0/10 commandes vers VIP BOSS</p>
+                
+                <div class="mt-4 space-y-2 text-[9px] text-gray-400">
+                    <p>✓ <strong class="text-white">VIP BOSS (10+ commandes)</strong></p>
+                    <p class="ml-4">→ -10% sur tout</p>
+                    <p class="ml-4">→ Livraison toujours offerte</p>
+                    <p class="ml-4">→ Early access produits</p>
+                    <p class="ml-4">→ 1 cadeau surprise/mois</p>
+                </div>
+            </div>
+
+            <!-- Theme Toggle -->
+            <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] rounded-2xl p-6">
+                <h4 class="text-[10px] font-black text-violet-500 uppercase mb-4 tracking-[0.2em]">🎨 APPARENCE</h4>
+                <div class="flex items-center justify-between">
+                    <span class="text-sm text-gray-400">Mode sombre</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" checked class="sr-only peer">
+                        <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-violet-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-violet-500"></div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Notifications Preferences -->
+            <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] rounded-2xl p-6">
+                <h4 class="text-[10px] font-black text-violet-500 uppercase mb-4 tracking-[0.2em]">🔔 NOTIFICATIONS</h4>
+                <div class="space-y-3">
+                    <label class="flex items-center justify-between cursor-pointer">
+                        <span class="text-sm text-gray-400">Offres du jour</span>
+                        <input type="checkbox" checked class="w-5 h-5 accent-violet-500 rounded">
+                    </label>
+                    <label class="flex items-center justify-between cursor-pointer">
+                        <span class="text-sm text-gray-400">Nouveaux produits</span>
+                        <input type="checkbox" checked class="w-5 h-5 accent-violet-500 rounded">
+                    </label>
+                    <label class="flex items-center justify-between cursor-pointer">
+                        <span class="text-sm text-gray-400">Grade upgradé</span>
+                        <input type="checkbox" checked class="w-5 h-5 accent-violet-500 rounded">
+                    </label>
+                </div>
+            </div>
+
+            <!-- Referral -->
+            <div class="bg-gradient-to-r from-amber-900/20 to-black border border-amber-500/30 rounded-2xl p-6 text-center">
+                <h4 class="text-[10px] font-black text-amber-500 uppercase mb-3 tracking-[0.2em]">👥 PARRAINAGE</h4>
+                <p class="text-xs text-gray-400 mb-4">Partage ce lien avec un ami</p>
+                <button onclick="shareReferral()" class="w-full bg-amber-500 text-black font-black text-xs py-3 rounded-lg active:scale-95 transition-transform">
+                    PARTAGER MON LIEN
+                </button>
+                <p class="text-[9px] text-gray-500 mt-3">Vous recevez tous deux 10€ de crédit</p>
+            </div>
+
+            <div class="h-10"></div>
         </div>
     </div>
 
@@ -1074,6 +1227,79 @@
                 </div>
             </section>
 
+            <!-- AVIS CLIENTS - ROULETTE AUTO-DÉFILANTE -->
+            <section>
+                <h3 class="text-[9px] font-black text-violet-500 tracking-[0.2em] uppercase mb-3 flex items-center gap-2">
+                    💬 AVIS CLIENTS
+                    <span class="text-[8px] text-gray-600">(30 avis vérifiés)</span>
+                </h3>
+                
+                <div class="reviews-carousel">
+                    <div class="reviews-track" id="reviews-track">
+                        <!-- Les avis seront générés dynamiquement -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- FAQ -->
+            <section>
+                <h3 class="text-[9px] font-black text-violet-500 tracking-[0.2em] uppercase mb-3">❓ FAQ</h3>
+                
+                <div class="space-y-3">
+                    <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl">
+                        <h5 class="text-white font-bold text-xs mb-2">C'est sûr niveau sécurité ?</h5>
+                        <p class="text-[10px] text-gray-400">Oui, double sous-vide + tracking chiffré. Discrétion maximale garantie.</p>
+                    </div>
+                    
+                    <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl">
+                        <h5 class="text-white font-bold text-xs mb-2">Combien de temps pour être livré ?</h5>
+                        <p class="text-[10px] text-gray-400">Meet-up: RDV même jour | Livraison IDF: 1-3h | Postal: 24-48h</p>
+                    </div>
+                    
+                    <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl">
+                        <h5 class="text-white font-bold text-xs mb-2">Je peux payer comment ?</h5>
+                        <p class="text-[10px] text-gray-400">Cash, USDT, BTC, ETH, Monero. Cashback +3% pour paiement crypto.</p>
+                    </div>
+                    
+                    <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl">
+                        <h5 class="text-white font-bold text-xs mb-2">C'est quoi les grades clients ?</h5>
+                        <p class="text-[10px] text-gray-400">Plus tu commandes, plus t'as d'avantages. VIP à 10 commandes = -10% à vie + cadeaux.</p>
+                    </div>
+                    
+                    <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl">
+                        <h5 class="text-white font-bold text-xs mb-2">Vous livrez où ?</h5>
+                        <p class="text-[10px] text-gray-400">Meet-up 92 Nord | Livraison IDF (75/91/92/93/94/95) | Postal France/Europe</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- GARANTIES -->
+            <section>
+                <h3 class="text-[9px] font-black text-violet-500 tracking-[0.2em] uppercase mb-3">✅ GARANTIES</h3>
+                
+                <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl space-y-3">
+                    <div>
+                        <h5 class="text-white font-bold text-xs mb-1">🔒 Discrétion Totale</h5>
+                        <p class="text-[10px] text-gray-400">Emballage neutre, aucune marque distinctive. Anonymat garanti.</p>
+                    </div>
+                    
+                    <div class="border-t border-[var(--border-accent)] pt-3">
+                        <h5 class="text-white font-bold text-xs mb-1">✨ Qualité Premium</h5>
+                        <p class="text-[10px] text-gray-400">Produits testés et certifiés. Origine vérifiée, traçabilité complète.</p>
+                    </div>
+                    
+                    <div class="border-t border-[var(--border-accent)] pt-3">
+                        <h5 class="text-white font-bold text-xs mb-1">💰 Remboursement Partiel</h5>
+                        <p class="text-[10px] text-gray-400">En cas de problème sur envoi postal : remboursement jusqu'à 50% selon le souci. Contactez le staff pour toute réclamation.</p>
+                    </div>
+                    
+                    <div class="border-t border-[var(--border-accent)] pt-3">
+                        <h5 class="text-white font-bold text-xs mb-1">🏃 Réactivité</h5>
+                        <p class="text-[10px] text-gray-400">Support disponible 10H30-02H30. Réponse moyenne : 15min.</p>
+                    </div>
+                </div>
+            </section>
+
             <section class="space-y-3">
                 <h3 class="text-[9px] font-black text-violet-500 tracking-[0.2em] uppercase opacity-80">HIÉRARCHIE & BONUS</h3>
                 
@@ -1081,8 +1307,8 @@
                     <h4 class="text-white font-black text-xs uppercase mb-2">🎁 CADEAUX PARRAINAGE</h4>
                     <p class="text-[10px] text-gray-300 mb-2">Tu parraines un ami ? Il commande ? = Cadeau immédiat.</p>
                     <div class="flex gap-2">
-                        <span class="bg-violet-500/10 text-violet-500 text-[9px] font-bold px-2 py-1 rounded border border-violet-500/30">1G OFFERT</span>
-                        <span class="bg-violet-500/10 text-violet-500 text-[9px] font-bold px-2 py-1 rounded border border-violet-500/30">OU 10€ CRÉDIT</span>
+                        <span class="bg-violet-500/10 text-violet-500 text-[9px] font-bold px-2 py-1 rounded border border-violet-500/30">10€ CRÉDIT</span>
+                        <span class="bg-violet-500/10 text-violet-500 text-[9px] font-bold px-2 py-1 rounded border border-violet-500/30">OU 1G OFFERT</span>
                     </div>
                 </div>
                 
@@ -1105,33 +1331,6 @@
                 </div>
             </section>
 
-            <section class="space-y-3">
-                <h3 class="text-[9px] font-black text-violet-500 tracking-[0.2em] uppercase opacity-80">AVIS</h3>
-                <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl space-y-3">
-                    <div class="border-b border-[var(--border-accent)] pb-2">
-                        <div class="flex justify-between mb-1">
-                            <span class="text-white text-[10px] font-bold">C****_92</span> 
-                            <span class="text-[10px]">🔥🔥🔥🔥🔥</span>
-                        </div>
-                        <p class="text-[10px] text-gray-500 italic">"Carré comme d'hab, la Mousse est violente."</p>
-                    </div>
-                    <div class="border-b border-[var(--border-accent)] pb-2">
-                        <div class="flex justify-between mb-1">
-                            <span class="text-white text-[10px] font-bold">S****_P</span> 
-                            <span class="text-[10px]">🔥🔥🔥🔥</span>
-                        </div>
-                        <p class="text-[10px] text-gray-500 italic">"Livraison rapide, livreur discret. Top."</p>
-                    </div>
-                    <div>
-                        <div class="flex justify-between mb-1">
-                            <span class="text-white text-[10px] font-bold">M****n</span> 
-                            <span class="text-[10px]">🔥🔥🔥🔥🔥</span>
-                        </div>
-                        <p class="text-[10px] text-gray-500 italic">"Le Frozen Sift c'est de l'art. Merci l'équipe."</p>
-                    </div>
-                </div>
-            </section>
-
             <section class="grid grid-cols-2 gap-3">
                 <button onclick="window.open('https://dympt.org/SouthV', '_blank')" class="w-full bg-violet-500 p-3 rounded-xl flex justify-center items-center shadow-lg shadow-violet-500/20 text-white font-black text-[10px] uppercase">
                     🥔 THE POTATO
@@ -1141,8 +1340,8 @@
                 </button>
             </section>
 
-            <button onclick="window.open('https://t.me/+-2I0rCCwKAI0ZTU0', '_blank')" class="w-full py-3 bg-[var(--bg-elevated)] border border-[var(--border-accent)] rounded-lg text-[10px] font-bold text-white uppercase hover:bg-[var(--border-accent)] mt-2 transition-colors">
-                VOIR TOUS LES AVIS TELEGRAM
+            <button onclick="contactStaff()" class="w-full py-3 bg-[var(--bg-elevated)] border border-[var(--border-accent)] rounded-lg text-[10px] font-bold text-white uppercase hover:bg-[var(--border-accent)] mt-2 transition-colors">
+                💬 CONTACT WHATSAPP
             </button>
 
             <div class="h-10"></div>
@@ -1161,55 +1360,131 @@
         
         <div class="flex-1 overflow-y-auto p-5 space-y-4 no-scrollbar relative z-10">
             
-            <!-- OFFRES LIMITÉES -->
+            <!-- OFFRES PAR JOUR -->
             <section>
                 <h3 class="text-[9px] font-black text-red-500 tracking-[0.2em] uppercase mb-3 flex items-center gap-2">
-                    <span class="animate-pulse">🔥</span> OFFRES LIMITÉES
+                    <span class="animate-pulse">🔥</span> OFFRES QUOTIDIENNES
                 </h3>
                 
                 <div class="space-y-3">
-                    <div class="bg-gradient-to-r from-violet-900/30 to-black border-2 border-violet-500 p-4 rounded-xl relative overflow-hidden">
-                        <div class="absolute top-2 right-2 bg-red-500 text-white text-[8px] font-black px-2 py-1 rounded-full animate-pulse">
-                            JUSQU'À DIMANCHE
-                        </div>
-                        <div class="text-2xl mb-2">🎯</div>
-                        <h4 class="text-white font-black text-sm uppercase mb-1">PACK DÉCOUVERTE PREMIUM</h4>
-                        <p class="text-[10px] text-gray-400 mb-2">Filtré 73U (10G) + Cereal Milk (5G)</p>
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="text-violet-500 font-black text-lg">125€</span>
-                            <span class="text-gray-600 line-through text-sm">140€</span>
-                            <span class="bg-red-500 text-white text-[9px] font-black px-2 py-1 rounded">-15€</span>
-                        </div>
-                        <button onclick="contactStaff('PREMIUM15')" class="w-full bg-violet-500 text-white font-black text-[10px] py-2 rounded-lg mt-2 active:scale-95 transition-transform">
-                            COMMANDER • CODE: PREMIUM15
-                        </button>
-                    </div>
-
-                    <div class="bg-[var(--bg-card)] border border-yellow-500/50 p-4 rounded-xl">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="text-2xl">⚡</span>
-                            <h4 class="text-white font-black text-sm uppercase">HAPPY HOUR 14H-16H</h4>
-                        </div>
-                        <p class="text-[10px] text-gray-400 mb-2">TOUS LES JOURS • -10€ sur commandes +100€ • Livraison IDF OFFERTE</p>
-                        <div class="bg-yellow-500/10 border border-yellow-500/30 p-2 rounded text-center">
-                            <span class="text-yellow-500 font-black text-[9px]">MENTIONNE "HAPPYHOUR" AU STAFF</span>
-                        </div>
-                    </div>
-
+                    <!-- LUNDI DAILY -->
                     <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl">
                         <div class="flex items-center gap-2 mb-2">
-                            <span class="text-2xl">🆕</span>
-                            <h4 class="text-white font-black text-sm uppercase">FIRST TIMER BONUS</h4>
+                            <span class="text-2xl">📅</span>
+                            <h4 class="text-white font-black text-sm uppercase">LUNDI DAILY</h4>
                         </div>
-                        <p class="text-[10px] text-gray-400 mb-2">Nouveau client ? Jaune Mousseux 20G = 90€ au lieu de 100€</p>
-                        <div class="bg-green-500/10 text-green-500 text-[9px] font-bold p-2 rounded text-center">
-                            + 2G OFFERTS SUR TA 2ÈME COMMANDE 🎁
+                        <div class="text-[10px] text-gray-400 space-y-1 mb-2">
+                            <p>• -10€ sur toute commande de 100€+</p>
+                            <p>• Livraison offerte</p>
+                            <p>• <span class="text-violet-500 font-bold">+150€ → Bag Cali 3.5G offert (strain au choix)</span></p>
+                            <p>• <span class="text-amber-500 font-bold">+260€ → 3.5G Filtré offert (strain au choix)</span></p>
+                        </div>
+                    </div>
+
+                    <!-- MARDI FOLIE -->
+                    <div class="bg-gradient-to-r from-purple-900/30 to-black border-2 border-purple-500 p-4 rounded-xl">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-2xl">⚡</span>
+                            <h4 class="text-white font-black text-sm uppercase">MARDI FOLIE</h4>
+                            <span class="text-[8px] bg-purple-500 text-white px-2 py-1 rounded-full font-black">DÈS 20H</span>
+                        </div>
+                        <div class="text-[10px] text-gray-400 space-y-1 mb-2">
+                            <p>• <span class="text-green-500 font-bold">Livraison offerte dès 100€</span></p>
+                            <p>• <span class="text-purple-500 font-bold">-20% sur toute commande +200€ (dès 20H)</span></p>
+                        </div>
+                    </div>
+
+                    <!-- MERCREDI CHILL -->
+                    <div class="bg-[var(--bg-card)] border border-blue-500/50 p-4 rounded-xl">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-2xl">🌊</span>
+                            <h4 class="text-white font-black text-sm uppercase">MERCREDI CHILL</h4>
+                            <span class="text-[8px] bg-blue-500 text-white px-2 py-1 rounded-full font-black">DÈS 16H</span>
+                        </div>
+                        <div class="text-[10px] text-gray-400 space-y-1 mb-2">
+                            <p>• <span class="text-blue-500 font-bold">3.5G produit au choix offert (dès 150€)</span></p>
+                            <p>• Livraison offerte</p>
+                        </div>
+                    </div>
+
+                    <!-- JEUDI BIENVENUE -->
+                    <div class="bg-gradient-to-r from-green-900/30 to-black border border-green-500/50 p-4 rounded-xl">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-2xl">🆕</span>
+                            <h4 class="text-white font-black text-sm uppercase">JEUDI BIENVENUE</h4>
+                            <span class="text-[8px] bg-green-500 text-black px-2 py-1 rounded-full font-black">NOUVEAUX CLIENTS</span>
+                        </div>
+                        <div class="text-[10px] text-gray-400 space-y-1 mb-2">
+                            <p>• <span class="text-green-500 font-bold">-20% sur ta PREMIÈRE commande</span></p>
+                            <p>• Bag produit mystère offert</p>
+                        </div>
+                    </div>
+
+                    <!-- VENDREDI MINUIT FOLIE -->
+                    <div class="bg-gradient-to-r from-red-900/30 to-black border-2 border-red-500 p-4 rounded-xl">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-2xl">🌙</span>
+                            <h4 class="text-white font-black text-sm uppercase">MINUIT FOLIE</h4>
+                            <span class="text-[8px] bg-red-500 text-white px-2 py-1 rounded-full font-black animate-pulse">00H-02H30</span>
+                        </div>
+                        <div class="text-[10px] text-gray-400 space-y-1 mb-2">
+                            <p>• Flash Sale : 1 produit surprise à <span class="text-red-500 font-bold">-30%</span></p>
+                            <p>• Annoncé 30min avant sur Telegram</p>
+                            <p>• Stock ultra limité (5-10 unités)</p>
+                            <p class="text-amber-500 font-bold">First come, first served</p>
+                        </div>
+                    </div>
+
+                    <!-- SAMEDI VALLEY -->
+                    <div class="bg-[var(--bg-card)] border border-amber-500/50 p-4 rounded-xl">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-2xl">🎉</span>
+                            <h4 class="text-white font-black text-sm uppercase">SAMEDI VALLEY</h4>
+                        </div>
+                        <div class="text-[10px] text-gray-400 space-y-1 mb-2">
+                            <p><span class="text-amber-500 font-bold">PACK WEEKEND :</span></p>
+                            <p>• Cereal Milk 10G + Filtré 73U 10G</p>
+                            <p>• Prix normal : 190€ → <span class="text-amber-500 font-bold">175€ (-15€)</span></p>
+                            <p>• + Grinder offert</p>
+                            <p class="mt-2 text-[9px] text-gray-500">OU Mix & Match : 3 produits, le moins cher à -50%</p>
+                        </div>
+                    </div>
+
+                    <!-- DIMANCHE RELAX -->
+                    <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-2xl">🌅</span>
+                            <h4 class="text-white font-black text-sm uppercase">DIMANCHE RELAX</h4>
+                        </div>
+                        <div class="text-[10px] text-gray-400 space-y-1 mb-2">
+                            <p>• -15€ sur toute commande de 120€+</p>
+                            <p>• Double points fidélité (progression grade)</p>
+                            <p>• Livraison offerte + délai réduit (priorité)</p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- PACKS / BUNDLES -->
+            <!-- HAPPY HOUR -->
+            <section>
+                <h3 class="text-[9px] font-black text-yellow-500 tracking-[0.2em] uppercase mb-3">
+                    ⚡ OFFRE PERMANENTE
+                </h3>
+                
+                <div class="bg-gradient-to-r from-yellow-900/20 to-black border border-yellow-500/50 p-4 rounded-xl">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-2xl">☀️</span>
+                        <h4 class="text-white font-black text-sm uppercase">HAPPY HOUR</h4>
+                        <span class="text-[8px] bg-yellow-500 text-black px-2 py-1 rounded-full font-black">14H-16H</span>
+                    </div>
+                    <p class="text-[10px] text-gray-400 mb-2">TOUS LES JOURS • -10€ sur commandes +100€ • Livraison IDF OFFERTE</p>
+                    <div class="bg-yellow-500/10 border border-yellow-500/30 p-2 rounded text-center">
+                        <span class="text-yellow-500 font-black text-[9px]">MENTIONNE "HAPPYHOUR" AU STAFF</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PACKS -->
             <section>
                 <h3 class="text-[9px] font-black text-violet-500 tracking-[0.2em] uppercase mb-3">
                     📦 PACKS & BUNDLES
@@ -1217,18 +1492,17 @@
                 
                 <div class="space-y-3">
                     <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl">
-                        <div class="text-2xl mb-2">🎉</div>
-                        <h4 class="text-white font-black text-sm uppercase mb-1">WEEKEND WARRIOR</h4>
+                        <div class="text-2xl mb-2">🎁</div>
+                        <h4 class="text-white font-black text-sm uppercase mb-1">PACK DÉCOUVERTE</h4>
                         <div class="text-[10px] text-gray-400 space-y-1 mb-2">
-                            <p>• Cereal Milk 10G</p>
-                            <p>• Jaune Mousseux 20G</p>
-                            <p>• Monte Cristo 2G</p>
-                            <p class="text-violet-500 font-bold">+ Papier OCB Slim OFFERT</p>
+                            <p>• Filtré 73U 10G (80€)</p>
+                            <p>• Cereal Milk 5G (60€)</p>
+                            <p class="text-violet-500 font-bold">+ OCB Slim OFFERT</p>
                         </div>
                         <div class="flex items-center gap-2">
-                            <span class="text-violet-500 font-black text-lg">220€</span>
-                            <span class="text-gray-600 line-through">250€</span>
-                            <span class="bg-violet-500/20 text-violet-500 text-[9px] font-bold px-2 py-1 rounded">-30€</span>
+                            <span class="text-violet-500 font-black text-lg">125€</span>
+                            <span class="text-gray-600 line-through">140€</span>
+                            <span class="bg-violet-500/20 text-violet-500 text-[9px] font-bold px-2 py-1 rounded">-15€</span>
                         </div>
                     </div>
 
@@ -1236,28 +1510,14 @@
                         <div class="text-2xl mb-2">🧼</div>
                         <h4 class="text-white font-black text-sm uppercase mb-1">HASH LOVER PACK</h4>
                         <div class="text-[10px] text-gray-400 space-y-1 mb-2">
-                            <p>• Filtré 73U 25G (2 strains au choix)</p>
-                            <p>• Jaune Mousseux 50G</p>
-                            <p class="text-red-500 font-bold">⚠️ STOCK ULTRA-LIMITÉ</p>
+                            <p>• Filtré 73U 25G (160€)</p>
+                            <p>• Jaune Mousseux 50G (170€)</p>
+                            <p class="text-red-500 font-bold">⚠️ STOCK LIMITÉ</p>
                         </div>
                         <div class="flex items-center gap-2">
-                            <span class="text-violet-500 font-black text-lg">300€</span>
+                            <span class="text-violet-500 font-black text-lg">310€</span>
                             <span class="text-gray-600 line-through">330€</span>
-                        </div>
-                    </div>
-
-                    <div class="bg-gradient-to-r from-amber-900/20 to-black border border-amber-500/30 p-4 rounded-xl">
-                        <div class="text-2xl mb-2">🇺🇸</div>
-                        <h4 class="text-white font-black text-sm uppercase mb-1">CALI COLLECTION</h4>
-                        <p class="text-[10px] text-amber-500 font-bold mb-2">100% IMPORT USA • LE MUST DU MUST</p>
-                        <div class="text-[10px] text-gray-400 space-y-1 mb-2">
-                            <p>• Cereal Milk 25G</p>
-                            <p>• Wizard Trees 10G (1 olive)</p>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <span class="text-amber-500 font-black text-lg">380€</span>
-                            <span class="text-gray-600 line-through">420€</span>
-                            <span class="bg-amber-500/20 text-amber-500 text-[9px] font-bold px-2 py-1 rounded">-40€</span>
+                            <span class="bg-violet-500/20 text-violet-500 text-[9px] font-bold px-2 py-1 rounded">-20€</span>
                         </div>
                     </div>
                 </div>
@@ -1273,91 +1533,23 @@
                     <div class="bg-gradient-to-r from-violet-900/30 to-black border border-violet-500/50 p-4 rounded-xl">
                         <div class="text-2xl mb-2">🎖️</div>
                         <h4 class="text-white font-black text-sm uppercase mb-1">GRADE VIP AUTOMATIQUE</h4>
-                        <p class="text-[10px] text-gray-400 mb-2">Commande +500€ en une fois = Passage direct GRADE VIP</p>
+                        <p class="text-[10px] text-gray-400 mb-2">Atteins 10 commandes = Passage auto GRADE VIP</p>
                         <div class="bg-violet-500/10 p-3 rounded space-y-1 text-[9px] text-gray-300">
                             <p>✓ -10% sur TOUTES les futures commandes</p>
                             <p>✓ Priorité livraison</p>
                             <p>✓ Accès produits exclusifs</p>
-                            <p>✓ 1 cadeau mystère garanti</p>
-                        </div>
-                    </div>
-
-                    <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl">
-                        <div class="text-2xl mb-2">👥</div>
-                        <h4 class="text-white font-black text-sm uppercase mb-1">PARRAINAGE BOOSTÉ X2</h4>
-                        <div class="text-[10px] text-gray-400 space-y-2">
-                            <p><span class="text-green-500 font-bold">TON AMI :</span> -15€ sur sa 1ère commande</p>
-                            <p><span class="text-violet-500 font-bold">TOI :</span> 15€ crédit OU 2G au choix</p>
-                            <div class="bg-amber-500/10 border border-amber-500/30 p-2 rounded mt-2">
-                                <p class="text-amber-500 font-bold text-center">3 PARRAINAGES = 1 PRODUIT OFFERT (50€)</p>
-                            </div>
+                            <p>✓ 1 cadeau surprise/mois</p>
                         </div>
                     </div>
 
                     <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl">
                         <div class="text-2xl mb-2">💰</div>
-                        <h4 class="text-white font-black text-sm uppercase mb-1">CASHBACK CRYPTO +5%</h4>
-                        <p class="text-[10px] text-gray-400 mb-2">Paie en crypto = +5% crédit offert</p>
+                        <h4 class="text-white font-black text-sm uppercase mb-1">CASHBACK CRYPTO +3%</h4>
+                        <p class="text-[10px] text-gray-400 mb-2">Paie en crypto = +3% crédit offert</p>
                         <div class="text-[9px] text-gray-400 space-y-1">
-                            <p>• 100€ en BTC = <span class="text-violet-500 font-bold">5€ crédit</span></p>
-                            <p>• 500€ en XMR = <span class="text-violet-500 font-bold">25€ crédit</span></p>
-                            <p class="text-[8px] text-gray-600 mt-1">Valable : USDT, BTC, Monero</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- OFFRES FLASH -->
-            <section>
-                <h3 class="text-[9px] font-black text-red-500 tracking-[0.2em] uppercase mb-3 flex items-center gap-2">
-                    <span class="animate-pulse">⚡</span> OFFRES FLASH
-                </h3>
-                
-                <div class="space-y-3">
-                    <div class="bg-[var(--bg-card)] border border-blue-500/30 p-4 rounded-xl">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="text-2xl">📅</span>
-                            <h4 class="text-white font-black text-sm uppercase">LUNDI BOOST</h4>
-                        </div>
-                        <p class="text-[10px] text-gray-400 mb-2">Tous les lundis 10H30-14H • 1 produit en promo surprise</p>
-                        <div class="bg-blue-500/10 text-blue-500 text-[9px] font-bold p-2 rounded text-center">
-                            -20% À -40% • ANNONCÉ SUR TELEGRAM 10H
-                        </div>
-                    </div>
-
-                    <div class="bg-[var(--bg-card)] border border-purple-500/30 p-4 rounded-xl">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="text-2xl">🌙</span>
-                            <h4 class="text-white font-black text-sm uppercase">MINUIT MADNESS</h4>
-                        </div>
-                        <p class="text-[10px] text-gray-400 mb-2">Vendredi & Samedi minuit-2H • Produit mystère à prix cassé</p>
-                        <p class="text-[9px] text-purple-500 font-bold">Annoncé 30min avant sur Telegram</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ÉVÉNEMENTIEL -->
-            <section>
-                <h3 class="text-[9px] font-black text-violet-500 tracking-[0.2em] uppercase mb-3">
-                    🎊 OFFRES ÉVÉNEMENTIELLES
-                </h3>
-                
-                <div class="space-y-3">
-                    <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl">
-                        <div class="text-2xl mb-2">🎂</div>
-                        <h4 class="text-white font-black text-sm uppercase mb-1">BIRTHDAY BONUS</h4>
-                        <p class="text-[10px] text-gray-400 mb-2">C'est ton anniv ? -20€ sur ta commande + cadeau surprise</p>
-                        <p class="text-[9px] text-gray-600">Envoie preuve CNI au Staff WhatsApp • Valable 7 jours autour de ta date</p>
-                    </div>
-
-                    <div class="bg-gradient-to-r from-red-900/20 to-black border border-red-500/30 p-4 rounded-xl">
-                        <div class="text-2xl mb-2">🖤</div>
-                        <h4 class="text-white font-black text-sm uppercase mb-1">BLACK WEEK</h4>
-                        <p class="text-[10px] text-gray-400 mb-2">1 semaine de folie (Nov/Fév)</p>
-                        <div class="text-[9px] text-gray-400 space-y-1">
-                            <p>• -20% sur TOUT le catalogue</p>
-                            <p>• Frais de port OFFERTS (tous modes)</p>
-                            <p>• Commande +300€ = Cadeau Premium</p>
+                            <p>• 100€ en ETH = <span class="text-violet-500 font-bold">3€ crédit</span></p>
+                            <p>• 500€ en USDT = <span class="text-violet-500 font-bold">15€ crédit</span></p>
+                            <p class="text-[8px] text-gray-600 mt-1">Valable : USDT, BTC, ETH, Monero (min 100€)</p>
                         </div>
                     </div>
                 </div>
@@ -1407,6 +1599,100 @@
         </div>
     </div>
 
+    <!-- ADMIN DASHBOARD -->
+    <div id="admin-modal" class="fixed inset-0 z-[80] bg-[var(--bg-deep)] hidden flex flex-col">
+        <div class="absolute inset-0 bg-[url('https://res.cloudinary.com/dlmmylat6/image/upload/v1770004112/0453086a-aa8b-480c-9227-6ceb099b3530_z111qu.png')] bg-cover bg-center opacity-[0.03] pointer-events-none"></div>
+        <div class="flex items-center justify-between p-6 border-b border-[var(--border-accent)] header-glass relative z-10">
+            <h2 class="text-xl font-black text-red-500 brand-font tracking-tighter uppercase">⚙️ ADMIN DASHBOARD</h2>
+            <button onclick="closeAdmin()" class="bg-[var(--bg-elevated)] w-10 h-10 rounded-full flex items-center justify-center text-white active:scale-90 border border-[var(--border-accent)]">
+                ✕
+            </button>
+        </div>
+        
+        <div class="flex-1 overflow-y-auto p-5 space-y-6 no-scrollbar relative z-10">
+            <!-- Stats Today -->
+            <div class="grid grid-cols-2 gap-3">
+                <div class="bg-gradient-to-br from-violet-900/30 to-black border border-violet-500/50 p-4 rounded-xl">
+                    <div class="text-2xl mb-2">📊</div>
+                    <div class="text-[10px] text-gray-500 uppercase">Aujourd'hui</div>
+                    <div class="text-2xl font-black text-white">0</div>
+                    <div class="text-[9px] text-gray-400">Commandes</div>
+                </div>
+                
+                <div class="bg-gradient-to-br from-green-900/30 to-black border border-green-500/50 p-4 rounded-xl">
+                    <div class="text-2xl mb-2">💰</div>
+                    <div class="text-[10px] text-gray-500 uppercase">CA du jour</div>
+                    <div class="text-2xl font-black text-green-500">0€</div>
+                    <div class="text-[9px] text-gray-400">Chiffre d'affaires</div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <section>
+                <h3 class="text-[9px] font-black text-red-500 tracking-[0.2em] uppercase mb-3">⚡ ACTIONS RAPIDES</h3>
+                
+                <div class="grid grid-cols-2 gap-3">
+                    <button class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl text-center active:scale-95 transition-transform">
+                        <div class="text-2xl mb-2">📦</div>
+                        <div class="text-[10px] font-bold text-white">Gérer Produits</div>
+                    </button>
+                    
+                    <button class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl text-center active:scale-95 transition-transform">
+                        <div class="text-2xl mb-2">🎁</div>
+                        <div class="text-[10px] font-bold text-white">Gérer Offres</div>
+                    </button>
+                    
+                    <button class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl text-center active:scale-95 transition-transform">
+                        <div class="text-2xl mb-2">💬</div>
+                        <div class="text-[10px] font-bold text-white">Valider Avis</div>
+                    </button>
+                    
+                    <button class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl text-center active:scale-95 transition-transform">
+                        <div class="text-2xl mb-2">👥</div>
+                        <div class="text-[10px] font-bold text-white">Gérer Clients</div>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Products Management -->
+            <section>
+                <h3 class="text-[9px] font-black text-violet-500 tracking-[0.2em] uppercase mb-3">📦 GESTION PRODUITS</h3>
+                
+                <div class="space-y-3" id="admin-products-list">
+                    <!-- Sera rempli dynamiquement -->
+                </div>
+            </section>
+
+            <!-- Stats Overview -->
+            <section>
+                <h3 class="text-[9px] font-black text-violet-500 tracking-[0.2em] uppercase mb-3">📈 STATISTIQUES</h3>
+                
+                <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl">
+                    <div class="text-xs text-gray-400 space-y-2">
+                        <div class="flex justify-between">
+                            <span>Total commandes :</span>
+                            <span class="text-white font-bold">0</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>CA total :</span>
+                            <span class="text-green-500 font-bold">0€</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Clients VIP :</span>
+                            <span class="text-violet-500 font-bold">0</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Taux conversion :</span>
+                            <span class="text-blue-500 font-bold">0%</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="h-10"></div>
+        </div>
+    </div>
+
     <!-- CHECKOUT MODAL -->
     <div id="checkout-modal" class="fixed inset-0 z-[80] bg-black hidden flex flex-col">
         <div class="absolute inset-0 bg-[url('https://res.cloudinary.com/dlmmylat6/image/upload/v1770004112/0453086a-aa8b-480c-9227-6ceb099b3530_z111qu.png')] bg-cover bg-center opacity-[0.03] pointer-events-none"></div>
@@ -1430,7 +1716,11 @@
         </div>
 
         <div class="flex-1 overflow-y-auto p-6 no-scrollbar relative z-10">
+            <!-- RECAP avec offre appliquée -->
             <div id="checkout-recap" class="mb-6 p-5 bg-[var(--bg-card)] border border-[var(--border-accent)] rounded-xl text-[11px] text-gray-400 font-mono shadow-inner"></div>
+            
+            <!-- OFFRE DU JOUR APPLIQUÉE -->
+            <div id="checkout-offer-applied" class="mb-6"></div>
             
             <form id="checkout-form" class="space-y-6">
                 <div class="p-5 bg-red-900/10 border-l-4 border-red-600 rounded-r-xl space-y-2">
@@ -1459,8 +1749,8 @@
                             <span class="text-xs font-black text-white">₿ BITCOIN</span>
                             <div class="pay-indicator"></div>
                         </div>
-                        <div onclick="selectPayment('XMR', this)" class="pay-card p-4 rounded-xl flex items-center justify-between">
-                            <span class="text-xs font-black text-white">🔒 MONERO</span>
+                        <div onclick="selectPayment('ETH', this)" class="pay-card p-4 rounded-xl flex items-center justify-between">
+                            <span class="text-xs font-black text-white">💎 ETHEREUM</span>
                             <div class="pay-indicator"></div>
                         </div>
                     </div>
@@ -1520,239 +1810,15 @@
     </div>
 
     <script>
-        // ========== SECURITY (VERSION CORRIGÉE) ==========
-
-        const BACKEND_URL = 'https://tuvasrientrouver.up.railway.app';
-        const DEBUG_MODE = true; // Mettre à false en production
-
-        function debugLog(msg, data = null) {
-            if (DEBUG_MODE) {
-                console.log(`🔍 [DEBUG] ${msg}`, data || '');
-            }
-        }
-
-        function blockAccess(reason, details = '') {
-            const screen = document.getElementById('block-screen');
-            document.getElementById('block-reason').textContent = reason;
-            document.getElementById('block-details').textContent = details;
-            screen.style.display = 'flex';
-            
-            // Vider le body après un délai pour éviter tout accès
-            setTimeout(() => {
-                document.body.innerHTML = screen.outerHTML;
-            }, 100);
-        }
-
-        async function initSecurity() {
-            'use strict';
-            debugLog('🚀 Démarrage vérification sécurité...');
-
-            // 1. Détection bot/crawler
-            const isBot = /bot|crawler|spider|crawling|scraper/i.test(navigator.userAgent);
-            const honeypotFilled = document.getElementById('contact_email')?.value !== '';
-            
-            if (isBot) {
-                debugLog('❌ Bot détecté', navigator.userAgent);
-                blockAccess('Accès refusé : Bot détecté');
-                return false;
-            }
-            
-            if (honeypotFilled) {
-                debugLog('❌ Honeypot rempli');
-                blockAccess('Accès refusé');
-                return false;
-            }
-
-            // 2. Vérifier Telegram WebApp SDK
-            debugLog('Vérification Telegram WebApp...');
-            const tg = window.Telegram?.WebApp;
-            
-            if (!tg) {
-                debugLog('❌ Telegram.WebApp non disponible');
-                blockAccess('Cette application fonctionne uniquement dans Telegram', 'window.Telegram.WebApp non trouvé');
-                return false;
-            }
-
-            debugLog('✅ Telegram WebApp détecté', {
-                platform: tg.platform,
-                version: tg.version,
-                colorScheme: tg.colorScheme
-            });
-
-            // 3. Initialiser Telegram
-            try {
-                tg.ready();
-                tg.expand();
-                tg.setHeaderColor('#000000');
-                tg.enableClosingConfirmation();
-                debugLog('✅ Telegram initialisé');
-            } catch (err) {
-                debugLog('⚠️ Erreur init Telegram (non-bloquant)', err);
-            }
-
-            // 4. Vérifier initData (IMPORTANT)
-            const initData = tg.initData || '';
-            debugLog('InitData présent ?', initData ? `OUI (${initData.length} chars)` : 'NON (vide)');
-            debugLog('InitData preview:', initData.substring(0, 100) + '...');
-
-            // ⚠️ EN MODE DEV : Si initData vide, on peut laisser passer avec warning
-            if (!initData || initData.trim() === '') {
-                if (DEBUG_MODE) {
-                    debugLog('⚠️ Mode DEV : initData vide mais passage autorisé');
-                    console.warn('⚠️ ATTENTION : En production, ceci bloquerait l\'accès');
-                    return true; // Bypass en dev
-                } else {
-                    debugLog('❌ initData vide en production');
-                    blockAccess('Session Telegram invalide', 'initData manquant - relance le bot');
-                    return false;
-                }
-            }
-
-            // 5. Vérification HMAC backend avec TIMEOUT
-            debugLog('Envoi vers backend pour vérification HMAC...');
-            debugLog('Backend URL:', BACKEND_URL);
-            
-            try {
-                // Créer un timeout de 10 secondes
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 10000);
-
-                const response = await fetch(`${BACKEND_URL}/api/verify`, {
-                    method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({ initData: initData }),
-                    signal: controller.signal
-                });
-
-                clearTimeout(timeoutId);
-                debugLog('Réponse backend', { 
-                    status: response.status, 
-                    ok: response.ok,
-                    statusText: response.statusText 
-                });
-
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    debugLog('❌ Backend refuse la connexion', errorText);
-                    
-                    // En mode dev, on laisse passer quand même
-                    if (DEBUG_MODE) {
-                        console.warn('⚠️ Vérification backend échouée mais passage autorisé en DEV');
-                        return true;
-                    }
-                    
-                    blockAccess('Vérification échouée', `Code HTTP: ${response.status}`);
-                    return false;
-                }
-
-                const data = await response.json();
-                debugLog('Data backend', data);
-
-                if (!data.ok) {
-                    debugLog('❌ Backend: session invalide');
-                    
-                    // En mode dev, on laisse passer quand même
-                    if (DEBUG_MODE) {
-                        console.warn('⚠️ Session invalide mais passage autorisé en DEV');
-                        return true;
-                    }
-                    
-                    blockAccess('Session invalide', data.reason || 'Relance le bot Telegram');
-                    return false;
-                }
-
-                debugLog('✅✅ Accès Telegram validé par le backend !');
-                return true;
-
-            } catch (err) {
-                debugLog('⚠️ Erreur backend', {
-                    name: err.name,
-                    message: err.message,
-                    isTimeout: err.name === 'AbortError'
-                });
-                
-                // Si c'est un timeout ou une erreur réseau
-                if (err.name === 'AbortError') {
-                    console.warn('⏱️ Timeout backend (10s) - passage en mode dégradé');
-                } else {
-                    console.warn('⚠️ Erreur connexion backend:', err.message);
-                }
-                
-                // EN DEV : on laisse passer en mode dégradé
-                if (DEBUG_MODE) {
-                    console.warn('⚠️ Mode DEV : accès autorisé malgré l\'erreur backend');
-                    return true;
-                } else {
-                    // EN PROD : on bloque si le backend est inaccessible (sécurité max)
-                    blockAccess('Service temporairement indisponible', 'Backend inaccessible - réessaye dans 1 minute');
-                    return false;
-                }
-            }
-        }
-
-        // Masquer le contenu par défaut
-        document.getElementById('main-feed').style.visibility = 'hidden';
-
-        // Lancer la sécurité au chargement
-        initSecurity().then(authorized => {
-            debugLog('🎬 Résultat final de la sécurité:', authorized ? 'AUTORISÉ ✅' : 'REFUSÉ ❌');
-            
-            if (authorized) {
-                debugLog('🎉 Accès autorisé, affichage du contenu');
-                document.getElementById('main-feed').style.visibility = 'visible';
-            } else {
-                debugLog('🚫 Accès refusé');
-            }
-        }).catch(err => {
-            debugLog('💥 ERREUR CRITIQUE dans initSecurity:', err);
-            
-            // Même en cas d'erreur, on laisse passer en mode DEV
-            if (DEBUG_MODE) {
-                console.error('💥 Erreur critique mais passage forcé en DEV:', err);
-                document.getElementById('main-feed').style.visibility = 'visible';
-            } else {
-                blockAccess('Erreur système', err.message);
-            }
-        });
-
-        // Protection DevTools
-        document.addEventListener('contextmenu', e => e.preventDefault());
-        document.addEventListener('keydown', e => {
-            if (e.key === 'F12' || 
-                (e.ctrlKey && e.shiftKey && e.key === 'I') ||
-                (e.ctrlKey && e.key === 'u')) {
-                e.preventDefault();
-                return false;
-            }
-        });
-        document.onselectstart = () => false;
+        // ========== CONFIGURATION ==========
         
-        // Détection DevTools ouvert
-        setInterval(() => {
-            const threshold = 160;
-            if (window.outerWidth - window.innerWidth > threshold || 
-                window.outerHeight - window.innerHeight > threshold) {
-                document.body.innerHTML = '<h1 style="color:red;text-align:center;margin-top:50vh;">⛔ DEVTOOLS DÉTECTÉ</h1>';
-            }
-        }, 1000);
+        const BACKEND_URL = 'https://tuvasrientrouver.up.railway.app';
+        const DEBUG_MODE = false;
+        const ADMIN_ID = 7998805372; // TON ID ADMIN
 
-        // ========== ANALYTICS ==========
-        function trackEvent(eventName, eventParams = {}) {
-            if (typeof gtag !== 'undefined') {
-                gtag('event', eventName, eventParams);
-            }
-        }
-
-        // ========== CATALOG DATA OPTIMISÉ PREMIUM ==========
+        // ========== CATALOG DATA ==========
+        
         const CATALOG = [
-            // ============================================
-            // 🌟 PRODUITS PREMIUM - AFFICHAGE PRIORITAIRE
-            // ============================================
-            
-            // 🔬 FILTRÉ 73U - PREMIUM HASH (Grande carte 2 colonnes)
             {
                 id: 'F73', 
                 name: "FILTRÉ 73U 🔬", 
@@ -1770,7 +1836,6 @@
                     {w:'100G', p:480}
                 ],
                 hasCustom: true,
-                layout: 'col-span-2 h-80',
                 stock: 'medium',
                 multiStrain: true,
                 strains: ['LEMON KUSH 🍋', 'GMO COOKIES 🍪'],
@@ -1778,7 +1843,6 @@
                 premium: true
             },
             
-            // 🍼 CEREAL MILK - PREMIUM WEED (Grande carte 2 colonnes)
             {
                 id: 'CM', 
                 name: "CEREAL MILK 🍼🥣", 
@@ -1790,6 +1854,7 @@
                 src: "https://res.cloudinary.com/dpojixeiy/image/upload/v1771124699/FILTRE%CC%81_3x_4_xzewtb.png",
                 videoSrc: "https://res.cloudinary.com/dpojixeiy/video/upload/v1771200487/ScreenRecording_02-16-2026_00-52-33_1_ybphbf.mov",
                 tiers: [
+                    {w:'3.5G', p:45, oldPrice: 50},
                     {w:'5G', p:60, oldPrice: 70},
                     {w:'10G', p:110, oldPrice: 140},
                     {w:'25G', p:250, oldPrice: 280},
@@ -1797,17 +1862,11 @@
                     {w:'100G', p:780, oldPrice: 1000}
                 ],
                 hasCustom: true,
-                layout: 'col-span-2 h-80',
                 stock: 'high',
                 bestseller: true,
                 premium: true
             },
             
-            // ============================================
-            // PRODUITS STANDARDS - AFFICHAGE NORMAL
-            // ============================================
-            
-            // 🧼 JAUNE MOUSSEUX - TOP MOUSSE
             {
                 id: 'JM', 
                 name: "JAUNE MOUSSEUX 🧼", 
@@ -1824,11 +1883,9 @@
                     {w:'100G', p:340, oldPrice: 450}
                 ],
                 hasCustom: true, 
-                layout: 'col-span-1 h-64',
                 stock: 'low'
             },
             
-            // 🧙‍♀️ WIZARD TREES - FROZEN SIFT CALI
             {
                 id: 'WZ', 
                 name: "WIZARD TREES 🧙‍♀️", 
@@ -1843,11 +1900,9 @@
                     {w:'10G (1)', p:170, oldPrice: 200}
                 ],
                 hasCustom: false, 
-                layout: 'col-span-1 h-64',
                 stock: 'medium'
             },
             
-            // 💎 MONTE CRISTO - FESTIVITÉS
             {
                 id: 'MC', 
                 name: "MONTE CRISTO 💎", 
@@ -1865,25 +1920,654 @@
                     {w:'20G', p:800, oldPrice: 1100}
                 ],
                 hasCustom: true, 
-                layout: 'col-span-2 h-64',
                 stock: 'low'
             }
         ];
 
+        // ========== AVIS CLIENTS (30 AVIS VARIÉS) ==========
+        
+        const REVIEWS = [
+            {stars: 5, text: "Livraison carré max vous assurez les frérots rien a dire", client: "92"},
+            {stars: 5, text: "Merci a vous l'equipe, la Cali est top rien a dire, pour une premiere fois c pro", client: "75"},
+            {stars: 4, text: "Propre comm dab, le Filtré 73U c de la balle merci lequipe", client: "93"},
+            {stars: 5, text: "Réactivité au top meme tard le soir vous gerer grave", client: "94"},
+            {stars: 5, text: "J'recommande fort c efficace plug le plus rapide j'valide", client: "IDF"},
+            {stars: 4, text: "1ere commande, un peu strésser mais tt c bien passer, discret et rapide 👌", client: "91"},
+            {stars: 5, text: "Le Cereal Milk c dla frappe mrc pr le pti cado en +", client: "92"},
+            {stars: 5, text: "Thanks guys the Wizard Trees hits different fr will order again 🔥", client: "75"},
+            {stars: 4, text: "Vu la qualitée jmattendais pa a se prix vous etes serieux continuez", client: "93"},
+            {stars: 5, text: "Livraison en 1H mm un dimanche soir respect total", client: "92"},
+            {stars: 5, text: "franchemen les gars respect, qualité + service impec j'recommand", client: "IDF"},
+            {stars: 4, text: "Premier achat un peu stresser mais tt c bien passer discret et pro", client: "94"},
+            {stars: 5, text: "le filtré 73U une turie franchemt merci a vous", client: "75"},
+            {stars: 5, text: "Reactivité au top meme a 2h du mat vs etes chaud merci", client: "93"},
+            {stars: 4, text: "servic carré livraison nickel rien a dir continuez", client: "92"},
+            {stars: 5, text: "La cali c vrm dla balle jpe pa men passer maintnan mrc", client: "91"},
+            {stars: 5, text: "Vrm pro du debut a la fin aucun souci j'valide a 100%", client: "IDF"},
+            {stars: 4, text: "premiere foi chz vous jsuipa decus franchemt c lourd", client: "94"},
+            {stars: 5, text: "livrason rapide mm le dimanche soir respect", client: "75"},
+            {stars: 5, text: "le jaune mousseux une tuerie merci pr le cadeau en plus", client: "93"},
+            {stars: 4, text: "service au top franchement vous assurez max", client: "92"},
+            {stars: 5, text: "1er commande niquel tt c bien passer livraison rapide", client: "91"},
+            {stars: 5, text: "franchement les mec vous gerer la cali c de ouf", client: "IDF"},
+            {stars: 4, text: "servic pro livrason rapide rien a dire", client: "94"},
+            {stars: 5, text: "Merci pour le service carré jreviens très vite", client: "75"},
+            {stars: 5, text: "le filtré c vraimen dla balle respect a lequipe", client: "93"},
+            {stars: 4, text: "premiere foi mais pas la derniere c sur mrc", client: "92"},
+            {stars: 5, text: "livrason en 1h pile chrono respect total", client: "91"},
+            {stars: 5, text: "La qualitée est la franchement bravo continuez", client: "IDF"},
+            {stars: 5, text: "Thanks bro for the quick delivery cali is fire 🔥🔥", client: "75"}
+        ];
+
+        // ========== OFFRES DU JOUR ==========
+        
+        const DAILY_OFFERS = {
+            1: { // Lundi
+                name: "LUNDI DAILY",
+                emoji: "📅",
+                desc: "-10€ sur 100€+ | Livraison offerte | +150€: Bag Cali 3.5G offert | +260€: 3.5G Filtré offert",
+                minAmount: 100,
+                discount: 10,
+                conditions: [
+                    {min: 150, gift: "Bag Cali TopShelf 3.5G (strain au choix)"},
+                    {min: 260, gift: "3.5G Filtré (strain au choix)"}
+                ]
+            },
+            2: { // Mardi
+                name: "MARDI FOLIE",
+                emoji: "⚡",
+                desc: "Livraison offerte dès 100€ | -20% sur +200€ (dès 20H)",
+                minAmount: 100,
+                deliveryFree: true,
+                afterHour: 20,
+                conditions: [
+                    {min: 200, discount: 20, afterHour: 20}
+                ]
+            },
+            3: { // Mercredi
+                name: "MERCREDI CHILL",
+                emoji: "🌊",
+                desc: "3.5G produit au choix offert sur 150€+ (dès 16H) | Livraison offerte",
+                minAmount: 150,
+                afterHour: 16,
+                deliveryFree: true,
+                gift: "3.5G produit au choix"
+            },
+            4: { // Jeudi
+                name: "JEUDI BIENVENUE",
+                emoji: "🆕",
+                desc: "-20% première commande | Bag produit mystère offert",
+                firstOrderOnly: true,
+                discount: 20,
+                gift: "Bag produit mystère"
+            },
+            5: { // Vendredi
+                name: "MINUIT FOLIE",
+                emoji: "🌙",
+                desc: "Flash Sale: 1 produit -30% (00H-02H30, annoncé 30min avant)",
+                afterHour: 0,
+                beforeHour: 2.5,
+                flashSale: true
+            },
+            6: { // Samedi
+                name: "SAMEDI VALLEY",
+                emoji: "🎉",
+                desc: "Pack Weekend: Cereal 10G + Filtré 10G = 175€ (-15€) | Mix & Match: 3 produits, -50% sur le moins cher",
+                pack: {price: 175, items: ["Cereal Milk 10G", "Filtré 73U 10G"], gift: "Grinder"},
+                mixMatch: true
+            },
+            0: { // Dimanche
+                name: "DIMANCHE RELAX",
+                emoji: "🌅",
+                desc: "-15€ sur 120€+ | Double points fidélité | Livraison offerte prioritaire",
+                minAmount: 120,
+                discount: 15,
+                deliveryFree: true,
+                doublePoints: true
+            }
+        };
+
+        // Happy Hour (tous les jours 14H-16H)
+        const HAPPY_HOUR = {
+            name: "HAPPY HOUR",
+            emoji: "☀️",
+            startHour: 14,
+            endHour: 16,
+            minAmount: 100,
+            discount: 10,
+            deliveryFree: true
+        };
+
         // ========== STATE ==========
+        
         let cart = [];
         let currentMode = 'meetup';
-        let currentFilter = 'all';
+        let currentSlide = 0;
         let isShopOpen = false;
         let selectedStrains = {};
+        let userOrders = 0;
+        let userGrade = 'TOURISTE';
+        let isAdmin = false;
+        let currentOffer = null;
+        let autoSlideInterval = null;
 
-        // ========== SOCIAL PROOF ENGINE ==========
+        // ========== SECURITY - TELEGRAM ONLY ==========
+        
+        function blockAccess(reason, details = '') {
+            const screen = document.getElementById('block-screen');
+            document.getElementById('block-reason').textContent = reason;
+            document.getElementById('block-details').textContent = details;
+            screen.style.display = 'flex';
+            screen.classList.remove('hidden');
+            
+            setTimeout(() => {
+                document.body.innerHTML = screen.outerHTML;
+            }, 100);
+        }
+
+        async function initSecurity() {
+            'use strict';
+            
+            const tg = window.Telegram?.WebApp;
+            
+            if (!tg || !tg.initData) {
+                blockAccess('⛔ ACCÈS REFUSÉ', 'Cette application fonctionne uniquement via Telegram');
+                return false;
+            }
+
+            try {
+                tg.ready();
+                tg.expand();
+                tg.setHeaderColor('#000000');
+                tg.enableClosingConfirmation();
+                
+                const userId = tg.initDataUnsafe?.user?.id;
+                
+                if (userId === ADMIN_ID) {
+                    isAdmin = true;
+                    document.getElementById('admin-btn').style.display = 'flex';
+                }
+                
+                initUserProfile(tg.initDataUnsafe?.user);
+                
+                return true;
+            } catch (err) {
+                if (!DEBUG_MODE) {
+                    blockAccess('Erreur système', err.message);
+                    return false;
+                }
+                return true;
+            }
+        }
+
+        document.getElementById('main-feed')?.style?.setProperty && 
+            document.getElementById('main-feed').style.setProperty('visibility', 'hidden');
+
+        initSecurity().then(authorized => {
+            if (authorized) {
+                document.getElementById('main-feed')?.style?.setProperty && 
+                    document.getElementById('main-feed').style.setProperty('visibility', 'visible');
+            }
+        }).catch(err => {
+            if (DEBUG_MODE) {
+                console.error('Security error:', err);
+            } else {
+                blockAccess('Erreur système', err.message);
+            }
+        });
+
+        // Protection DevTools
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if (e.key === 'F12' || 
+                (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+                (e.ctrlKey && e.key === 'u')) {
+                e.preventDefault();
+                return false;
+            }
+        });
+        document.onselectstart = () => false;
+
+        // ========== USER PROFILE ==========
+        
+        function initUserProfile(user) {
+            if (!user) return;
+            
+            const tg = window.Telegram?.WebApp;
+            
+            if (tg?.CloudStorage) {
+                tg.CloudStorage.getItems(['user_orders', 'user_grade'], (err, data) => {
+                    if (!err && data) {
+                        userOrders = parseInt(data.user_orders) || 0;
+                        userGrade = data.user_grade || 'TOURISTE';
+                        updateUserProfile(user);
+                    }
+                });
+            } else {
+                updateUserProfile(user);
+            }
+        }
+
+        function updateUserProfile(user) {
+            if (!user) return;
+            
+            const avatar = document.getElementById('user-avatar');
+            const name = document.getElementById('user-name');
+            const gradeEl = document.getElementById('user-grade');
+            const ordersEl = document.getElementById('user-orders');
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+            
+            if (avatar) {
+                const initials = (user.first_name?.[0] || '?') + (user.last_name?.[0] || '');
+                avatar.textContent = initials;
+            }
+            
+            if (name) {
+                name.textContent = user.first_name || 'Utilisateur';
+            }
+            
+            let grade = 'TOURISTE';
+            let gradeEmoji = '🥉';
+            if (userOrders >= 10) {
+                grade = 'VIP BOSS';
+                gradeEmoji = '🥇';
+            } else if (userOrders >= 3) {
+                grade = 'INITIÉ';
+                gradeEmoji = '🥈';
+            }
+            
+            if (gradeEl) {
+                gradeEl.innerHTML = `<span class="text-2xl">${gradeEmoji}</span><span class="text-sm font-bold text-violet-500">${grade}</span>`;
+            }
+            
+            if (ordersEl) {
+                ordersEl.textContent = userOrders;
+            }
+            
+            if (progressBar && progressText) {
+                const progress = Math.min((userOrders / 10) * 100, 100);
+                progressBar.style.width = progress + '%';
+                progressText.textContent = `${userOrders}/10 commandes vers VIP BOSS`;
+            }
+        }
+
+        function incrementUserOrders() {
+            userOrders++;
+            const tg = window.Telegram?.WebApp;
+            if (tg?.CloudStorage) {
+                tg.CloudStorage.setItem('user_orders', userOrders.toString());
+                
+                let newGrade = 'TOURISTE';
+                if (userOrders >= 10) newGrade = 'VIP BOSS';
+                else if (userOrders >= 3) newGrade = 'INITIÉ';
+                
+                if (newGrade !== userGrade) {
+                    userGrade = newGrade;
+                    tg.CloudStorage.setItem('user_grade', userGrade);
+                    showToast('success', 'GRADE UPGRADÉ !', `Tu es maintenant ${userGrade} 🎉`);
+                }
+            }
+        }
+
+        // ========== DAILY OFFERS ==========
+        
+        function getDailyOffer() {
+            const now = new Date();
+            const day = now.getDay();
+            const hour = now.getHours() + now.getMinutes() / 60;
+            
+            if (hour >= HAPPY_HOUR.startHour && hour < HAPPY_HOUR.endHour) {
+                return {
+                    ...HAPPY_HOUR,
+                    isHappyHour: true
+                };
+            }
+            
+            const offer = DAILY_OFFERS[day];
+            if (!offer) return null;
+            
+            if (offer.afterHour && hour < offer.afterHour) {
+                return null;
+            }
+            
+            if (offer.beforeHour && hour >= offer.beforeHour) {
+                return null;
+            }
+            
+            return offer;
+        }
+
+        function updateMarqueeOffer() {
+            currentOffer = getDailyOffer();
+            
+            if (!currentOffer) return;
+            
+            const offerText = `${currentOffer.emoji} ${currentOffer.name.toUpperCase()} : ${currentOffer.desc}`;
+            
+            const marquee1 = document.getElementById('daily-offer-marquee');
+            const marquee2 = document.getElementById('daily-offer-marquee-2');
+            
+            if (marquee1) marquee1.textContent = offerText;
+            if (marquee2) marquee2.textContent = offerText;
+        }
+
+        function displayDailyOfferBanner() {
+            const banner = document.getElementById('daily-offer-banner');
+            if (!banner) return;
+            
+            currentOffer = getDailyOffer();
+            
+            if (!currentOffer) {
+                banner.innerHTML = '';
+                return;
+            }
+            
+            const now = new Date();
+            const hour = now.getHours();
+            const minute = now.getMinutes();
+            
+            let countdown = '';
+            if (currentOffer.isHappyHour) {
+                const endTime = new Date();
+                endTime.setHours(HAPPY_HOUR.endHour, 0, 0);
+                const remaining = endTime - now;
+                const hours = Math.floor(remaining / (1000 * 60 * 60));
+                const mins = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+                countdown = `<div class="countdown-timer mt-2">
+                    <span>⏰ SE TERMINE DANS :</span>
+                    <span class="countdown-number">${hours.toString().padStart(2, '0')}</span>
+                    <span>:</span>
+                    <span class="countdown-number">${mins.toString().padStart(2, '0')}</span>
+                </div>`;
+            }
+            
+            banner.innerHTML = `
+                <div class="offer-banner">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="text-3xl">${currentOffer.emoji}</span>
+                        <div class="flex-1">
+                            <h3 class="text-white font-black text-sm uppercase">${currentOffer.name} ACTIF !</h3>
+                            <p class="text-[10px] text-gray-300 mt-1">${currentOffer.desc}</p>
+                        </div>
+                    </div>
+                    ${countdown}
+                </div>
+            `;
+        }
+
+        function calculateOfferDiscount(subtotal) {
+            if (!currentOffer) return {discount: 0, description: ''};
+            
+            let discount = 0;
+            let description = '';
+            
+            if (currentOffer.isHappyHour) {
+                if (subtotal >= HAPPY_HOUR.minAmount) {
+                    discount = HAPPY_HOUR.discount;
+                    description = `Happy Hour: -${discount}€`;
+                }
+            } else if (currentOffer.discount) {
+                if (currentOffer.minAmount && subtotal >= currentOffer.minAmount) {
+                    if (currentOffer.discount <= 100) {
+                        discount = Math.round(subtotal * (currentOffer.discount / 100));
+                        description = `${currentOffer.name}: -${currentOffer.discount}%`;
+                    } else {
+                        discount = currentOffer.discount;
+                        description = `${currentOffer.name}: -${discount}€`;
+                    }
+                }
+            }
+            
+            if (currentOffer.conditions) {
+                for (const cond of currentOffer.conditions) {
+                    if (cond.min && subtotal >= cond.min) {
+                        if (cond.discount) {
+                            const condDiscount = Math.round(subtotal * (cond.discount / 100));
+                            if (condDiscount > discount) {
+                                discount = condDiscount;
+                                description = `${currentOffer.name}: -${cond.discount}%`;
+                            }
+                        }
+                        if (cond.gift) {
+                            description += ` + ${cond.gift}`;
+                        }
+                    }
+                }
+            }
+            
+            if (currentOffer.gift && (!currentOffer.minAmount || subtotal >= currentOffer.minAmount)) {
+                description += (description ? ' + ' : '') + currentOffer.gift;
+            }
+            
+            return {discount, description};
+        }
+
+        // ========== CAROUSEL ==========
+        
+        function renderCarousel() {
+            const track = document.getElementById('carousel-track');
+            const indicators = document.getElementById('carousel-indicators');
+            
+            if (!track || !indicators) return;
+            
+            track.innerHTML = '';
+            indicators.innerHTML = '';
+            
+            CATALOG.forEach((item, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'carousel-slide';
+                
+                const media = item.videoSrc ? 
+                    `<video src="${item.videoSrc}" autoplay loop muted playsinline webkit-playsinline></video>` :
+                    `<img src="${item.src}" alt="${item.name}">`;
+                
+                let badges = '';
+                if (item.premium) {
+                    badges += '<span class="badge-premium" style="background:linear-gradient(135deg,#8b5cf6,#a78bfa);animation:badgePulse 2s ease-in-out infinite;">⭐ PREMIUM</span>';
+                }
+                if (item.bestseller) {
+                    badges += '<span class="badge-premium badge-bestseller mt-2">🔥 BEST SELLER</span>';
+                }
+                if (item.stock === 'low') {
+                    badges += '<span class="badge-premium badge-stock mt-2">⚠️ STOCK LIMITÉ</span>';
+                }
+                
+                let offerBadge = '';
+                if (currentOffer && !currentOffer.flashSale) {
+                    offerBadge = `<span class="badge-premium badge-offer-active mt-2">${currentOffer.emoji} OFFRE ACTIVE</span>`;
+                }
+                
+                slide.innerHTML = `
+                    ${media}
+                    <div class="carousel-gradient"></div>
+                    <div class="absolute top-6 right-6 flex flex-col gap-2 z-20">
+                        ${badges}
+                        ${offerBadge}
+                    </div>
+                    <div class="carousel-content">
+                        <span class="badge-premium inline-block mb-3">${item.tag}</span>
+                        <h2 class="text-4xl font-black text-white uppercase brand-font tracking-tighter leading-none mb-3">${item.name}</h2>
+                        <p class="text-sm text-gray-300 mb-4 line-clamp-2">${item.desc.substring(0, 100)}...</p>
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="text-violet-500 font-black text-2xl">À partir de ${item.tiers[0].p}€</span>
+                            ${item.tiers[0].oldPrice ? `<span class="text-gray-600 line-through text-lg">${item.tiers[0].oldPrice}€</span>` : ''}
+                        </div>
+                        <button onclick="openProduct('${item.id}')" class="bg-violet-500 text-white font-black text-sm px-8 py-4 rounded-xl active:scale-95 transition-transform shadow-[0_0_30px_rgba(139,92,246,0.5)]">
+                            VOIR LE PRODUIT →
+                        </button>
+                    </div>
+                `;
+                
+                track.appendChild(slide);
+                
+                const indicator = document.createElement('div');
+                indicator.className = 'carousel-indicator' + (index === 0 ? ' active' : '');
+                indicator.onclick = () => goToSlide(index);
+                indicators.appendChild(indicator);
+            });
+            
+            startAutoSlide();
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            const track = document.getElementById('carousel-track');
+            if (!track) return;
+            
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+            
+            document.querySelectorAll('.carousel-indicator').forEach((ind, i) => {
+                ind.classList.toggle('active', i === currentSlide);
+            });
+            
+            triggerHaptic('light');
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % CATALOG.length;
+            goToSlide(currentSlide);
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + CATALOG.length) % CATALOG.length;
+            goToSlide(currentSlide);
+        }
+
+        function startAutoSlide() {
+            if (autoSlideInterval) {
+                clearInterval(autoSlideInterval);
+            }
+            autoSlideInterval = setInterval(() => {
+                nextSlide();
+            }, 5000);
+        }
+
+        // ========== REVIEWS CAROUSEL ==========
+        
+        function renderReviews() {
+            const track = document.getElementById('reviews-track');
+            if (!track) return;
+            
+            const reviewsHTML = REVIEWS.map(r => {
+                const stars = '🔥'.repeat(r.stars);
+                return `
+                    <div class="review-card">
+                        <div class="text-sm mb-2">${stars}</div>
+                        <p class="text-xs text-gray-300 mb-3 italic">"${r.text}"</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-[9px] text-gray-500">Client ${r.client}</span>
+                            <span class="text-[9px] text-green-500">✓ Validé</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            track.innerHTML = reviewsHTML + reviewsHTML;
+        }
+
+        // ========== ANALYTICS ==========
+        
+        function trackEvent(eventName, eventParams = {}) {
+            if (typeof gtag !== 'undefined') {
+                gtag('event', eventName, eventParams);
+            }
+        }
+
+        // ========== HAPTIC ==========
+        
+        function triggerHaptic(type = 'light') {
+            const tg = window.Telegram?.WebApp;
+            if (tg?.HapticFeedback) {
+                if (type === 'light') tg.HapticFeedback.impactOccurred('light');
+                if (type === 'medium') tg.HapticFeedback.impactOccurred('medium');
+                if (type === 'heavy') tg.HapticFeedback.impactOccurred('heavy');
+                if (type === 'success') tg.HapticFeedback.notificationOccurred('success');
+                if (type === 'error') tg.HapticFeedback.notificationOccurred('error');
+            }
+        }
+
+        // ========== TOAST ==========
+        
+        function showToast(type, title, message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const icons = {
+                success: '✓',
+                error: '✕',
+                warning: '⚠'
+            };
+            
+            toast.innerHTML = `
+                <div class="toast-icon">${icons[type] || '●'}</div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+            `;
+            
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'toastSlideOut 0.3s ease-out forwards';
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+
+        // ========== CONFETTI ==========
+        
+        function triggerConfetti() {
+            const colors = ['#8b5cf6', '#a78bfa', '#c4b5fd', '#FFF'];
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.top = '-10px';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animation = `confetti-fall ${2 + Math.random() * 2}s linear forwards`;
+                    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                    document.body.appendChild(confetti);
+                    setTimeout(() => confetti.remove(), 4000);
+                }, i * 30);
+            }
+        }
+
+        // ========== STATUS ==========
+        
+        const updateStatus = () => {
+            const now = new Date();
+            const hour = now.getHours();
+            const minute = now.getMinutes();
+            const currentTime = hour + minute / 60;
+            
+            isShopOpen = (currentTime >= 10.5 && currentTime <= 24) || (currentTime >= 0 && currentTime <= 2.5);
+            
+            const dot = document.getElementById('status-dot');
+            const text = document.getElementById('status-text');
+            
+            if (dot && text) {
+                if (isShopOpen) {
+                    dot.className = "status-dot online";
+                    text.innerText = "OPEN / ACTIF";
+                    text.className = "text-violet-500 font-bold";
+                } else {
+                    dot.className = "status-dot offline";
+                    text.innerText = "OFF / DODO";
+                    text.className = "text-red-500 font-bold";
+                }
+            }
+        };
+
+        // ========== SOCIAL PROOF ==========
+        
         const SOCIAL_PROOF_MESSAGES = [
             { icon: '🔥', text: 'Commande passée', location: '92' },
             { icon: '⚡', text: 'Activité récente', location: 'IDF' },
             { icon: '📦', text: 'Commande en cours', location: '75' },
-            { icon: '💚', text: 'Client satisfait', location: '93' },
-            { icon: '🎯', text: 'Vente confirmée', location: '91' }
+            { icon: '💚', text: 'Client satisfait', location: '93' }
         ];
 
         function generateSocialProof() {
@@ -1921,90 +2605,9 @@
             }, 15000 + Math.random() * 15000);
         }
 
-        // ========== TOAST ==========
-        function showToast(type, title, message) {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            
-            const icons = {
-                success: '✓',
-                error: '✕',
-                warning: '⚠'
-            };
-            
-            toast.innerHTML = `
-                <div class="toast-icon">${icons[type] || '●'}</div>
-                <div class="toast-content">
-                    <div class="toast-title">${title}</div>
-                    <div class="toast-message">${message}</div>
-                </div>
-            `;
-            
-            container.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.style.animation = 'toastSlideOut 0.3s ease-out forwards';
-                setTimeout(() => toast.remove(), 300);
-            }, 4000);
-        }
-
-        // ========== CONFETTI ==========
-        function triggerConfetti() {
-            const colors = ['#8b5cf6', '#a78bfa', '#c4b5fd', '#FFF'];
-            for (let i = 0; i < 50; i++) {
-                setTimeout(() => {
-                    const confetti = document.createElement('div');
-                    confetti.className = 'confetti';
-                    confetti.style.left = Math.random() * 100 + '%';
-                    confetti.style.top = '-10px';
-                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-                    confetti.style.animation = `confetti-fall ${2 + Math.random() * 2}s linear forwards`;
-                    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
-                    document.body.appendChild(confetti);
-                    setTimeout(() => confetti.remove(), 4000);
-                }, i * 30);
-            }
-        }
-
-        // ========== HAPTIC ==========
-        function triggerHaptic(type = 'light') {
-            const tg = window.Telegram?.WebApp;
-            if (tg?.HapticFeedback) {
-                if (type === 'light') tg.HapticFeedback.impactOccurred('light');
-                if (type === 'medium') tg.HapticFeedback.impactOccurred('medium');
-                if (type === 'heavy') tg.HapticFeedback.impactOccurred('heavy');
-                if (type === 'success') tg.HapticFeedback.notificationOccurred('success');
-                if (type === 'error') tg.HapticFeedback.notificationOccurred('error');
-            }
-        }
-
-        // ========== STATUS ==========
-        const updateStatus = () => {
-            const now = new Date();
-            const hour = now.getHours();
-            const minute = now.getMinutes();
-            const currentTime = hour + minute / 60;
-            
-            isShopOpen = (currentTime >= 10.5 && currentTime <= 24) || (currentTime >= 0 && currentTime <= 2.5);
-            
-            const dot = document.getElementById('status-dot');
-            const text = document.getElementById('status-text');
-            
-            if (isShopOpen) {
-                dot.className = "status-dot online";
-                text.innerText = "OPEN / ACTIF";
-                text.className = "text-violet-500 font-bold";
-            } else {
-                dot.className = "status-dot offline";
-                text.innerText = "OFF / DODO";
-                text.className = "text-red-500 font-bold";
-            }
-        };
-
         // ========== INIT ==========
+        
         window.onload = () => {
-            // Fermeture FORCÉE du splash après 3 secondes max (sécurité anti-blocage)
             const splashTimeout = setTimeout(() => {
                 console.warn('⚠️ Fermeture forcée du splash (timeout 3s)');
                 const splash = document.getElementById('splash-screen');
@@ -2014,9 +2617,8 @@
                 }
             }, 3000);
             
-            // Fermeture normale après 1.8s
             setTimeout(() => {
-                clearTimeout(splashTimeout); // Annuler le timeout de sécurité
+                clearTimeout(splashTimeout);
                 const splash = document.getElementById('splash-screen');
                 if (splash) {
                     splash.style.opacity = '0';
@@ -2026,153 +2628,107 @@
             
             updateStatus();
             setInterval(updateStatus, 60000);
-            renderFeed();
+            
+            updateMarqueeOffer();
+            setInterval(updateMarqueeOffer, 60000);
+            
+            displayDailyOfferBanner();
+            setInterval(displayDailyOfferBanner, 60000);
+            
+            renderCarousel();
+            renderReviews();
             startSocialProofEngine();
             
             trackEvent('app_loaded');
         };
 
         // ========== NAVIGATION ==========
+        
         function resetHome() {
             window.scrollTo({top:0, behavior:'smooth'});
-            document.getElementById('product-modal').classList.add('hidden');
-            document.getElementById('infos-modal').classList.add('hidden');
-            document.getElementById('offers-modal').classList.add('hidden');
-            document.getElementById('checkout-modal').classList.add('hidden');
-            filterFeed('all');
+            closeAllModals();
             
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.nav-btn')[0].classList.add('active');
             
             trackEvent('navigate_home');
         }
-        
+
+        function closeAllModals() {
+            document.getElementById('product-modal')?.classList.add('hidden');
+            document.getElementById('profile-modal')?.classList.add('hidden');
+            document.getElementById('infos-modal')?.classList.add('hidden');
+            document.getElementById('offers-modal')?.classList.add('hidden');
+            document.getElementById('checkout-modal')?.classList.add('hidden');
+            document.getElementById('admin-modal')?.classList.add('hidden');
+        }
+
+        function openProfile() {
+            closeAllModals();
+            document.getElementById('profile-modal')?.classList.remove('hidden');
+            triggerHaptic('light');
+            trackEvent('view_profile');
+        }
+
+        function closeProfile() {
+            document.getElementById('profile-modal')?.classList.add('hidden');
+            triggerHaptic('light');
+        }
+
         function openOffers() { 
-            document.getElementById('offers-modal').classList.remove('hidden');
+            closeAllModals();
+            document.getElementById('offers-modal')?.classList.remove('hidden');
             triggerHaptic('light');
             
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.nav-btn')[1].classList.add('active');
+            document.querySelectorAll('.nav-btn')[1]?.classList.add('active');
             
             trackEvent('view_offers');
         }
         
         function closeOffers() { 
-            document.getElementById('offers-modal').classList.add('hidden');
+            document.getElementById('offers-modal')?.classList.add('hidden');
             triggerHaptic('light');
         }
 
-        // ========== FILTERS ==========
-        function filterFeed(cat) {
-            currentFilter = cat;
+        function openInfos() { 
+            closeAllModals();
+            document.getElementById('infos-modal')?.classList.remove('hidden');
             triggerHaptic('light');
             
-            document.querySelectorAll('.filter-chip').forEach(btn => {
-                const isTarget = btn.id === `btn-${cat === 'HASH' ? 'hash' : cat === 'WEED' ? 'weed' : cat === 'FESTIVITÉS' ? 'fest' : 'all'}`;
-                btn.classList.toggle('active', isTarget);
-            });
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.nav-btn')[2]?.classList.add('active');
+            
+            trackEvent('view_info');
+        }
+        
+        function closeInfos() { 
+            document.getElementById('infos-modal')?.classList.add('hidden');
+            triggerHaptic('light');
+        }
 
-            const subBar = document.getElementById('sub-filters');
-            if(cat !== 'all') {
-                const subs = [...new Set(CATALOG.filter(i => i.cat === cat).map(i => i.sub))];
-                subBar.innerHTML = subs.map(s => `
-                    <span class="text-[9px] font-black text-violet-500 uppercase tracking-widest border border-violet-500/30 px-3 py-1 rounded-full bg-violet-500/5">
-                        ${s}
-                    </span>
-                `).join('');
-                subBar.classList.remove('opacity-0', 'pointer-events-none');
-            } else {
-                subBar.classList.add('opacity-0', 'pointer-events-none');
+        function openAdmin() {
+            if (!isAdmin) {
+                showToast('error', 'ACCÈS REFUSÉ', 'Vous n\'avez pas les droits admin');
+                return;
             }
             
-            renderFeed();
-            trackEvent('filter_changed', { category: cat });
+            closeAllModals();
+            document.getElementById('admin-modal')?.classList.remove('hidden');
+            triggerHaptic('medium');
+            trackEvent('admin_access');
         }
 
-        // ========== RENDER FEED ==========
-        function renderFeed() {
-            const container = document.getElementById('main-feed');
-            const filtered = currentFilter === 'all' ? CATALOG : CATALOG.filter(i => i.cat === currentFilter);
-            
-            container.innerHTML = `
-                <div class="product-card col-span-2 h-80"><div class="skeleton w-full h-full"></div></div>
-                <div class="product-card col-span-1 h-64"><div class="skeleton w-full h-full"></div></div>
-                <div class="product-card col-span-1 h-64"><div class="skeleton w-full h-full"></div></div>
-            `;
-            
-            setTimeout(() => {
-                let html = '';
-                filtered.forEach(item => {
-                    let mediaSrc = item.src;
-                    
-                    const media = (item.mediaType === 'video')
-                        ? `<video src="${mediaSrc}" class="w-full h-full object-cover opacity-80" loop muted playsinline autoplay webkit-playsinline></video>`
-                        : `<img src="${mediaSrc}" class="w-full h-full object-cover opacity-80" loading="lazy">`;
-                    
-                    let badges = '';
-                    if (item.premium) {
-                        badges = `<span class="badge-premium" style="background:linear-gradient(135deg,#8b5cf6,#a78bfa);animation:badgePulse 2s ease-in-out infinite;">⭐ PREMIUM</span>`;
-                    } else {
-                        badges = `<span class="badge-premium">${item.tag}</span>`;
-                    }
-                    
-                    if (item.bestseller) {
-                        badges += `<span class="badge-premium badge-bestseller mt-1">🔥 BEST SELLER</span>`;
-                    }
-                    
-                    let stockBadge = '';
-                    if (item.stock === 'low') {
-                        stockBadge = '<span class="badge-premium badge-stock mt-1">⚠️ STOCK LIMITÉ</span>';
-                    }
-                    
-                    let strainBadge = '';
-                    if (item.multiStrain) {
-                        strainBadge = `<span class="badge-premium mt-1" style="background:rgba(234,179,8,0.9);">🔄 ${item.strains.length} STRAINS</span>`;
-                    }
-                    
-                    let activity = '';
-                    if (isShopOpen && Math.random() > 0.5) {
-                        const viewers = Math.floor(Math.random() * 12) + 3;
-                        activity = `<div class="activity-badge mt-2"><div class="activity-dot"></div>${viewers} CONSULTATIONS</div>`;
-                    }
-                    
-                    html += `
-                    <div class="product-card ${item.layout} fade-in cursor-pointer group" onclick="openProduct('${item.id}')">
-                        <div class="absolute inset-0 bg-black overflow-hidden">
-                            ${media}
-                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
-                        </div>
-                        <div class="absolute bottom-0 left-0 w-full p-5 z-20">
-                            ${badges}
-                            ${stockBadge}
-                            ${strainBadge}
-                            <h3 class="text-white font-black text-lg leading-tight uppercase mb-2 tracking-tighter mt-3">${item.name}</h3>
-                            <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mb-1">${item.sub}</p>
-                            
-                            <div class="flex items-center gap-2 mt-2">
-                                <span class="text-violet-500 font-black text-sm">À partir de ${item.tiers[0].p}€</span>
-                                ${item.tiers[0].oldPrice ? `<span class="text-gray-600 line-through text-xs">${item.tiers[0].oldPrice}€</span>` : ''}
-                            </div>
-                            
-                            ${activity}
-                        </div>
-                        
-                        ${item.premium ? `
-                        <div class="absolute top-4 left-4 z-20">
-                            <div class="bg-violet-600 text-white px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-wider shadow-lg shadow-violet-500/50 border border-violet-400">
-                                ⭐ PREMIUM
-                            </div>
-                        </div>
-                        ` : ''}
-                    </div>`;
-                });
-                container.innerHTML = html;
-            }, 300);
+        function closeAdmin() {
+            document.getElementById('admin-modal')?.classList.add('hidden');
+            triggerHaptic('light');
         }
 
-        // ========== OPEN PRODUCT ==========
+        // ========== PRODUCT MODAL ==========
+        
         function openProduct(id) {
             const p = CATALOG.find(x => x.id === id);
+            if (!p) return;
             
             trackEvent('product_view', { product_id: id, product_name: p.name });
             
@@ -2181,11 +2737,13 @@
             document.getElementById('modal-desc').innerText = p.desc;
             
             const customBtn = document.getElementById('custom-req-btn');
-            p.hasCustom ? customBtn.classList.remove('hidden') : customBtn.classList.add('hidden');
+            if (customBtn) {
+                p.hasCustom ? customBtn.classList.remove('hidden') : customBtn.classList.add('hidden');
+            }
 
             const strainWrap = document.getElementById('strain-selector-wrap');
             const strainSel = document.getElementById('strain-selector');
-            if (p.multiStrain && p.strains) {
+            if (p.multiStrain && p.strains && strainWrap && strainSel) {
                 strainWrap.classList.remove('hidden');
                 if (!selectedStrains[id]) {
                     selectedStrains[id] = p.defaultStrain || p.strains[0];
@@ -2196,85 +2754,85 @@
                         ${s}
                     </button>
                 `).join('');
-            } else {
+            } else if (strainWrap) {
                 strainWrap.classList.add('hidden');
-                strainSel.innerHTML = '';
             }
             
-            // AFFICHAGE MEDIA OPTIMISÉ
             const v = document.getElementById('modal-video');
             const i = document.getElementById('modal-image');
             
             const videoUrl = p.videoSrc || (p.mediaType === 'video' ? p.src : null);
-            const imageUrl = p.mediaType === 'image' ? p.src : (p.thumbnail || null);
+            const imageUrl = p.mediaType === 'image' ? p.src : null;
             
-            if (videoUrl) {
+            if (videoUrl && v && i) {
                 i.classList.add('hidden');
                 v.classList.remove('hidden');
                 v.src = videoUrl;
-                v.play().catch(err => {
-                    console.log('Autoplay bloqué, affichage image de secours');
+                v.play().catch(() => {
                     if (imageUrl) {
                         v.classList.add('hidden');
                         i.classList.remove('hidden');
                         i.src = imageUrl;
                     }
                 });
-            } else if (imageUrl) {
+            } else if (imageUrl && i && v) {
                 v.classList.add('hidden');
                 i.classList.remove('hidden');
                 i.src = imageUrl;
             }
 
-            // BADGES OVERLAY
-            let badgesHTML = '';
-            if (p.premium) {
-                badgesHTML += '<span class="badge-premium" style="background:linear-gradient(135deg,#8b5cf6,#a78bfa);animation:badgePulse 2s ease-in-out infinite;">⭐ PREMIUM</span>';
+            const badgesEl = document.getElementById('modal-badges');
+            if (badgesEl) {
+                let badgesHTML = '';
+                if (p.premium) {
+                    badgesHTML += '<span class="badge-premium" style="background:linear-gradient(135deg,#8b5cf6,#a78bfa);animation:badgePulse 2s ease-in-out infinite;">⭐ PREMIUM</span>';
+                }
+                if (p.bestseller) {
+                    badgesHTML += '<span class="badge-premium badge-bestseller mt-2">🔥 BEST SELLER</span>';
+                }
+                if (p.stock === 'low') {
+                    badgesHTML += '<span class="badge-premium badge-stock mt-2">⚠️ STOCK LIMITÉ</span>';
+                }
+                if (p.multiStrain) {
+                    badgesHTML += `<span class="badge-premium mt-2" style="background:rgba(234,179,8,0.9);">🔄 ${p.strains.length} STRAINS DISPO</span>`;
+                }
+                badgesEl.innerHTML = badgesHTML;
             }
-            if (p.bestseller) {
-                badgesHTML += '<span class="badge-premium badge-bestseller mt-2">🔥 BEST SELLER</span>';
-            }
-            if (p.stock === 'low') {
-                badgesHTML += '<span class="badge-premium badge-stock mt-2">⚠️ STOCK LIMITÉ</span>';
-            }
-            if (p.multiStrain) {
-                badgesHTML += `<span class="badge-premium mt-2" style="background:rgba(234,179,8,0.9);">🔄 ${p.strains.length} STRAINS DISPO</span>`;
-            }
-            document.getElementById('modal-badges').innerHTML = badgesHTML;
 
-            // ACTIVITY INDICATOR
-            let activityHTML = '';
-            if (isShopOpen) {
+            const activityEl = document.getElementById('modal-activity');
+            if (activityEl && isShopOpen) {
                 const viewers = Math.floor(Math.random() * 15) + 5;
-                const orders = Math.floor(Math.random() * 8) + 2;
-                activityHTML = `
+                activityEl.innerHTML = `
                     <div class="flex items-center gap-3">
                         <div class="activity-badge">
                             <div class="activity-dot"></div>
                             ${viewers} personnes consultent
                         </div>
-                        <div class="activity-badge" style="background:rgba(34,197,94,0.1);border-color:rgba(34,197,94,0.2);color:#22c55e;">
-                            <div class="activity-dot" style="background:#22c55e;"></div>
-                            ${orders} ventes aujourd'hui
-                        </div>
                     </div>
                 `;
             }
-            document.getElementById('modal-activity').innerHTML = activityHTML;
 
             renderTiers(p);
             
-            document.getElementById('product-modal').classList.remove('hidden');
-            setTimeout(() => {
-                document.getElementById('modal-panel').classList.remove('translate-y-full');
-                triggerHaptic('light');
-            }, 50);
+            const modal = document.getElementById('product-modal');
+            const panel = document.getElementById('modal-panel');
+            
+            if (modal && panel) {
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    panel.classList.remove('translate-y-full');
+                    triggerHaptic('light');
+                }, 50);
+            }
             
             setupSwipeToClose();
         }
 
         function renderTiers(p) {
-            document.getElementById('tiers-list').innerHTML = p.tiers.map((t, index) => {
+            const tiersEl = document.getElementById('tiers-list');
+            if (!tiersEl) return;
+            
+            tiersEl.innerHTML = p.tiers.map((t, index) => {
                 const isPopular = index === 1 || index === 2;
                 const savings = t.oldPrice ? t.oldPrice - t.p : 0;
                 
@@ -2291,7 +2849,6 @@
             `}).join('');
         }
 
-        // ========== STRAIN SELECTOR ==========
         function selectStrain(productId, strainName, btn) {
             selectedStrains[productId] = strainName;
             triggerHaptic('light');
@@ -2299,9 +2856,10 @@
             btn.classList.add('active');
         }
 
-        // ========== SWIPE TO CLOSE ==========
         function setupSwipeToClose() {
             const panel = document.getElementById('modal-panel');
+            if (!panel) return;
+            
             let startY = 0;
             let currentY = 0;
             let isDragging = false;
@@ -2338,15 +2896,25 @@
 
         function closeModal() {
             const panel = document.getElementById('modal-panel');
-            panel.style.transform = '';
-            panel.classList.add('translate-y-full');
-            setTimeout(() => document.getElementById('product-modal').classList.add('hidden'), 400);
+            const modal = document.getElementById('product-modal');
+            
+            if (panel) {
+                panel.style.transform = '';
+                panel.classList.add('translate-y-full');
+            }
+            
+            if (modal) {
+                setTimeout(() => modal.classList.add('hidden'), 400);
+            }
+            
             triggerHaptic('light');
         }
 
         // ========== CART ==========
+        
         function addToCart(id, weight, price) {
             const p = CATALOG.find(x => x.id === id);
+            if (!p) return;
             
             let strainInfo = '';
             if (p.multiStrain && selectedStrains[id]) {
@@ -2370,19 +2938,26 @@
 
         function updateCartUI() {
             const b = document.getElementById('cart-badge');
+            if (!b) return;
+            
             b.innerText = cart.length;
-            cart.length > 0 ? b.classList.remove('hidden') : b.classList.add('hidden');
-            b.style.display = cart.length > 0 ? 'flex' : 'none';
+            if (cart.length > 0) {
+                b.classList.remove('hidden');
+                b.style.display = 'flex';
+            } else {
+                b.classList.add('hidden');
+            }
         }
 
         function openCart() { 
             if(cart.length > 0) { 
-                document.getElementById('checkout-modal').classList.remove('hidden'); 
+                closeAllModals();
+                document.getElementById('checkout-modal')?.classList.remove('hidden'); 
                 renderRecap();
                 triggerHaptic('medium');
                 
                 document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-                document.querySelectorAll('.nav-btn')[3].classList.add('active');
+                document.querySelectorAll('.nav-btn')[3]?.classList.add('active');
                 
                 trackEvent('begin_checkout', {
                     cart_items: cart.length,
@@ -2395,38 +2970,34 @@
         }
         
         function closeCheckout() { 
-            document.getElementById('checkout-modal').classList.add('hidden');
-            triggerHaptic('light');
-        }
-        
-        function openInfos() { 
-            document.getElementById('infos-modal').classList.remove('hidden');
-            triggerHaptic('light');
-            
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.nav-btn')[2].classList.add('active');
-            
-            trackEvent('view_info');
-        }
-        
-        function closeInfos() { 
-            document.getElementById('infos-modal').classList.add('hidden');
+            document.getElementById('checkout-modal')?.classList.add('hidden');
             triggerHaptic('light');
         }
 
         // ========== CHECKOUT ==========
+        
         function renderRecap() {
             const div = document.getElementById('checkout-recap');
+            if (!div) return;
+            
             let subtotal = cart.reduce((a,b) => a + b.p, 0);
+            
+            const offerResult = calculateOfferDiscount(subtotal);
+            const offerDiscount = offerResult.discount;
+            const offerDesc = offerResult.description;
             
             let deliveryFee = 0;
             if(currentMode === 'delivery') {
-                deliveryFee = 10;
+                if (currentOffer?.deliveryFree && subtotal >= (currentOffer.minAmount || 0)) {
+                    deliveryFee = 0;
+                } else {
+                    deliveryFee = 10;
+                }
             } else if(currentMode === 'postal') {
                 deliveryFee = 20;
             }
             
-            let total = subtotal + deliveryFee;
+            let total = subtotal - offerDiscount + deliveryFee;
             
             let html = '<ul class="space-y-2">';
             cart.forEach(c => {
@@ -2439,15 +3010,39 @@
             html += `<div class="mt-4 pt-4 border-t border-[var(--border-accent)] space-y-2">`;
             html += `<div class="flex justify-between text-xs text-gray-400"><span>Sous-total</span><span>${subtotal}€</span></div>`;
             
+            if(offerDiscount > 0) {
+                html += `<div class="flex justify-between text-xs text-green-500 font-bold"><span>Offre appliquée</span><span>-${offerDiscount}€</span></div>`;
+            }
+            
             if(deliveryFee > 0) {
                 const deliveryLabel = currentMode === 'delivery' ? 'Livraison IDF' : 'Envoi Postal';
                 html += `<div class="flex justify-between text-xs text-gray-400"><span>${deliveryLabel}</span><span>+${deliveryFee}€</span></div>`;
+            } else if (currentMode === 'delivery' || currentMode === 'postal') {
+                html += `<div class="flex justify-between text-xs text-green-500"><span>Livraison</span><span>OFFERTE</span></div>`;
             }
             
             html += `<div class="flex justify-between font-black text-violet-500 text-sm pt-2 border-t border-[var(--border-accent)]"><span>TOTAL</span><span>${total}€</span></div>`;
             html += `</div>`;
             
             div.innerHTML = html;
+            
+            const offerAppliedDiv = document.getElementById('checkout-offer-applied');
+            if (offerAppliedDiv) {
+                if (offerDesc) {
+                    offerAppliedDiv.innerHTML = `
+                        <div class="bg-green-900/20 border border-green-500/50 rounded-xl p-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-xl">✅</span>
+                                <h4 class="text-green-500 font-black text-xs uppercase">OFFRE APPLIQUÉE</h4>
+                            </div>
+                            <p class="text-[10px] text-gray-300">${offerDesc}</p>
+                            ${offerDiscount > 0 ? `<p class="text-green-500 font-bold text-sm mt-2">Tu économises ${offerDiscount}€ !</p>` : ''}
+                        </div>
+                    `;
+                } else {
+                    offerAppliedDiv.innerHTML = '';
+                }
+            }
         }
 
         function switchTab(mode) {
@@ -2455,12 +3050,12 @@
             triggerHaptic('light');
             
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(`tab-${mode}`).classList.add('active');
+            document.getElementById(`tab-${mode}`)?.classList.add('active');
             
             ['meetup', 'delivery', 'postal'].forEach(m => {
-                document.getElementById(`fields-${m}`).classList.add('hidden');
+                document.getElementById(`fields-${m}`)?.classList.add('hidden');
             });
-            document.getElementById(`fields-${mode}`).classList.remove('hidden');
+            document.getElementById(`fields-${mode}`)?.classList.remove('hidden');
             
             renderRecap();
             
@@ -2470,7 +3065,11 @@
         function selectPayment(method, el) {
             triggerHaptic('light');
             
-            document.getElementById('payment-method').value = method;
+            const paymentInput = document.getElementById('payment-method');
+            if (paymentInput) {
+                paymentInput.value = method;
+            }
+            
             document.querySelectorAll('.pay-card').forEach(c => c.classList.remove('selected'));
             el.classList.add('selected');
             
@@ -2478,8 +3077,10 @@
         }
 
         // ========== ORDER SUBMISSION ==========
+        
         function submitOrder() {
-            if(!document.getElementById('check-id').checked) { 
+            const checkId = document.getElementById('check-id');
+            if(!checkId?.checked) { 
                 showToast('error', 'ERREUR', 'Validation du protocole sécurité obligatoire');
                 triggerHaptic('error');
                 return; 
@@ -2490,16 +3091,16 @@
             let timeVal = "";
             
             if(currentMode === 'meetup') { 
-                whatsappVal = document.getElementById('mu-whatsapp').value.trim();
-                timeVal = document.getElementById('mu-time').value.trim();
+                whatsappVal = document.getElementById('mu-whatsapp')?.value.trim() || '';
+                timeVal = document.getElementById('mu-time')?.value.trim() || '';
             }
             if(currentMode === 'delivery') { 
-                whatsappVal = document.getElementById('del-whatsapp').value.trim();
-                addressVal = document.getElementById('del-address').value.trim();
+                whatsappVal = document.getElementById('del-whatsapp')?.value.trim() || '';
+                addressVal = document.getElementById('del-address')?.value.trim() || '';
             }
             if(currentMode === 'postal') { 
-                whatsappVal = document.getElementById('post-whatsapp').value.trim();
-                addressVal = document.getElementById('post-address').value.trim();
+                whatsappVal = document.getElementById('post-whatsapp')?.value.trim() || '';
+                addressVal = document.getElementById('post-address')?.value.trim() || '';
             }
 
             if(!whatsappVal) { 
@@ -2522,21 +3123,31 @@
 
             triggerHaptic('heavy');
 
-            document.getElementById('checkout-modal').classList.add('hidden');
-            document.getElementById('processing-screen').classList.remove('hidden');
+            closeCheckout();
+            document.getElementById('processing-screen')?.classList.remove('hidden');
 
             setTimeout(() => {
                 let subtotal = cart.reduce((a,b) => a + b.p, 0);
-                let payment = document.getElementById('payment-method').value;
+                
+                const offerResult = calculateOfferDiscount(subtotal);
+                const offerDiscount = offerResult.discount;
+                const offerDesc = offerResult.description;
+                
+                const paymentInput = document.getElementById('payment-method');
+                let payment = paymentInput?.value || 'CASH';
                 
                 let deliveryFee = 0;
                 if(currentMode === 'delivery') {
-                    deliveryFee = 10;
+                    if (currentOffer?.deliveryFree && subtotal >= (currentOffer.minAmount || 0)) {
+                        deliveryFee = 0;
+                    } else {
+                        deliveryFee = 10;
+                    }
                 } else if(currentMode === 'postal') {
                     deliveryFee = 20;
                 }
                 
-                let total = subtotal + deliveryFee;
+                let total = subtotal - offerDiscount + deliveryFee;
                 
                 let msgLines = [];
                 msgLines.push('COMMANDE SOUTH VALLEY');
@@ -2556,10 +3167,19 @@
                 msgLines.push('');
                 msgLines.push('=== TOTAL ===');
                 msgLines.push(`Sous-total: ${subtotal} EUR`);
+                
+                if(offerDiscount > 0) {
+                    msgLines.push(`Offre appliquee: -${offerDiscount} EUR`);
+                    msgLines.push(`Details: ${offerDesc}`);
+                }
+                
                 if(deliveryFee > 0) {
                     msgLines.push(`Frais livraison: +${deliveryFee} EUR`);
+                } else if(currentMode === 'delivery' || currentMode === 'postal') {
+                    msgLines.push(`Livraison: OFFERTE`);
                 }
-                msgLines.push(`TOTAL: ${total} EUR`);
+                
+                msgLines.push(`TOTAL FINAL: ${total} EUR`);
                 msgLines.push('');
                 msgLines.push('=== PAIEMENT ===');
                 msgLines.push(payment);
@@ -2590,16 +3210,12 @@
                 
                 if (tg) {
                     tg.disableClosingConfirmation();
-                    // openLink() pour les URLs externes (WhatsApp, web, etc.)
-                    // openTelegramLink() uniquement pour t.me/*
                     if (tg.openLink) {
                         tg.openLink(waURL, { try_instant_view: false });
                     } else {
-                        // Fallback pour anciennes versions
                         window.open(waURL, '_blank');
                     }
                 } else {
-                    // Si pas dans Telegram, redirection normale
                     window.location.href = waURL;
                 }
 
@@ -2613,14 +3229,18 @@
                         price: c.p
                     })),
                     delivery_method: currentMode,
-                    payment_method: payment
+                    payment_method: payment,
+                    offer_applied: offerDesc || 'none',
+                    discount: offerDiscount
                 });
 
                 setTimeout(() => {
-                    document.getElementById('processing-screen').classList.add('hidden');
+                    document.getElementById('processing-screen')?.classList.add('hidden');
                     triggerConfetti();
                     triggerHaptic('success');
                     showToast('success', 'REDIRECTION WHATSAPP', 'Ouverture de WhatsApp avec ta commande !');
+                    
+                    incrementUserOrders();
                     
                     cart = [];
                     updateCartUI();
@@ -2650,6 +3270,35 @@
             }
             
             trackEvent('contact_staff', { promo_code: promoCode || 'none' });
+        }
+
+        function shareReferral() {
+            const tg = window.Telegram?.WebApp;
+            const userId = tg?.initDataUnsafe?.user?.id;
+            
+            if (!userId) {
+                showToast('error', 'ERREUR', 'Impossible de générer le lien');
+                return;
+            }
+            
+            const referralLink = `https://t.me/southvalley_bot?start=ref_${userId}`;
+            const message = `Rejoins South Valley avec mon lien de parrainage ! On reçoit tous les deux 10€ de crédit 🎁\n\n${referralLink}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Parrainage South Valley',
+                    text: message
+                }).catch(() => {
+                    navigator.clipboard.writeText(referralLink);
+                    showToast('success', 'COPIÉ', 'Lien de parrainage copié dans le presse-papier');
+                });
+            } else {
+                navigator.clipboard.writeText(referralLink);
+                showToast('success', 'COPIÉ', 'Lien de parrainage copié dans le presse-papier');
+            }
+            
+            triggerHaptic('success');
+            trackEvent('referral_share');
         }
     </script>
 </body>
