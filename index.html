@@ -6,17 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>South Valley - Command Center V2</title>
     
-    <!-- ANTI-INDEXING STRICT -->
     <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
     <meta name="googlebot" content="noindex, nofollow">
     <meta name="bingbot" content="noindex, nofollow">
     <meta http-equiv="X-Robots-Tag" content="noindex, nofollow">
     <meta name="referrer" content="no-referrer">
     
-    <!-- ⚠️ SDK TELEGRAM (AVANT TOUT) -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-    <!-- Google Analytics 4 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -424,21 +421,12 @@
         }
 
         @keyframes slideInUp {
-            from {
-                transform: translateY(100px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         @keyframes fadeOut {
-            to {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
+            to { opacity: 0; transform: translateY(-20px); }
         }
 
         .social-proof-icon {
@@ -543,9 +531,7 @@
             transition: opacity 0.3s;
         }
 
-        .tier-card:hover::before {
-            opacity: 1;
-        }
+        .tier-card:hover::before { opacity: 1; }
 
         .tier-card:active {
             transform: scale(0.96);
@@ -590,9 +576,7 @@
             transition: opacity 0.3s;
         }
 
-        .tab-btn.active::before {
-            opacity: 1;
-        }
+        .tab-btn.active::before { opacity: 1; }
 
         .tab-btn.active {
             color: #fff;
@@ -601,10 +585,7 @@
             box-shadow: 0 0 20px var(--accent-glow);
         }
 
-        .tab-btn span {
-            position: relative;
-            z-index: 1;
-        }
+        .tab-btn span { position: relative; z-index: 1; }
 
         /* PAYMENT */
         .pay-card {
@@ -615,9 +596,7 @@
             position: relative;
         }
 
-        .pay-card:active {
-            transform: scale(0.96);
-        }
+        .pay-card:active { transform: scale(0.96); }
 
         .pay-card.selected {
             background: rgba(139, 92, 246, 0.1);
@@ -682,30 +661,12 @@
             gap: 12px;
         }
         
-        .toast.success { 
-            border-color: var(--accent);
-            box-shadow: 0 10px 40px rgba(139, 92, 246, 0.3);
-        }
+        .toast.success { border-color: var(--accent); box-shadow: 0 10px 40px rgba(139, 92, 246, 0.3); }
+        .toast.error { border-color: #ef4444; box-shadow: 0 10px 40px rgba(239, 68, 68, 0.3); }
+        .toast.warning { border-color: #f59e0b; box-shadow: 0 10px 40px rgba(245, 158, 11, 0.3); }
         
-        .toast.error { 
-            border-color: #ef4444; 
-            box-shadow: 0 10px 40px rgba(239, 68, 68, 0.3);
-        }
-        
-        .toast.warning { 
-            border-color: #f59e0b; 
-            box-shadow: 0 10px 40px rgba(245, 158, 11, 0.3);
-        }
-        
-        .toast-icon {
-            font-size: 24px;
-            flex-shrink: 0;
-            line-height: 1;
-        }
-        
-        .toast-content {
-            flex: 1;
-        }
+        .toast-icon { font-size: 24px; flex-shrink: 0; line-height: 1; }
+        .toast-content { flex: 1; }
         
         .toast-title {
             font-size: 11px;
@@ -719,28 +680,15 @@
         .toast.error .toast-title { color: #ef4444; }
         .toast.warning .toast-title { color: #f59e0b; }
         
-        .toast-message {
-            font-size: 11px;
-            color: var(--text-secondary);
-            line-height: 1.5;
-        }
+        .toast-message { font-size: 11px; color: var(--text-secondary); line-height: 1.5; }
         
         @keyframes toastSlideIn {
-            from {
-                transform: translateX(400px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
+            from { transform: translateX(400px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
         
         @keyframes toastSlideOut {
-            to {
-                transform: translateX(400px);
-                opacity: 0;
-            }
+            to { transform: translateX(400px); opacity: 0; }
         }
         
         /* CONFETTI */
@@ -753,10 +701,7 @@
         }
         
         @keyframes confetti-fall {
-            to {
-                transform: translateY(100vh) rotate(720deg);
-                opacity: 0;
-            }
+            to { transform: translateY(100vh) rotate(720deg); opacity: 0; }
         }
         
         /* SKELETON */
@@ -801,9 +746,7 @@
             cursor: pointer;
         }
 
-        .strain-btn:active {
-            transform: scale(0.96);
-        }
+        .strain-btn:active { transform: scale(0.96); }
 
         .strain-btn.active {
             background: rgba(139, 92, 246, 0.15);
@@ -824,9 +767,7 @@
             animation: reviewsScroll 60s linear infinite;
         }
 
-        .reviews-track:hover {
-            animation-play-state: paused;
-        }
+        .reviews-track:hover { animation-play-state: paused; }
 
         @keyframes reviewsScroll {
             0% { transform: translateX(0); }
@@ -935,7 +876,7 @@
     <!-- SOCIAL PROOF TICKER -->
     <div class="social-proof-ticker" id="social-proof-ticker"></div>
 
-    <!-- ADMIN BUTTON (Visible uniquement pour ID 7998805372) -->
+    <!-- ADMIN BUTTON (Visible uniquement pour ID admin) -->
     <button id="admin-btn" class="admin-btn" onclick="openAdmin()">⚙️</button>
 
     <!-- BLOCK SCREEN -->
@@ -969,7 +910,6 @@
             </button>
         </div>
         
-        <!-- MARQUEE avec offre du jour dynamique -->
         <div class="marquee-container py-1.5 border-y border-violet-500/50">
             <div class="marquee-track" id="marquee-track">
                 <span class="marquee-item" id="daily-offer-marquee">🎁 CHARGEMENT OFFRE...</span>
@@ -1054,14 +994,11 @@
                     ←
                 </button>
                 
-                <!-- BADGES OVERLAY -->
                 <div class="absolute top-5 right-5 flex flex-col gap-2 z-20" id="modal-badges"></div>
                 
                 <div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-[#000] via-[#000]/90 to-transparent">
                     <span id="modal-tag" class="badge-premium inline-block mb-2"></span>
                     <h2 id="modal-title" class="text-3xl font-black text-white uppercase brand-font tracking-tighter leading-none"></h2>
-                    
-                    <!-- ACTIVITY INDICATOR -->
                     <div id="modal-activity" class="mt-3"></div>
                 </div>
             </div>
@@ -1069,7 +1006,6 @@
             <div class="p-6 flex-1 overflow-y-auto no-scrollbar">
                 <p id="modal-desc" class="text-xs text-gray-400 leading-relaxed mb-8 font-mono border-l-2 border-violet-500 pl-4"></p>
 
-                <!-- STRAIN SELECTOR -->
                 <div id="strain-selector-wrap" class="hidden mb-6">
                     <h3 class="text-[10px] font-black text-violet-500 uppercase mb-3 tracking-[0.2em]">STRAIN</h3>
                     <div id="strain-selector" class="flex gap-3"></div>
@@ -1099,7 +1035,6 @@
         </div>
         
         <div class="flex-1 overflow-y-auto p-5 space-y-6 no-scrollbar relative z-10">
-            <!-- User Info Card -->
             <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] rounded-2xl p-6 text-center">
                 <div id="user-avatar" class="w-24 h-24 rounded-full bg-violet-500 mx-auto mb-4 flex items-center justify-center text-4xl"></div>
                 <h3 id="user-name" class="text-xl font-black text-white mb-2">Utilisateur</h3>
@@ -1109,7 +1044,6 @@
                 </div>
             </div>
 
-            <!-- Stats Card -->
             <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] rounded-2xl p-6">
                 <h4 class="text-[10px] font-black text-violet-500 uppercase mb-4 tracking-[0.2em]">📊 MES STATS</h4>
                 <div class="space-y-3">
@@ -1124,7 +1058,6 @@
                 </div>
             </div>
 
-            <!-- Progress to VIP -->
             <div class="bg-gradient-to-r from-violet-900/30 to-black border border-violet-500/50 rounded-2xl p-6">
                 <h4 class="text-[10px] font-black text-violet-500 uppercase mb-3 tracking-[0.2em]">🏆 PROGRESSION VIP</h4>
                 <div class="w-full bg-gray-800 rounded-full h-3 mb-2">
@@ -1141,7 +1074,6 @@
                 </div>
             </div>
 
-            <!-- Theme Toggle -->
             <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] rounded-2xl p-6">
                 <h4 class="text-[10px] font-black text-violet-500 uppercase mb-4 tracking-[0.2em]">🎨 APPARENCE</h4>
                 <div class="flex items-center justify-between">
@@ -1153,7 +1085,6 @@
                 </div>
             </div>
 
-            <!-- Notifications Preferences -->
             <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] rounded-2xl p-6">
                 <h4 class="text-[10px] font-black text-violet-500 uppercase mb-4 tracking-[0.2em]">🔔 NOTIFICATIONS</h4>
                 <div class="space-y-3">
@@ -1172,7 +1103,6 @@
                 </div>
             </div>
 
-            <!-- Referral -->
             <div class="bg-gradient-to-r from-amber-900/20 to-black border border-amber-500/30 rounded-2xl p-6 text-center">
                 <h4 class="text-[10px] font-black text-amber-500 uppercase mb-3 tracking-[0.2em]">👥 PARRAINAGE</h4>
                 <p class="text-xs text-gray-400 mb-4">Partage ce lien avec un ami</p>
@@ -1227,45 +1157,35 @@
                 </div>
             </section>
 
-            <!-- AVIS CLIENTS - ROULETTE AUTO-DÉFILANTE -->
             <section>
                 <h3 class="text-[9px] font-black text-violet-500 tracking-[0.2em] uppercase mb-3 flex items-center gap-2">
                     💬 AVIS CLIENTS
                     <span class="text-[8px] text-gray-600">(30 avis vérifiés)</span>
                 </h3>
-                
                 <div class="reviews-carousel">
-                    <div class="reviews-track" id="reviews-track">
-                        <!-- Les avis seront générés dynamiquement -->
-                    </div>
+                    <div class="reviews-track" id="reviews-track"></div>
                 </div>
             </section>
 
-            <!-- FAQ -->
             <section>
                 <h3 class="text-[9px] font-black text-violet-500 tracking-[0.2em] uppercase mb-3">❓ FAQ</h3>
-                
                 <div class="space-y-3">
                     <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl">
                         <h5 class="text-white font-bold text-xs mb-2">C'est sûr niveau sécurité ?</h5>
                         <p class="text-[10px] text-gray-400">Oui, double sous-vide + tracking chiffré. Discrétion maximale garantie.</p>
                     </div>
-                    
                     <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl">
                         <h5 class="text-white font-bold text-xs mb-2">Combien de temps pour être livré ?</h5>
                         <p class="text-[10px] text-gray-400">Meet-up: RDV même jour | Livraison IDF: 1-3h | Postal: 24-48h</p>
                     </div>
-                    
                     <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl">
                         <h5 class="text-white font-bold text-xs mb-2">Je peux payer comment ?</h5>
                         <p class="text-[10px] text-gray-400">Cash, USDT, BTC, ETH, Monero. Cashback +3% pour paiement crypto.</p>
                     </div>
-                    
                     <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl">
                         <h5 class="text-white font-bold text-xs mb-2">C'est quoi les grades clients ?</h5>
                         <p class="text-[10px] text-gray-400">Plus tu commandes, plus t'as d'avantages. VIP à 10 commandes = -10% à vie + cadeaux.</p>
                     </div>
-                    
                     <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl">
                         <h5 class="text-white font-bold text-xs mb-2">Vous livrez où ?</h5>
                         <p class="text-[10px] text-gray-400">Meet-up 92 Nord | Livraison IDF (75/91/92/93/94/95) | Postal France/Europe</p>
@@ -1273,26 +1193,21 @@
                 </div>
             </section>
 
-            <!-- GARANTIES -->
             <section>
                 <h3 class="text-[9px] font-black text-violet-500 tracking-[0.2em] uppercase mb-3">✅ GARANTIES</h3>
-                
                 <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl space-y-3">
                     <div>
                         <h5 class="text-white font-bold text-xs mb-1">🔒 Discrétion Totale</h5>
                         <p class="text-[10px] text-gray-400">Emballage neutre, aucune marque distinctive. Anonymat garanti.</p>
                     </div>
-                    
                     <div class="border-t border-[var(--border-accent)] pt-3">
                         <h5 class="text-white font-bold text-xs mb-1">✨ Qualité Premium</h5>
                         <p class="text-[10px] text-gray-400">Produits testés et certifiés. Origine vérifiée, traçabilité complète.</p>
                     </div>
-                    
                     <div class="border-t border-[var(--border-accent)] pt-3">
                         <h5 class="text-white font-bold text-xs mb-1">💰 Remboursement Partiel</h5>
-                        <p class="text-[10px] text-gray-400">En cas de problème sur envoi postal : remboursement jusqu'à 50% selon le souci. Contactez le staff pour toute réclamation.</p>
+                        <p class="text-[10px] text-gray-400">En cas de problème sur envoi postal : remboursement jusqu'à 50% selon le souci.</p>
                     </div>
-                    
                     <div class="border-t border-[var(--border-accent)] pt-3">
                         <h5 class="text-white font-bold text-xs mb-1">🏃 Réactivité</h5>
                         <p class="text-[10px] text-gray-400">Support disponible 10H30-02H30. Réponse moyenne : 15min.</p>
@@ -1302,7 +1217,6 @@
 
             <section class="space-y-3">
                 <h3 class="text-[9px] font-black text-violet-500 tracking-[0.2em] uppercase opacity-80">HIÉRARCHIE & BONUS</h3>
-                
                 <div class="bg-gradient-to-r from-violet-900/20 to-black border border-violet-500/20 p-4 rounded-xl">
                     <h4 class="text-white font-black text-xs uppercase mb-2">🎁 CADEAUX PARRAINAGE</h4>
                     <p class="text-[10px] text-gray-300 mb-2">Tu parraines un ami ? Il commande ? = Cadeau immédiat.</p>
@@ -1311,7 +1225,6 @@
                         <span class="bg-violet-500/10 text-violet-500 text-[9px] font-bold px-2 py-1 rounded border border-violet-500/30">OU 1G OFFERT</span>
                     </div>
                 </div>
-                
                 <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl">
                     <h4 class="text-white font-black text-xs uppercase mb-3">GRADES CLIENTS</h4>
                     <div class="space-y-2">
@@ -1359,20 +1272,13 @@
         </div>
         
         <div class="flex-1 overflow-y-auto p-5 space-y-4 no-scrollbar relative z-10">
-            
-            <!-- OFFRES PAR JOUR -->
             <section>
                 <h3 class="text-[9px] font-black text-red-500 tracking-[0.2em] uppercase mb-3 flex items-center gap-2">
                     <span class="animate-pulse">🔥</span> OFFRES QUOTIDIENNES
                 </h3>
-                
                 <div class="space-y-3">
-                    <!-- LUNDI DAILY -->
                     <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="text-2xl">📅</span>
-                            <h4 class="text-white font-black text-sm uppercase">LUNDI DAILY</h4>
-                        </div>
+                        <div class="flex items-center gap-2 mb-2"><span class="text-2xl">📅</span><h4 class="text-white font-black text-sm uppercase">LUNDI DAILY</h4></div>
                         <div class="text-[10px] text-gray-400 space-y-1 mb-2">
                             <p>• -10€ sur toute commande de 100€+</p>
                             <p>• Livraison offerte</p>
@@ -1380,53 +1286,29 @@
                             <p>• <span class="text-amber-500 font-bold">+260€ → 3.5G Filtré offert (strain au choix)</span></p>
                         </div>
                     </div>
-
-                    <!-- MARDI FOLIE -->
                     <div class="bg-gradient-to-r from-purple-900/30 to-black border-2 border-purple-500 p-4 rounded-xl">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="text-2xl">⚡</span>
-                            <h4 class="text-white font-black text-sm uppercase">MARDI FOLIE</h4>
-                            <span class="text-[8px] bg-purple-500 text-white px-2 py-1 rounded-full font-black">DÈS 20H</span>
-                        </div>
+                        <div class="flex items-center gap-2 mb-2"><span class="text-2xl">⚡</span><h4 class="text-white font-black text-sm uppercase">MARDI FOLIE</h4><span class="text-[8px] bg-purple-500 text-white px-2 py-1 rounded-full font-black">DÈS 20H</span></div>
                         <div class="text-[10px] text-gray-400 space-y-1 mb-2">
                             <p>• <span class="text-green-500 font-bold">Livraison offerte dès 100€</span></p>
                             <p>• <span class="text-purple-500 font-bold">-20% sur toute commande +200€ (dès 20H)</span></p>
                         </div>
                     </div>
-
-                    <!-- MERCREDI CHILL -->
                     <div class="bg-[var(--bg-card)] border border-blue-500/50 p-4 rounded-xl">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="text-2xl">🌊</span>
-                            <h4 class="text-white font-black text-sm uppercase">MERCREDI CHILL</h4>
-                            <span class="text-[8px] bg-blue-500 text-white px-2 py-1 rounded-full font-black">DÈS 16H</span>
-                        </div>
+                        <div class="flex items-center gap-2 mb-2"><span class="text-2xl">🌊</span><h4 class="text-white font-black text-sm uppercase">MERCREDI CHILL</h4><span class="text-[8px] bg-blue-500 text-white px-2 py-1 rounded-full font-black">DÈS 16H</span></div>
                         <div class="text-[10px] text-gray-400 space-y-1 mb-2">
                             <p>• <span class="text-blue-500 font-bold">3.5G produit au choix offert (dès 150€)</span></p>
                             <p>• Livraison offerte</p>
                         </div>
                     </div>
-
-                    <!-- JEUDI BIENVENUE -->
                     <div class="bg-gradient-to-r from-green-900/30 to-black border border-green-500/50 p-4 rounded-xl">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="text-2xl">🆕</span>
-                            <h4 class="text-white font-black text-sm uppercase">JEUDI BIENVENUE</h4>
-                            <span class="text-[8px] bg-green-500 text-black px-2 py-1 rounded-full font-black">NOUVEAUX CLIENTS</span>
-                        </div>
+                        <div class="flex items-center gap-2 mb-2"><span class="text-2xl">🆕</span><h4 class="text-white font-black text-sm uppercase">JEUDI BIENVENUE</h4><span class="text-[8px] bg-green-500 text-black px-2 py-1 rounded-full font-black">NOUVEAUX CLIENTS</span></div>
                         <div class="text-[10px] text-gray-400 space-y-1 mb-2">
                             <p>• <span class="text-green-500 font-bold">-20% sur ta PREMIÈRE commande</span></p>
                             <p>• Bag produit mystère offert</p>
                         </div>
                     </div>
-
-                    <!-- VENDREDI MINUIT FOLIE -->
                     <div class="bg-gradient-to-r from-red-900/30 to-black border-2 border-red-500 p-4 rounded-xl">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="text-2xl">🌙</span>
-                            <h4 class="text-white font-black text-sm uppercase">MINUIT FOLIE</h4>
-                            <span class="text-[8px] bg-red-500 text-white px-2 py-1 rounded-full font-black animate-pulse">00H-02H30</span>
-                        </div>
+                        <div class="flex items-center gap-2 mb-2"><span class="text-2xl">🌙</span><h4 class="text-white font-black text-sm uppercase">MINUIT FOLIE</h4><span class="text-[8px] bg-red-500 text-white px-2 py-1 rounded-full font-black animate-pulse">00H-02H30</span></div>
                         <div class="text-[10px] text-gray-400 space-y-1 mb-2">
                             <p>• Flash Sale : 1 produit surprise à <span class="text-red-500 font-bold">-30%</span></p>
                             <p>• Annoncé 30min avant sur Telegram</p>
@@ -1434,13 +1316,8 @@
                             <p class="text-amber-500 font-bold">First come, first served</p>
                         </div>
                     </div>
-
-                    <!-- SAMEDI VALLEY -->
                     <div class="bg-[var(--bg-card)] border border-amber-500/50 p-4 rounded-xl">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="text-2xl">🎉</span>
-                            <h4 class="text-white font-black text-sm uppercase">SAMEDI VALLEY</h4>
-                        </div>
+                        <div class="flex items-center gap-2 mb-2"><span class="text-2xl">🎉</span><h4 class="text-white font-black text-sm uppercase">SAMEDI VALLEY</h4></div>
                         <div class="text-[10px] text-gray-400 space-y-1 mb-2">
                             <p><span class="text-amber-500 font-bold">PACK WEEKEND :</span></p>
                             <p>• Cereal Milk 10G + Filtré 73U 10G</p>
@@ -1449,13 +1326,8 @@
                             <p class="mt-2 text-[9px] text-gray-500">OU Mix & Match : 3 produits, le moins cher à -50%</p>
                         </div>
                     </div>
-
-                    <!-- DIMANCHE RELAX -->
                     <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="text-2xl">🌅</span>
-                            <h4 class="text-white font-black text-sm uppercase">DIMANCHE RELAX</h4>
-                        </div>
+                        <div class="flex items-center gap-2 mb-2"><span class="text-2xl">🌅</span><h4 class="text-white font-black text-sm uppercase">DIMANCHE RELAX</h4></div>
                         <div class="text-[10px] text-gray-400 space-y-1 mb-2">
                             <p>• -15€ sur toute commande de 120€+</p>
                             <p>• Double points fidélité (progression grade)</p>
@@ -1465,18 +1337,10 @@
                 </div>
             </section>
 
-            <!-- HAPPY HOUR -->
             <section>
-                <h3 class="text-[9px] font-black text-yellow-500 tracking-[0.2em] uppercase mb-3">
-                    ⚡ OFFRE PERMANENTE
-                </h3>
-                
+                <h3 class="text-[9px] font-black text-yellow-500 tracking-[0.2em] uppercase mb-3">⚡ OFFRE PERMANENTE</h3>
                 <div class="bg-gradient-to-r from-yellow-900/20 to-black border border-yellow-500/50 p-4 rounded-xl">
-                    <div class="flex items-center gap-2 mb-2">
-                        <span class="text-2xl">☀️</span>
-                        <h4 class="text-white font-black text-sm uppercase">HAPPY HOUR</h4>
-                        <span class="text-[8px] bg-yellow-500 text-black px-2 py-1 rounded-full font-black">14H-16H</span>
-                    </div>
+                    <div class="flex items-center gap-2 mb-2"><span class="text-2xl">☀️</span><h4 class="text-white font-black text-sm uppercase">HAPPY HOUR</h4><span class="text-[8px] bg-yellow-500 text-black px-2 py-1 rounded-full font-black">14H-16H</span></div>
                     <p class="text-[10px] text-gray-400 mb-2">TOUS LES JOURS • -10€ sur commandes +100€ • Livraison IDF OFFERTE</p>
                     <div class="bg-yellow-500/10 border border-yellow-500/30 p-2 rounded text-center">
                         <span class="text-yellow-500 font-black text-[9px]">MENTIONNE "HAPPYHOUR" AU STAFF</span>
@@ -1484,12 +1348,8 @@
                 </div>
             </section>
 
-            <!-- PACKS -->
             <section>
-                <h3 class="text-[9px] font-black text-violet-500 tracking-[0.2em] uppercase mb-3">
-                    📦 PACKS & BUNDLES
-                </h3>
-                
+                <h3 class="text-[9px] font-black text-violet-500 tracking-[0.2em] uppercase mb-3">📦 PACKS & BUNDLES</h3>
                 <div class="space-y-3">
                     <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl">
                         <div class="text-2xl mb-2">🎁</div>
@@ -1505,7 +1365,6 @@
                             <span class="bg-violet-500/20 text-violet-500 text-[9px] font-bold px-2 py-1 rounded">-15€</span>
                         </div>
                     </div>
-
                     <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl">
                         <div class="text-2xl mb-2">🧼</div>
                         <h4 class="text-white font-black text-sm uppercase mb-1">HASH LOVER PACK</h4>
@@ -1523,12 +1382,8 @@
                 </div>
             </section>
 
-            <!-- FIDÉLITÉ -->
             <section>
-                <h3 class="text-[9px] font-black text-violet-500 tracking-[0.2em] uppercase mb-3">
-                    💎 PROGRAMME FIDÉLITÉ
-                </h3>
-                
+                <h3 class="text-[9px] font-black text-violet-500 tracking-[0.2em] uppercase mb-3">💎 PROGRAMME FIDÉLITÉ</h3>
                 <div class="space-y-3">
                     <div class="bg-gradient-to-r from-violet-900/30 to-black border border-violet-500/50 p-4 rounded-xl">
                         <div class="text-2xl mb-2">🎖️</div>
@@ -1541,7 +1396,6 @@
                             <p>✓ 1 cadeau surprise/mois</p>
                         </div>
                     </div>
-
                     <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl">
                         <div class="text-2xl mb-2">💰</div>
                         <h4 class="text-white font-black text-sm uppercase mb-1">CASHBACK CRYPTO +3%</h4>
@@ -1555,32 +1409,16 @@
                 </div>
             </section>
 
-            <!-- VOLUME -->
             <section>
-                <h3 class="text-[9px] font-black text-violet-500 tracking-[0.2em] uppercase mb-3">
-                    📊 OFFRES VOLUME
-                </h3>
-                
+                <h3 class="text-[9px] font-black text-violet-500 tracking-[0.2em] uppercase mb-3">📊 OFFRES VOLUME</h3>
                 <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl">
                     <div class="text-2xl mb-2">💎</div>
                     <h4 class="text-white font-black text-sm uppercase mb-2">GROS VOLUME DÉGRESSIF</h4>
                     <div class="text-[10px] text-gray-400 space-y-1 mb-3">
-                        <div class="flex justify-between">
-                            <span>100G :</span>
-                            <span class="text-violet-500 font-bold">-5%</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>250G :</span>
-                            <span class="text-violet-500 font-bold">-10%</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>500G :</span>
-                            <span class="text-violet-500 font-bold">-15%</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>1KG+ :</span>
-                            <span class="text-amber-500 font-bold">-20% + Négo</span>
-                        </div>
+                        <div class="flex justify-between"><span>100G :</span><span class="text-violet-500 font-bold">-5%</span></div>
+                        <div class="flex justify-between"><span>250G :</span><span class="text-violet-500 font-bold">-10%</span></div>
+                        <div class="flex justify-between"><span>500G :</span><span class="text-violet-500 font-bold">-15%</span></div>
+                        <div class="flex justify-between"><span>1KG+ :</span><span class="text-amber-500 font-bold">-20% + Négo</span></div>
                     </div>
                     <button onclick="contactStaff('GROSVOLUME')" class="w-full bg-violet-500 text-white font-black text-[10px] py-2 rounded-lg active:scale-95 transition-transform">
                         CONTACT STAFF POUR DEVIS
@@ -1599,18 +1437,27 @@
         </div>
     </div>
 
-    <!-- ADMIN DASHBOARD -->
+    <!-- ============================================================
+         PATCH 3 — ADMIN DASHBOARD
+         CHANGEMENT : Ajout bouton ← retour à gauche du header
+         La structure était : [titre] [✕]
+         Elle devient       : [←] [titre] [✕]
+    ============================================================ -->
     <div id="admin-modal" class="fixed inset-0 z-[80] bg-[var(--bg-deep)] hidden flex flex-col">
         <div class="absolute inset-0 bg-[url('https://res.cloudinary.com/dlmmylat6/image/upload/v1770004112/0453086a-aa8b-480c-9227-6ceb099b3530_z111qu.png')] bg-cover bg-center opacity-[0.03] pointer-events-none"></div>
-        <div class="flex items-center justify-between p-6 border-b border-[var(--border-accent)] header-glass relative z-10">
-            <h2 class="text-xl font-black text-red-500 brand-font tracking-tighter uppercase">⚙️ ADMIN DASHBOARD</h2>
-            <button onclick="closeAdmin()" class="bg-[var(--bg-elevated)] w-10 h-10 rounded-full flex items-center justify-center text-white active:scale-90 border border-[var(--border-accent)]">
+        <div class="flex items-center p-6 border-b border-[var(--border-accent)] header-glass relative z-10 gap-4">
+            <!-- NOUVEAU : bouton retour ← -->
+            <button onclick="closeAdmin()" class="bg-[var(--bg-elevated)] w-10 h-10 rounded-full flex items-center justify-center text-white active:scale-90 border border-[var(--border-accent)] shrink-0">
+                ←
+            </button>
+            <h2 class="text-xl font-black text-red-500 brand-font tracking-tighter uppercase flex-1">⚙️ ADMIN DASHBOARD</h2>
+            <!-- ✕ conservé pour fermer aussi -->
+            <button onclick="closeAdmin()" class="bg-[var(--bg-elevated)] w-10 h-10 rounded-full flex items-center justify-center text-white active:scale-90 border border-[var(--border-accent)] shrink-0">
                 ✕
             </button>
         </div>
         
         <div class="flex-1 overflow-y-auto p-5 space-y-6 no-scrollbar relative z-10">
-            <!-- Stats Today -->
             <div class="grid grid-cols-2 gap-3">
                 <div class="bg-gradient-to-br from-violet-900/30 to-black border border-violet-500/50 p-4 rounded-xl">
                     <div class="text-2xl mb-2">📊</div>
@@ -1618,7 +1465,6 @@
                     <div class="text-2xl font-black text-white">0</div>
                     <div class="text-[9px] text-gray-400">Commandes</div>
                 </div>
-                
                 <div class="bg-gradient-to-br from-green-900/30 to-black border border-green-500/50 p-4 rounded-xl">
                     <div class="text-2xl mb-2">💰</div>
                     <div class="text-[10px] text-gray-500 uppercase">CA du jour</div>
@@ -1627,26 +1473,21 @@
                 </div>
             </div>
 
-            <!-- Quick Actions -->
             <section>
                 <h3 class="text-[9px] font-black text-red-500 tracking-[0.2em] uppercase mb-3">⚡ ACTIONS RAPIDES</h3>
-                
                 <div class="grid grid-cols-2 gap-3">
                     <button class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl text-center active:scale-95 transition-transform">
                         <div class="text-2xl mb-2">📦</div>
                         <div class="text-[10px] font-bold text-white">Gérer Produits</div>
                     </button>
-                    
                     <button class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl text-center active:scale-95 transition-transform">
                         <div class="text-2xl mb-2">🎁</div>
                         <div class="text-[10px] font-bold text-white">Gérer Offres</div>
                     </button>
-                    
                     <button class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl text-center active:scale-95 transition-transform">
                         <div class="text-2xl mb-2">💬</div>
                         <div class="text-[10px] font-bold text-white">Valider Avis</div>
                     </button>
-                    
                     <button class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl text-center active:scale-95 transition-transform">
                         <div class="text-2xl mb-2">👥</div>
                         <div class="text-[10px] font-bold text-white">Gérer Clients</div>
@@ -1654,37 +1495,19 @@
                 </div>
             </section>
 
-            <!-- Products Management -->
             <section>
                 <h3 class="text-[9px] font-black text-violet-500 tracking-[0.2em] uppercase mb-3">📦 GESTION PRODUITS</h3>
-                
-                <div class="space-y-3" id="admin-products-list">
-                    <!-- Sera rempli dynamiquement -->
-                </div>
+                <div class="space-y-3" id="admin-products-list"></div>
             </section>
 
-            <!-- Stats Overview -->
             <section>
                 <h3 class="text-[9px] font-black text-violet-500 tracking-[0.2em] uppercase mb-3">📈 STATISTIQUES</h3>
-                
                 <div class="bg-[var(--bg-card)] border border-[var(--border-accent)] p-4 rounded-xl">
                     <div class="text-xs text-gray-400 space-y-2">
-                        <div class="flex justify-between">
-                            <span>Total commandes :</span>
-                            <span class="text-white font-bold">0</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>CA total :</span>
-                            <span class="text-green-500 font-bold">0€</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>Clients VIP :</span>
-                            <span class="text-violet-500 font-bold">0</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>Taux conversion :</span>
-                            <span class="text-blue-500 font-bold">0%</span>
-                        </div>
+                        <div class="flex justify-between"><span>Total commandes :</span><span class="text-white font-bold">0</span></div>
+                        <div class="flex justify-between"><span>CA total :</span><span class="text-green-500 font-bold">0€</span></div>
+                        <div class="flex justify-between"><span>Clients VIP :</span><span class="text-violet-500 font-bold">0</span></div>
+                        <div class="flex justify-between"><span>Taux conversion :</span><span class="text-blue-500 font-bold">0%</span></div>
                     </div>
                 </div>
             </section>
@@ -1704,22 +1527,13 @@
         </div>
 
         <div class="grid grid-cols-3 p-4 gap-3 bg-[var(--bg-deep)] relative z-10">
-            <button onclick="switchTab('meetup')" id="tab-meetup" class="tab-btn active py-3.5 rounded-xl text-[10px] uppercase tracking-tighter">
-                <span>MEET-UP</span>
-            </button>
-            <button onclick="switchTab('delivery')" id="tab-delivery" class="tab-btn py-3.5 rounded-xl text-[10px] uppercase tracking-tighter">
-                <span>LIVRAISON</span>
-            </button>
-            <button onclick="switchTab('postal')" id="tab-postal" class="tab-btn py-3.5 rounded-xl text-[10px] uppercase tracking-tighter">
-                <span>POSTAL</span>
-            </button>
+            <button onclick="switchTab('meetup')" id="tab-meetup" class="tab-btn active py-3.5 rounded-xl text-[10px] uppercase tracking-tighter"><span>MEET-UP</span></button>
+            <button onclick="switchTab('delivery')" id="tab-delivery" class="tab-btn py-3.5 rounded-xl text-[10px] uppercase tracking-tighter"><span>LIVRAISON</span></button>
+            <button onclick="switchTab('postal')" id="tab-postal" class="tab-btn py-3.5 rounded-xl text-[10px] uppercase tracking-tighter"><span>POSTAL</span></button>
         </div>
 
         <div class="flex-1 overflow-y-auto p-6 no-scrollbar relative z-10">
-            <!-- RECAP avec offre appliquée -->
             <div id="checkout-recap" class="mb-6 p-5 bg-[var(--bg-card)] border border-[var(--border-accent)] rounded-xl text-[11px] text-gray-400 font-mono shadow-inner"></div>
-            
-            <!-- OFFRE DU JOUR APPLIQUÉE -->
             <div id="checkout-offer-applied" class="mb-6"></div>
             
             <form id="checkout-form" class="space-y-6">
@@ -1814,9 +1628,14 @@
         
         const BACKEND_URL = 'https://tuvasrientrouver.up.railway.app';
         const DEBUG_MODE = false;
-        const ADMIN_ID = 7998805372; // TON ID ADMIN
+        const ADMIN_ID = 7998805372;
 
         // ========== CATALOG DATA ==========
+        // PATCH 1 — CATALOG
+        // F73 : src mis à jour vers nouvelle miniature Cloudinary
+        //        + champ thumbnail = même URL (image de prévisualisation carrousel)
+        // CM  : src inchangé (déjà correct), thumbnail ajouté explicitement
+        // JM / WZ / MC : pas de thumbnail → le carrousel affichera la vidéo en fallback
         
         const CATALOG = [
             {
@@ -1827,7 +1646,9 @@
                 tag: "🇲🇦 FILTRÉ PREMIUM",
                 desc: "Filtré 73 microns, provenance Maroc. Extraction à sec sur fleur fraîche, trichomes intacts, couleur sable dorée caractéristique. Deux strains au choix : Lemon Kush (agrumes, citron zesté, finish peppery) & GMO Cookies (notes terreuses, diesel, fuel). Consistance souple, fonte rapide. Réservé aux connaisseurs.",
                 mediaType: 'image',
-                src: "https://res.cloudinary.com/dlmmylat6/image/upload/v1770940493/IMG_2860_uvetqy.jpg",
+                // PATCH 1a — nouvelle URL miniature F73
+                thumbnail: "https://res.cloudinary.com/dpojixeiy/image/upload/v1771467394/IMG_2860_icurze.jpg",
+                src: "https://res.cloudinary.com/dpojixeiy/image/upload/v1771467394/IMG_2860_icurze.jpg",
                 videoSrc: "https://res.cloudinary.com/dlmmylat6/video/upload/v1770940296/ScreenRecording_02-12-2026_20-01-22_1_wstkxb.mov",
                 tiers: [
                     {w:'10G', p:80},
@@ -1851,6 +1672,8 @@
                 tag: "🇺🇸 CALI IMPORT",
                 desc: "CALI USA TOP SHELF - Strain Cereal Milk : Têtes compactes, couleur violette nuancée, Terps Ultra-Savoureux. Effets : Relaxation corporelle profonde & Euphorie, un régal pour les amateurs de Zaza ! Génétique légendaire, cultivation indoor premium.",
                 mediaType: 'image',
+                // PATCH 1b — thumbnail CM explicite (même URL que src)
+                thumbnail: "https://res.cloudinary.com/dpojixeiy/image/upload/v1771124699/FILTRE%CC%81_3x_4_xzewtb.png",
                 src: "https://res.cloudinary.com/dpojixeiy/image/upload/v1771124699/FILTRE%CC%81_3x_4_xzewtb.png",
                 videoSrc: "https://res.cloudinary.com/dpojixeiy/video/upload/v1771200487/ScreenRecording_02-16-2026_00-52-33_1_ybphbf.mov",
                 tiers: [
@@ -1876,6 +1699,7 @@
                 desc: "Sourcing direct Atlas. Texture mousseuse ultra-malléable. Terpènes authentiques, filtration 2026. Propre, gras et puissant.",
                 mediaType: 'video', 
                 src: "https://res.cloudinary.com/dlmmylat6/video/upload/v1769740747/1766600622422513_fblg2j.mov",
+                // pas de thumbnail → fallback vidéo dans le carrousel
                 tiers: [
                     {w:'10G', p:60, oldPrice: 80},
                     {w:'20G', p:100, oldPrice: 130},
@@ -1924,7 +1748,7 @@
             }
         ];
 
-        // ========== AVIS CLIENTS (30 AVIS VARIÉS) ==========
+        // ========== AVIS CLIENTS ==========
         
         const REVIEWS = [
             {stars: 5, text: "Livraison carré max vous assurez les frérots rien a dire", client: "92"},
@@ -1962,81 +1786,16 @@
         // ========== OFFRES DU JOUR ==========
         
         const DAILY_OFFERS = {
-            1: { // Lundi
-                name: "LUNDI DAILY",
-                emoji: "📅",
-                desc: "-10€ sur 100€+ | Livraison offerte | +150€: Bag Cali 3.5G offert | +260€: 3.5G Filtré offert",
-                minAmount: 100,
-                discount: 10,
-                conditions: [
-                    {min: 150, gift: "Bag Cali TopShelf 3.5G (strain au choix)"},
-                    {min: 260, gift: "3.5G Filtré (strain au choix)"}
-                ]
-            },
-            2: { // Mardi
-                name: "MARDI FOLIE",
-                emoji: "⚡",
-                desc: "Livraison offerte dès 100€ | -20% sur +200€ (dès 20H)",
-                minAmount: 100,
-                deliveryFree: true,
-                afterHour: 20,
-                conditions: [
-                    {min: 200, discount: 20, afterHour: 20}
-                ]
-            },
-            3: { // Mercredi
-                name: "MERCREDI CHILL",
-                emoji: "🌊",
-                desc: "3.5G produit au choix offert sur 150€+ (dès 16H) | Livraison offerte",
-                minAmount: 150,
-                afterHour: 16,
-                deliveryFree: true,
-                gift: "3.5G produit au choix"
-            },
-            4: { // Jeudi
-                name: "JEUDI BIENVENUE",
-                emoji: "🆕",
-                desc: "-20% première commande | Bag produit mystère offert",
-                firstOrderOnly: true,
-                discount: 20,
-                gift: "Bag produit mystère"
-            },
-            5: { // Vendredi
-                name: "MINUIT FOLIE",
-                emoji: "🌙",
-                desc: "Flash Sale: 1 produit -30% (00H-02H30, annoncé 30min avant)",
-                afterHour: 0,
-                beforeHour: 2.5,
-                flashSale: true
-            },
-            6: { // Samedi
-                name: "SAMEDI VALLEY",
-                emoji: "🎉",
-                desc: "Pack Weekend: Cereal 10G + Filtré 10G = 175€ (-15€) | Mix & Match: 3 produits, -50% sur le moins cher",
-                pack: {price: 175, items: ["Cereal Milk 10G", "Filtré 73U 10G"], gift: "Grinder"},
-                mixMatch: true
-            },
-            0: { // Dimanche
-                name: "DIMANCHE RELAX",
-                emoji: "🌅",
-                desc: "-15€ sur 120€+ | Double points fidélité | Livraison offerte prioritaire",
-                minAmount: 120,
-                discount: 15,
-                deliveryFree: true,
-                doublePoints: true
-            }
+            1: { name: "LUNDI DAILY", emoji: "📅", desc: "-10€ sur 100€+ | Livraison offerte | +150€: Bag Cali 3.5G offert | +260€: 3.5G Filtré offert", minAmount: 100, discount: 10, conditions: [{min: 150, gift: "Bag Cali TopShelf 3.5G (strain au choix)"},{min: 260, gift: "3.5G Filtré (strain au choix)"}] },
+            2: { name: "MARDI FOLIE", emoji: "⚡", desc: "Livraison offerte dès 100€ | -20% sur +200€ (dès 20H)", minAmount: 100, deliveryFree: true, afterHour: 20, conditions: [{min: 200, discount: 20, afterHour: 20}] },
+            3: { name: "MERCREDI CHILL", emoji: "🌊", desc: "3.5G produit au choix offert sur 150€+ (dès 16H) | Livraison offerte", minAmount: 150, afterHour: 16, deliveryFree: true, gift: "3.5G produit au choix" },
+            4: { name: "JEUDI BIENVENUE", emoji: "🆕", desc: "-20% première commande | Bag produit mystère offert", firstOrderOnly: true, discount: 20, gift: "Bag produit mystère" },
+            5: { name: "MINUIT FOLIE", emoji: "🌙", desc: "Flash Sale: 1 produit -30% (00H-02H30, annoncé 30min avant)", afterHour: 0, beforeHour: 2.5, flashSale: true },
+            6: { name: "SAMEDI VALLEY", emoji: "🎉", desc: "Pack Weekend: Cereal 10G + Filtré 10G = 175€ (-15€) | Mix & Match: 3 produits, -50% sur le moins cher", pack: {price: 175, items: ["Cereal Milk 10G", "Filtré 73U 10G"], gift: "Grinder"}, mixMatch: true },
+            0: { name: "DIMANCHE RELAX", emoji: "🌅", desc: "-15€ sur 120€+ | Double points fidélité | Livraison offerte prioritaire", minAmount: 120, discount: 15, deliveryFree: true, doublePoints: true }
         };
 
-        // Happy Hour (tous les jours 14H-16H)
-        const HAPPY_HOUR = {
-            name: "HAPPY HOUR",
-            emoji: "☀️",
-            startHour: 14,
-            endHour: 16,
-            minAmount: 100,
-            discount: 10,
-            deliveryFree: true
-        };
+        const HAPPY_HOUR = { name: "HAPPY HOUR", emoji: "☀️", startHour: 14, endHour: 16, minAmount: 100, discount: 10, deliveryFree: true };
 
         // ========== STATE ==========
         
@@ -2051,7 +1810,7 @@
         let currentOffer = null;
         let autoSlideInterval = null;
 
-        // ========== SECURITY - TELEGRAM ONLY ==========
+        // ========== SECURITY ==========
         
         function blockAccess(reason, details = '') {
             const screen = document.getElementById('block-screen');
@@ -2059,22 +1818,16 @@
             document.getElementById('block-details').textContent = details;
             screen.style.display = 'flex';
             screen.classList.remove('hidden');
-            
-            setTimeout(() => {
-                document.body.innerHTML = screen.outerHTML;
-            }, 100);
+            setTimeout(() => { document.body.innerHTML = screen.outerHTML; }, 100);
         }
 
         async function initSecurity() {
             'use strict';
-            
             const tg = window.Telegram?.WebApp;
-            
             if (!tg || !tg.initData) {
                 blockAccess('⛔ ACCÈS REFUSÉ', 'Cette application fonctionne uniquement via Telegram');
                 return false;
             }
-
             try {
                 tg.ready();
                 tg.expand();
@@ -2083,47 +1836,30 @@
                 
                 const userId = tg.initDataUnsafe?.user?.id;
                 
-                if (userId === ADMIN_ID) {
+                // PATCH 4 — vérification admin renforcée : comparaison stricte + type check
+                if (userId && typeof userId === 'number' && userId === ADMIN_ID) {
                     isAdmin = true;
-                    document.getElementById('admin-btn').style.display = 'flex';
+                    const adminBtn = document.getElementById('admin-btn');
+                    if (adminBtn) adminBtn.style.display = 'flex';
                 }
                 
                 initUserProfile(tg.initDataUnsafe?.user);
-                
                 return true;
             } catch (err) {
-                if (!DEBUG_MODE) {
-                    blockAccess('Erreur système', err.message);
-                    return false;
-                }
+                if (!DEBUG_MODE) { blockAccess('Erreur système', err.message); return false; }
                 return true;
             }
         }
 
-        document.getElementById('main-feed')?.style?.setProperty && 
-            document.getElementById('main-feed').style.setProperty('visibility', 'hidden');
-
-        initSecurity().then(authorized => {
-            if (authorized) {
-                document.getElementById('main-feed')?.style?.setProperty && 
-                    document.getElementById('main-feed').style.setProperty('visibility', 'visible');
-            }
-        }).catch(err => {
-            if (DEBUG_MODE) {
-                console.error('Security error:', err);
-            } else {
-                blockAccess('Erreur système', err.message);
-            }
+        initSecurity().catch(err => {
+            if (DEBUG_MODE) { console.error('Security error:', err); }
+            else { blockAccess('Erreur système', err.message); }
         });
 
-        // Protection DevTools
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.addEventListener('keydown', e => {
-            if (e.key === 'F12' || 
-                (e.ctrlKey && e.shiftKey && e.key === 'I') ||
-                (e.ctrlKey && e.key === 'u')) {
-                e.preventDefault();
-                return false;
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key === 'u')) {
+                e.preventDefault(); return false;
             }
         });
         document.onselectstart = () => false;
@@ -2132,9 +1868,7 @@
         
         function initUserProfile(user) {
             if (!user) return;
-            
             const tg = window.Telegram?.WebApp;
-            
             if (tg?.CloudStorage) {
                 tg.CloudStorage.getItems(['user_orders', 'user_grade'], (err, data) => {
                     if (!err && data) {
@@ -2150,44 +1884,21 @@
 
         function updateUserProfile(user) {
             if (!user) return;
-            
             const avatar = document.getElementById('user-avatar');
             const name = document.getElementById('user-name');
             const gradeEl = document.getElementById('user-grade');
             const ordersEl = document.getElementById('user-orders');
             const progressBar = document.getElementById('progress-bar');
             const progressText = document.getElementById('progress-text');
-            
-            if (avatar) {
-                const initials = (user.first_name?.[0] || '?') + (user.last_name?.[0] || '');
-                avatar.textContent = initials;
-            }
-            
-            if (name) {
-                name.textContent = user.first_name || 'Utilisateur';
-            }
-            
-            let grade = 'TOURISTE';
-            let gradeEmoji = '🥉';
-            if (userOrders >= 10) {
-                grade = 'VIP BOSS';
-                gradeEmoji = '🥇';
-            } else if (userOrders >= 3) {
-                grade = 'INITIÉ';
-                gradeEmoji = '🥈';
-            }
-            
-            if (gradeEl) {
-                gradeEl.innerHTML = `<span class="text-2xl">${gradeEmoji}</span><span class="text-sm font-bold text-violet-500">${grade}</span>`;
-            }
-            
-            if (ordersEl) {
-                ordersEl.textContent = userOrders;
-            }
-            
+            if (avatar) { const initials = (user.first_name?.[0] || '?') + (user.last_name?.[0] || ''); avatar.textContent = initials; }
+            if (name) { name.textContent = user.first_name || 'Utilisateur'; }
+            let grade = 'TOURISTE', gradeEmoji = '🥉';
+            if (userOrders >= 10) { grade = 'VIP BOSS'; gradeEmoji = '🥇'; }
+            else if (userOrders >= 3) { grade = 'INITIÉ'; gradeEmoji = '🥈'; }
+            if (gradeEl) gradeEl.innerHTML = `<span class="text-2xl">${gradeEmoji}</span><span class="text-sm font-bold text-violet-500">${grade}</span>`;
+            if (ordersEl) ordersEl.textContent = userOrders;
             if (progressBar && progressText) {
-                const progress = Math.min((userOrders / 10) * 100, 100);
-                progressBar.style.width = progress + '%';
+                progressBar.style.width = Math.min((userOrders / 10) * 100, 100) + '%';
                 progressText.textContent = `${userOrders}/10 commandes vers VIP BOSS`;
             }
         }
@@ -2197,11 +1908,9 @@
             const tg = window.Telegram?.WebApp;
             if (tg?.CloudStorage) {
                 tg.CloudStorage.setItem('user_orders', userOrders.toString());
-                
                 let newGrade = 'TOURISTE';
                 if (userOrders >= 10) newGrade = 'VIP BOSS';
                 else if (userOrders >= 3) newGrade = 'INITIÉ';
-                
                 if (newGrade !== userGrade) {
                     userGrade = newGrade;
                     tg.CloudStorage.setItem('user_grade', userGrade);
@@ -2216,141 +1925,76 @@
             const now = new Date();
             const day = now.getDay();
             const hour = now.getHours() + now.getMinutes() / 60;
-            
-            if (hour >= HAPPY_HOUR.startHour && hour < HAPPY_HOUR.endHour) {
-                return {
-                    ...HAPPY_HOUR,
-                    isHappyHour: true
-                };
-            }
-            
+            if (hour >= HAPPY_HOUR.startHour && hour < HAPPY_HOUR.endHour) return { ...HAPPY_HOUR, isHappyHour: true };
             const offer = DAILY_OFFERS[day];
             if (!offer) return null;
-            
-            if (offer.afterHour && hour < offer.afterHour) {
-                return null;
-            }
-            
-            if (offer.beforeHour && hour >= offer.beforeHour) {
-                return null;
-            }
-            
+            if (offer.afterHour && hour < offer.afterHour) return null;
+            if (offer.beforeHour && hour >= offer.beforeHour) return null;
             return offer;
         }
 
         function updateMarqueeOffer() {
             currentOffer = getDailyOffer();
-            
             if (!currentOffer) return;
-            
             const offerText = `${currentOffer.emoji} ${currentOffer.name.toUpperCase()} : ${currentOffer.desc}`;
-            
-            const marquee1 = document.getElementById('daily-offer-marquee');
-            const marquee2 = document.getElementById('daily-offer-marquee-2');
-            
-            if (marquee1) marquee1.textContent = offerText;
-            if (marquee2) marquee2.textContent = offerText;
+            const m1 = document.getElementById('daily-offer-marquee');
+            const m2 = document.getElementById('daily-offer-marquee-2');
+            if (m1) m1.textContent = offerText;
+            if (m2) m2.textContent = offerText;
         }
 
         function displayDailyOfferBanner() {
             const banner = document.getElementById('daily-offer-banner');
             if (!banner) return;
-            
             currentOffer = getDailyOffer();
-            
-            if (!currentOffer) {
-                banner.innerHTML = '';
-                return;
-            }
-            
+            if (!currentOffer) { banner.innerHTML = ''; return; }
             const now = new Date();
-            const hour = now.getHours();
-            const minute = now.getMinutes();
-            
             let countdown = '';
             if (currentOffer.isHappyHour) {
-                const endTime = new Date();
-                endTime.setHours(HAPPY_HOUR.endHour, 0, 0);
+                const endTime = new Date(); endTime.setHours(HAPPY_HOUR.endHour, 0, 0);
                 const remaining = endTime - now;
                 const hours = Math.floor(remaining / (1000 * 60 * 60));
                 const mins = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
-                countdown = `<div class="countdown-timer mt-2">
-                    <span>⏰ SE TERMINE DANS :</span>
-                    <span class="countdown-number">${hours.toString().padStart(2, '0')}</span>
-                    <span>:</span>
-                    <span class="countdown-number">${mins.toString().padStart(2, '0')}</span>
-                </div>`;
+                countdown = `<div class="countdown-timer mt-2"><span>⏰ SE TERMINE DANS :</span><span class="countdown-number">${String(hours).padStart(2,'0')}</span><span>:</span><span class="countdown-number">${String(mins).padStart(2,'0')}</span></div>`;
             }
-            
-            banner.innerHTML = `
-                <div class="offer-banner">
-                    <div class="flex items-center gap-3 mb-2">
-                        <span class="text-3xl">${currentOffer.emoji}</span>
-                        <div class="flex-1">
-                            <h3 class="text-white font-black text-sm uppercase">${currentOffer.name} ACTIF !</h3>
-                            <p class="text-[10px] text-gray-300 mt-1">${currentOffer.desc}</p>
-                        </div>
-                    </div>
-                    ${countdown}
-                </div>
-            `;
+            banner.innerHTML = `<div class="offer-banner"><div class="flex items-center gap-3 mb-2"><span class="text-3xl">${currentOffer.emoji}</span><div class="flex-1"><h3 class="text-white font-black text-sm uppercase">${currentOffer.name} ACTIF !</h3><p class="text-[10px] text-gray-300 mt-1">${currentOffer.desc}</p></div></div>${countdown}</div>`;
         }
 
         function calculateOfferDiscount(subtotal) {
             if (!currentOffer) return {discount: 0, description: ''};
-            
-            let discount = 0;
-            let description = '';
-            
+            let discount = 0, description = '';
             if (currentOffer.isHappyHour) {
-                if (subtotal >= HAPPY_HOUR.minAmount) {
-                    discount = HAPPY_HOUR.discount;
-                    description = `Happy Hour: -${discount}€`;
-                }
+                if (subtotal >= HAPPY_HOUR.minAmount) { discount = HAPPY_HOUR.discount; description = `Happy Hour: -${discount}€`; }
             } else if (currentOffer.discount) {
                 if (currentOffer.minAmount && subtotal >= currentOffer.minAmount) {
-                    if (currentOffer.discount <= 100) {
-                        discount = Math.round(subtotal * (currentOffer.discount / 100));
-                        description = `${currentOffer.name}: -${currentOffer.discount}%`;
-                    } else {
-                        discount = currentOffer.discount;
-                        description = `${currentOffer.name}: -${discount}€`;
-                    }
+                    if (currentOffer.discount <= 100) { discount = Math.round(subtotal * (currentOffer.discount / 100)); description = `${currentOffer.name}: -${currentOffer.discount}%`; }
+                    else { discount = currentOffer.discount; description = `${currentOffer.name}: -${discount}€`; }
                 }
             }
-            
             if (currentOffer.conditions) {
                 for (const cond of currentOffer.conditions) {
                     if (cond.min && subtotal >= cond.min) {
-                        if (cond.discount) {
-                            const condDiscount = Math.round(subtotal * (cond.discount / 100));
-                            if (condDiscount > discount) {
-                                discount = condDiscount;
-                                description = `${currentOffer.name}: -${cond.discount}%`;
-                            }
-                        }
-                        if (cond.gift) {
-                            description += ` + ${cond.gift}`;
-                        }
+                        if (cond.discount) { const cd = Math.round(subtotal * (cond.discount / 100)); if (cd > discount) { discount = cd; description = `${currentOffer.name}: -${cond.discount}%`; } }
+                        if (cond.gift) description += ` + ${cond.gift}`;
                     }
                 }
             }
-            
             if (currentOffer.gift && (!currentOffer.minAmount || subtotal >= currentOffer.minAmount)) {
                 description += (description ? ' + ' : '') + currentOffer.gift;
             }
-            
             return {discount, description};
         }
 
         // ========== CAROUSEL ==========
+        // PATCH 2 — renderCarousel
+        // Avant : priorité TOUJOURS à videoSrc → toutes les vidéos s'autoplay sur la home
+        // Après : priorité à thumbnail (image statique) → fallback vidéo si pas de thumbnail
+        //         Les vidéos restent accessibles dans le modal openProduct()
         
         function renderCarousel() {
             const track = document.getElementById('carousel-track');
             const indicators = document.getElementById('carousel-indicators');
-            
             if (!track || !indicators) return;
-            
             track.innerHTML = '';
             indicators.innerHTML = '';
             
@@ -2358,33 +2002,26 @@
                 const slide = document.createElement('div');
                 slide.className = 'carousel-slide';
                 
-                const media = item.videoSrc ? 
-                    `<video src="${item.videoSrc}" autoplay loop muted playsinline webkit-playsinline></video>` :
-                    `<img src="${item.src}" alt="${item.name}">`;
+                // PATCH 2 : détermine le média à afficher sur la home
+                // Si thumbnail ou image statique → <img> (chargement instantané, 0 bande passante vidéo)
+                // Sinon → <video> muted autoplay (fallback pour JM/WZ/MC sans thumbnail)
+                const staticImage = item.thumbnail || (item.mediaType === 'image' ? item.src : null);
+                const carouselMedia = staticImage
+                    ? `<img src="${staticImage}" alt="${item.name}" loading="lazy">`
+                    : `<video src="${item.src}" autoplay loop muted playsinline webkit-playsinline></video>`;
                 
                 let badges = '';
-                if (item.premium) {
-                    badges += '<span class="badge-premium" style="background:linear-gradient(135deg,#8b5cf6,#a78bfa);animation:badgePulse 2s ease-in-out infinite;">⭐ PREMIUM</span>';
-                }
-                if (item.bestseller) {
-                    badges += '<span class="badge-premium badge-bestseller mt-2">🔥 BEST SELLER</span>';
-                }
-                if (item.stock === 'low') {
-                    badges += '<span class="badge-premium badge-stock mt-2">⚠️ STOCK LIMITÉ</span>';
-                }
+                if (item.premium) badges += '<span class="badge-premium" style="background:linear-gradient(135deg,#8b5cf6,#a78bfa);animation:badgePulse 2s ease-in-out infinite;">⭐ PREMIUM</span>';
+                if (item.bestseller) badges += '<span class="badge-premium badge-bestseller mt-2">🔥 BEST SELLER</span>';
+                if (item.stock === 'low') badges += '<span class="badge-premium badge-stock mt-2">⚠️ STOCK LIMITÉ</span>';
                 
                 let offerBadge = '';
-                if (currentOffer && !currentOffer.flashSale) {
-                    offerBadge = `<span class="badge-premium badge-offer-active mt-2">${currentOffer.emoji} OFFRE ACTIVE</span>`;
-                }
+                if (currentOffer && !currentOffer.flashSale) offerBadge = `<span class="badge-premium badge-offer-active mt-2">${currentOffer.emoji} OFFRE ACTIVE</span>`;
                 
                 slide.innerHTML = `
-                    ${media}
+                    ${carouselMedia}
                     <div class="carousel-gradient"></div>
-                    <div class="absolute top-6 right-6 flex flex-col gap-2 z-20">
-                        ${badges}
-                        ${offerBadge}
-                    </div>
+                    <div class="absolute top-6 right-6 flex flex-col gap-2 z-20">${badges}${offerBadge}</div>
                     <div class="carousel-content">
                         <span class="badge-premium inline-block mb-3">${item.tag}</span>
                         <h2 class="text-4xl font-black text-white uppercase brand-font tracking-tighter leading-none mb-3">${item.name}</h2>
@@ -2398,7 +2035,6 @@
                         </button>
                     </div>
                 `;
-                
                 track.appendChild(slide);
                 
                 const indicator = document.createElement('div');
@@ -2414,33 +2050,17 @@
             currentSlide = index;
             const track = document.getElementById('carousel-track');
             if (!track) return;
-            
             track.style.transform = `translateX(-${currentSlide * 100}%)`;
-            
-            document.querySelectorAll('.carousel-indicator').forEach((ind, i) => {
-                ind.classList.toggle('active', i === currentSlide);
-            });
-            
+            document.querySelectorAll('.carousel-indicator').forEach((ind, i) => ind.classList.toggle('active', i === currentSlide));
             triggerHaptic('light');
         }
 
-        function nextSlide() {
-            currentSlide = (currentSlide + 1) % CATALOG.length;
-            goToSlide(currentSlide);
-        }
-
-        function prevSlide() {
-            currentSlide = (currentSlide - 1 + CATALOG.length) % CATALOG.length;
-            goToSlide(currentSlide);
-        }
+        function nextSlide() { currentSlide = (currentSlide + 1) % CATALOG.length; goToSlide(currentSlide); }
+        function prevSlide() { currentSlide = (currentSlide - 1 + CATALOG.length) % CATALOG.length; goToSlide(currentSlide); }
 
         function startAutoSlide() {
-            if (autoSlideInterval) {
-                clearInterval(autoSlideInterval);
-            }
-            autoSlideInterval = setInterval(() => {
-                nextSlide();
-            }, 5000);
+            if (autoSlideInterval) clearInterval(autoSlideInterval);
+            autoSlideInterval = setInterval(() => nextSlide(), 5000);
         }
 
         // ========== REVIEWS CAROUSEL ==========
@@ -2448,34 +2068,17 @@
         function renderReviews() {
             const track = document.getElementById('reviews-track');
             if (!track) return;
-            
             const reviewsHTML = REVIEWS.map(r => {
                 const stars = '🔥'.repeat(r.stars);
-                return `
-                    <div class="review-card">
-                        <div class="text-sm mb-2">${stars}</div>
-                        <p class="text-xs text-gray-300 mb-3 italic">"${r.text}"</p>
-                        <div class="flex items-center justify-between">
-                            <span class="text-[9px] text-gray-500">Client ${r.client}</span>
-                            <span class="text-[9px] text-green-500">✓ Validé</span>
-                        </div>
-                    </div>
-                `;
+                return `<div class="review-card"><div class="text-sm mb-2">${stars}</div><p class="text-xs text-gray-300 mb-3 italic">"${r.text}"</p><div class="flex items-center justify-between"><span class="text-[9px] text-gray-500">Client ${r.client}</span><span class="text-[9px] text-green-500">✓ Validé</span></div></div>`;
             }).join('');
-            
             track.innerHTML = reviewsHTML + reviewsHTML;
         }
 
         // ========== ANALYTICS ==========
-        
-        function trackEvent(eventName, eventParams = {}) {
-            if (typeof gtag !== 'undefined') {
-                gtag('event', eventName, eventParams);
-            }
-        }
+        function trackEvent(eventName, eventParams = {}) { if (typeof gtag !== 'undefined') gtag('event', eventName, eventParams); }
 
         // ========== HAPTIC ==========
-        
         function triggerHaptic(type = 'light') {
             const tg = window.Telegram?.WebApp;
             if (tg?.HapticFeedback) {
@@ -2488,66 +2091,44 @@
         }
 
         // ========== TOAST ==========
-        
         function showToast(type, title, message) {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
-            
-            const icons = {
-                success: '✓',
-                error: '✕',
-                warning: '⚠'
-            };
-            
-            toast.innerHTML = `
-                <div class="toast-icon">${icons[type] || '●'}</div>
-                <div class="toast-content">
-                    <div class="toast-title">${title}</div>
-                    <div class="toast-message">${message}</div>
-                </div>
-            `;
-            
+            const icons = {success: '✓', error: '✕', warning: '⚠'};
+            toast.innerHTML = `<div class="toast-icon">${icons[type] || '●'}</div><div class="toast-content"><div class="toast-title">${title}</div><div class="toast-message">${message}</div></div>`;
             container.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.style.animation = 'toastSlideOut 0.3s ease-out forwards';
-                setTimeout(() => toast.remove(), 300);
-            }, 4000);
+            setTimeout(() => { toast.style.animation = 'toastSlideOut 0.3s ease-out forwards'; setTimeout(() => toast.remove(), 300); }, 4000);
         }
 
         // ========== CONFETTI ==========
-        
         function triggerConfetti() {
             const colors = ['#8b5cf6', '#a78bfa', '#c4b5fd', '#FFF'];
             for (let i = 0; i < 50; i++) {
                 setTimeout(() => {
-                    const confetti = document.createElement('div');
-                    confetti.className = 'confetti';
-                    confetti.style.left = Math.random() * 100 + '%';
-                    confetti.style.top = '-10px';
-                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-                    confetti.style.animation = `confetti-fall ${2 + Math.random() * 2}s linear forwards`;
-                    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
-                    document.body.appendChild(confetti);
-                    setTimeout(() => confetti.remove(), 4000);
+                    const c = document.createElement('div');
+                    c.className = 'confetti';
+                    c.style.cssText = `left:${Math.random()*100}%;top:-10px;background:${colors[Math.floor(Math.random()*colors.length)]};animation:confetti-fall ${2+Math.random()*2}s linear forwards;transform:rotate(${Math.random()*360}deg)`;
+                    document.body.appendChild(c);
+                    setTimeout(() => c.remove(), 4000);
                 }, i * 30);
             }
         }
 
         // ========== STATUS ==========
+        // PATCH 6 — fix logique isShopOpen
+        // Avant : (currentTime >= 10.5 && currentTime <= 24) → toujours vrai (max = ~23.98)
+        // Après : (currentTime >= 10.5) || (currentTime <= 2.5) — ouvert de 10h30 à 2h30 minuit
         
         const updateStatus = () => {
             const now = new Date();
-            const hour = now.getHours();
-            const minute = now.getMinutes();
-            const currentTime = hour + minute / 60;
+            const currentTime = now.getHours() + now.getMinutes() / 60;
             
-            isShopOpen = (currentTime >= 10.5 && currentTime <= 24) || (currentTime >= 0 && currentTime <= 2.5);
+            // Ouvert : 10h30-minuit OU 0h00-2h30
+            isShopOpen = currentTime >= 10.5 || currentTime <= 2.5;
             
             const dot = document.getElementById('status-dot');
             const text = document.getElementById('status-text');
-            
             if (dot && text) {
                 if (isShopOpen) {
                     dot.className = "status-dot online";
@@ -2572,73 +2153,51 @@
 
         function generateSocialProof() {
             if (!isShopOpen) return;
-            
             const msg = SOCIAL_PROOF_MESSAGES[Math.floor(Math.random() * SOCIAL_PROOF_MESSAGES.length)];
             const minAgo = Math.floor(Math.random() * 30) + 1;
-            
             const ticker = document.getElementById('social-proof-ticker');
             const item = document.createElement('div');
             item.className = 'social-proof-item';
-            
-            item.innerHTML = `
-                <div class="flex items-center gap-3">
-                    <span class="social-proof-icon">${msg.icon}</span>
-                    <div class="flex-1">
-                        <p class="text-white text-[10px] font-bold">${msg.text}</p>
-                        <p class="text-gray-500 text-[9px] font-mono">il y a ${minAgo}min • ${msg.location}</p>
-                    </div>
-                </div>
-            `;
-            
+            item.innerHTML = `<div class="flex items-center gap-3"><span class="social-proof-icon">${msg.icon}</span><div class="flex-1"><p class="text-white text-[10px] font-bold">${msg.text}</p><p class="text-gray-500 text-[9px] font-mono">il y a ${minAgo}min • ${msg.location}</p></div></div>`;
             ticker.appendChild(item);
-            
-            setTimeout(() => {
-                item.remove();
-            }, 5000);
+            setTimeout(() => item.remove(), 5000);
         }
 
         function startSocialProofEngine() {
-            setInterval(() => {
-                if (isShopOpen && Math.random() > 0.6) {
-                    generateSocialProof();
-                }
-            }, 15000 + Math.random() * 15000);
+            // Délai recalculé à chaque tick pour varier l'intervalle correctement
+            function scheduleNext() {
+                const delay = 15000 + Math.random() * 15000;
+                setTimeout(() => {
+                    if (isShopOpen && Math.random() > 0.6) generateSocialProof();
+                    scheduleNext();
+                }, delay);
+            }
+            scheduleNext();
         }
 
         // ========== INIT ==========
         
         window.onload = () => {
             const splashTimeout = setTimeout(() => {
-                console.warn('⚠️ Fermeture forcée du splash (timeout 3s)');
                 const splash = document.getElementById('splash-screen');
-                if (splash) {
-                    splash.style.opacity = '0';
-                    setTimeout(() => splash.remove(), 800);
-                }
+                if (splash) { splash.style.opacity = '0'; setTimeout(() => splash.remove(), 800); }
             }, 3000);
             
             setTimeout(() => {
                 clearTimeout(splashTimeout);
                 const splash = document.getElementById('splash-screen');
-                if (splash) {
-                    splash.style.opacity = '0';
-                    setTimeout(() => splash.remove(), 800);
-                }
+                if (splash) { splash.style.opacity = '0'; setTimeout(() => splash.remove(), 800); }
             }, 1800);
             
             updateStatus();
             setInterval(updateStatus, 60000);
-            
             updateMarqueeOffer();
             setInterval(updateMarqueeOffer, 60000);
-            
             displayDailyOfferBanner();
             setInterval(displayDailyOfferBanner, 60000);
-            
             renderCarousel();
             renderReviews();
             startSocialProofEngine();
-            
             trackEvent('app_loaded');
         };
 
@@ -2647,72 +2206,48 @@
         function resetHome() {
             window.scrollTo({top:0, behavior:'smooth'});
             closeAllModals();
-            
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.nav-btn')[0].classList.add('active');
-            
             trackEvent('navigate_home');
         }
 
         function closeAllModals() {
-            document.getElementById('product-modal')?.classList.add('hidden');
-            document.getElementById('profile-modal')?.classList.add('hidden');
-            document.getElementById('infos-modal')?.classList.add('hidden');
-            document.getElementById('offers-modal')?.classList.add('hidden');
-            document.getElementById('checkout-modal')?.classList.add('hidden');
-            document.getElementById('admin-modal')?.classList.add('hidden');
+            ['product-modal','profile-modal','infos-modal','offers-modal','checkout-modal','admin-modal'].forEach(id => {
+                document.getElementById(id)?.classList.add('hidden');
+            });
         }
 
-        function openProfile() {
-            closeAllModals();
-            document.getElementById('profile-modal')?.classList.remove('hidden');
-            triggerHaptic('light');
-            trackEvent('view_profile');
-        }
-
-        function closeProfile() {
-            document.getElementById('profile-modal')?.classList.add('hidden');
-            triggerHaptic('light');
-        }
+        function openProfile() { closeAllModals(); document.getElementById('profile-modal')?.classList.remove('hidden'); triggerHaptic('light'); trackEvent('view_profile'); }
+        function closeProfile() { document.getElementById('profile-modal')?.classList.add('hidden'); triggerHaptic('light'); }
 
         function openOffers() { 
-            closeAllModals();
-            document.getElementById('offers-modal')?.classList.remove('hidden');
+            closeAllModals(); 
+            document.getElementById('offers-modal')?.classList.remove('hidden'); 
             triggerHaptic('light');
-            
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.nav-btn')[1]?.classList.add('active');
-            
             trackEvent('view_offers');
         }
-        
-        function closeOffers() { 
-            document.getElementById('offers-modal')?.classList.add('hidden');
-            triggerHaptic('light');
-        }
+        function closeOffers() { document.getElementById('offers-modal')?.classList.add('hidden'); triggerHaptic('light'); }
 
         function openInfos() { 
-            closeAllModals();
-            document.getElementById('infos-modal')?.classList.remove('hidden');
+            closeAllModals(); 
+            document.getElementById('infos-modal')?.classList.remove('hidden'); 
             triggerHaptic('light');
-            
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.nav-btn')[2]?.classList.add('active');
-            
             trackEvent('view_info');
         }
-        
-        function closeInfos() { 
-            document.getElementById('infos-modal')?.classList.add('hidden');
-            triggerHaptic('light');
-        }
+        function closeInfos() { document.getElementById('infos-modal')?.classList.add('hidden'); triggerHaptic('light'); }
 
+        // PATCH 3 + 4 — openAdmin avec double vérification isAdmin
         function openAdmin() {
+            // Double check côté JS : isAdmin doit être true ET avoir été positionné par initSecurity()
             if (!isAdmin) {
                 showToast('error', 'ACCÈS REFUSÉ', 'Vous n\'avez pas les droits admin');
+                triggerHaptic('error');
                 return;
             }
-            
             closeAllModals();
             document.getElementById('admin-modal')?.classList.remove('hidden');
             triggerHaptic('medium');
@@ -2725,11 +2260,11 @@
         }
 
         // ========== PRODUCT MODAL ==========
+        // Note : les vidéos restent accessibles ici (videoSrc utilisé en priorité dans le modal)
         
         function openProduct(id) {
             const p = CATALOG.find(x => x.id === id);
             if (!p) return;
-            
             trackEvent('product_view', { product_id: id, product_name: p.name });
             
             document.getElementById('modal-title').innerText = p.name;
@@ -2737,23 +2272,14 @@
             document.getElementById('modal-desc').innerText = p.desc;
             
             const customBtn = document.getElementById('custom-req-btn');
-            if (customBtn) {
-                p.hasCustom ? customBtn.classList.remove('hidden') : customBtn.classList.add('hidden');
-            }
+            if (customBtn) p.hasCustom ? customBtn.classList.remove('hidden') : customBtn.classList.add('hidden');
 
             const strainWrap = document.getElementById('strain-selector-wrap');
             const strainSel = document.getElementById('strain-selector');
             if (p.multiStrain && p.strains && strainWrap && strainSel) {
                 strainWrap.classList.remove('hidden');
-                if (!selectedStrains[id]) {
-                    selectedStrains[id] = p.defaultStrain || p.strains[0];
-                }
-                strainSel.innerHTML = p.strains.map(s => `
-                    <button onclick="selectStrain('${id}', '${s}', this)" 
-                            class="strain-btn ${selectedStrains[id] === s ? 'active' : ''}">
-                        ${s}
-                    </button>
-                `).join('');
+                if (!selectedStrains[id]) selectedStrains[id] = p.defaultStrain || p.strains[0];
+                strainSel.innerHTML = p.strains.map(s => `<button onclick="selectStrain('${id}', '${s}', this)" class="strain-btn ${selectedStrains[id] === s ? 'active' : ''}">${s}</button>`).join('');
             } else if (strainWrap) {
                 strainWrap.classList.add('hidden');
             }
@@ -2761,19 +2287,16 @@
             const v = document.getElementById('modal-video');
             const i = document.getElementById('modal-image');
             
+            // Dans le modal : priorité à la vidéo (expérience produit complète)
             const videoUrl = p.videoSrc || (p.mediaType === 'video' ? p.src : null);
-            const imageUrl = p.mediaType === 'image' ? p.src : null;
+            const imageUrl = p.src && p.mediaType === 'image' ? p.src : null;
             
             if (videoUrl && v && i) {
                 i.classList.add('hidden');
                 v.classList.remove('hidden');
                 v.src = videoUrl;
                 v.play().catch(() => {
-                    if (imageUrl) {
-                        v.classList.add('hidden');
-                        i.classList.remove('hidden');
-                        i.src = imageUrl;
-                    }
+                    if (imageUrl) { v.classList.add('hidden'); i.classList.remove('hidden'); i.src = imageUrl; }
                 });
             } else if (imageUrl && i && v) {
                 v.classList.add('hidden');
@@ -2784,45 +2307,26 @@
             const badgesEl = document.getElementById('modal-badges');
             if (badgesEl) {
                 let badgesHTML = '';
-                if (p.premium) {
-                    badgesHTML += '<span class="badge-premium" style="background:linear-gradient(135deg,#8b5cf6,#a78bfa);animation:badgePulse 2s ease-in-out infinite;">⭐ PREMIUM</span>';
-                }
-                if (p.bestseller) {
-                    badgesHTML += '<span class="badge-premium badge-bestseller mt-2">🔥 BEST SELLER</span>';
-                }
-                if (p.stock === 'low') {
-                    badgesHTML += '<span class="badge-premium badge-stock mt-2">⚠️ STOCK LIMITÉ</span>';
-                }
-                if (p.multiStrain) {
-                    badgesHTML += `<span class="badge-premium mt-2" style="background:rgba(234,179,8,0.9);">🔄 ${p.strains.length} STRAINS DISPO</span>`;
-                }
+                if (p.premium) badgesHTML += '<span class="badge-premium" style="background:linear-gradient(135deg,#8b5cf6,#a78bfa);animation:badgePulse 2s ease-in-out infinite;">⭐ PREMIUM</span>';
+                if (p.bestseller) badgesHTML += '<span class="badge-premium badge-bestseller mt-2">🔥 BEST SELLER</span>';
+                if (p.stock === 'low') badgesHTML += '<span class="badge-premium badge-stock mt-2">⚠️ STOCK LIMITÉ</span>';
+                if (p.multiStrain) badgesHTML += `<span class="badge-premium mt-2" style="background:rgba(234,179,8,0.9);">🔄 ${p.strains.length} STRAINS DISPO</span>`;
                 badgesEl.innerHTML = badgesHTML;
             }
 
             const activityEl = document.getElementById('modal-activity');
             if (activityEl && isShopOpen) {
                 const viewers = Math.floor(Math.random() * 15) + 5;
-                activityEl.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <div class="activity-badge">
-                            <div class="activity-dot"></div>
-                            ${viewers} personnes consultent
-                        </div>
-                    </div>
-                `;
+                activityEl.innerHTML = `<div class="flex items-center gap-3"><div class="activity-badge"><div class="activity-dot"></div>${viewers} personnes consultent</div></div>`;
             }
 
             renderTiers(p);
             
             const modal = document.getElementById('product-modal');
             const panel = document.getElementById('modal-panel');
-            
             if (modal && panel) {
                 modal.classList.remove('hidden');
-                setTimeout(() => {
-                    panel.classList.remove('translate-y-full');
-                    triggerHaptic('light');
-                }, 50);
+                setTimeout(() => { panel.classList.remove('translate-y-full'); triggerHaptic('light'); }, 50);
             }
             
             setupSwipeToClose();
@@ -2831,22 +2335,15 @@
         function renderTiers(p) {
             const tiersEl = document.getElementById('tiers-list');
             if (!tiersEl) return;
-            
             tiersEl.innerHTML = p.tiers.map((t, index) => {
                 const isPopular = index === 1 || index === 2;
                 const savings = t.oldPrice ? t.oldPrice - t.p : 0;
-                
-                return `
-                <button onclick="addToCart('${p.id}', '${t.w}', ${t.p})" 
-                        class="tier-card ${isPopular ? 'popular' : ''} p-4 rounded-xl flex flex-col items-center transition-all active:scale-95 group">
+                return `<button onclick="addToCart('${p.id}', '${t.w}', ${t.p})" class="tier-card ${isPopular ? 'popular' : ''} p-4 rounded-xl flex flex-col items-center transition-all active:scale-95 group">
                     <span class="text-white font-black text-sm group-hover:text-violet-500 transition-colors">${t.w}</span>
-                    <div class="price-display mt-2">
-                        ${t.oldPrice ? `<span class="price-old">${t.oldPrice}€</span>` : ''}
-                        <span class="price-current">${t.p}€</span>
-                    </div>
+                    <div class="price-display mt-2">${t.oldPrice ? `<span class="price-old">${t.oldPrice}€</span>` : ''}<span class="price-current">${t.p}€</span></div>
                     ${savings > 0 ? `<span class="price-save mt-1">Économise ${savings}€</span>` : ''}
-                </button>
-            `}).join('');
+                </button>`;
+            }).join('');
         }
 
         function selectStrain(productId, strainName, btn) {
@@ -2856,40 +2353,29 @@
             btn.classList.add('active');
         }
 
+        // PATCH 5 — setupSwipeToClose
+        // Avant : addEventListener à chaque openProduct() → N listeners accumulés (memory leak)
+        // Après : flag _swipeSetup sur l'élément → listeners attachés une seule fois
+        
         function setupSwipeToClose() {
             const panel = document.getElementById('modal-panel');
-            if (!panel) return;
+            if (!panel || panel._swipeSetup) return; // déjà configuré → on sort
+            panel._swipeSetup = true;
             
-            let startY = 0;
-            let currentY = 0;
-            let isDragging = false;
-
-            panel.addEventListener('touchstart', (e) => {
-                startY = e.touches[0].clientY;
-                isDragging = true;
-            });
-
+            let startY = 0, currentY = 0, isDragging = false;
+            
+            panel.addEventListener('touchstart', (e) => { startY = e.touches[0].clientY; isDragging = true; });
             panel.addEventListener('touchmove', (e) => {
                 if (!isDragging) return;
                 currentY = e.touches[0].clientY;
                 const diff = currentY - startY;
-                
-                if (diff > 0) {
-                    panel.style.transform = `translateY(${diff}px)`;
-                }
+                if (diff > 0) panel.style.transform = `translateY(${diff}px)`;
             });
-
             panel.addEventListener('touchend', () => {
                 if (!isDragging) return;
                 const diff = currentY - startY;
-                
-                if (diff > 150) {
-                    closeModal();
-                    triggerHaptic('light');
-                } else {
-                    panel.style.transform = 'translateY(0)';
-                }
-                
+                if (diff > 150) { closeModal(); triggerHaptic('light'); }
+                else panel.style.transform = 'translateY(0)';
                 isDragging = false;
             });
         }
@@ -2897,16 +2383,8 @@
         function closeModal() {
             const panel = document.getElementById('modal-panel');
             const modal = document.getElementById('product-modal');
-            
-            if (panel) {
-                panel.style.transform = '';
-                panel.classList.add('translate-y-full');
-            }
-            
-            if (modal) {
-                setTimeout(() => modal.classList.add('hidden'), 400);
-            }
-            
+            if (panel) { panel.style.transform = ''; panel.classList.add('translate-y-full'); }
+            if (modal) setTimeout(() => modal.classList.add('hidden'), 400);
             triggerHaptic('light');
         }
 
@@ -2915,88 +2393,51 @@
         function addToCart(id, weight, price) {
             const p = CATALOG.find(x => x.id === id);
             if (!p) return;
-            
             let strainInfo = '';
-            if (p.multiStrain && selectedStrains[id]) {
-                strainInfo = ` [${selectedStrains[id]}]`;
-            }
-
+            if (p.multiStrain && selectedStrains[id]) strainInfo = ` [${selectedStrains[id]}]`;
             cart.push({name: p.name, w: weight, p: price, strain: strainInfo});
             updateCartUI();
             closeModal();
-            
             triggerHaptic('medium');
             showToast('success', 'AJOUTÉ AU PANIER', `${p.name}${strainInfo} (${weight}) • ${price}€`);
-            
-            trackEvent('add_to_cart', {
-                product_id: id,
-                product_name: p.name,
-                quantity: weight,
-                price: price
-            });
+            trackEvent('add_to_cart', { product_id: id, product_name: p.name, quantity: weight, price: price });
         }
 
         function updateCartUI() {
             const b = document.getElementById('cart-badge');
             if (!b) return;
-            
             b.innerText = cart.length;
-            if (cart.length > 0) {
-                b.classList.remove('hidden');
-                b.style.display = 'flex';
-            } else {
-                b.classList.add('hidden');
-            }
+            if (cart.length > 0) { b.classList.remove('hidden'); b.style.display = 'flex'; }
+            else b.classList.add('hidden');
         }
 
         function openCart() { 
-            if(cart.length > 0) { 
+            if (cart.length > 0) { 
                 closeAllModals();
                 document.getElementById('checkout-modal')?.classList.remove('hidden'); 
                 renderRecap();
                 triggerHaptic('medium');
-                
                 document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
                 document.querySelectorAll('.nav-btn')[3]?.classList.add('active');
-                
-                trackEvent('begin_checkout', {
-                    cart_items: cart.length,
-                    cart_value: cart.reduce((a,b) => a + b.p, 0)
-                });
+                trackEvent('begin_checkout', { cart_items: cart.length, cart_value: cart.reduce((a,b) => a + b.p, 0) });
             } else {
                 showToast('warning', 'PANIER VIDE', 'Ajoute des produits avant de valider');
                 triggerHaptic('error');
             }
         }
         
-        function closeCheckout() { 
-            document.getElementById('checkout-modal')?.classList.add('hidden');
-            triggerHaptic('light');
-        }
+        function closeCheckout() { document.getElementById('checkout-modal')?.classList.add('hidden'); triggerHaptic('light'); }
 
         // ========== CHECKOUT ==========
         
         function renderRecap() {
             const div = document.getElementById('checkout-recap');
             if (!div) return;
-            
             let subtotal = cart.reduce((a,b) => a + b.p, 0);
-            
-            const offerResult = calculateOfferDiscount(subtotal);
-            const offerDiscount = offerResult.discount;
-            const offerDesc = offerResult.description;
-            
+            const {discount: offerDiscount, description: offerDesc} = calculateOfferDiscount(subtotal);
             let deliveryFee = 0;
-            if(currentMode === 'delivery') {
-                if (currentOffer?.deliveryFree && subtotal >= (currentOffer.minAmount || 0)) {
-                    deliveryFee = 0;
-                } else {
-                    deliveryFee = 10;
-                }
-            } else if(currentMode === 'postal') {
-                deliveryFee = 20;
-            }
-            
+            if (currentMode === 'delivery') { deliveryFee = (currentOffer?.deliveryFree && subtotal >= (currentOffer.minAmount || 0)) ? 0 : 10; }
+            else if (currentMode === 'postal') { deliveryFee = 20; }
             let total = subtotal - offerDiscount + deliveryFee;
             
             let html = '<ul class="space-y-2">';
@@ -3005,74 +2446,38 @@
                 const strainDisplay = c.strain ? `<span class="text-violet-400">${c.strain}</span>` : '';
                 html += `<li class="flex justify-between"><span>• ${cleanName}${strainDisplay} (${c.w})</span> <span class="text-white font-bold">${c.p}€</span></li>`;
             });
-            html += `</ul>`;
-            
+            html += '</ul>';
             html += `<div class="mt-4 pt-4 border-t border-[var(--border-accent)] space-y-2">`;
             html += `<div class="flex justify-between text-xs text-gray-400"><span>Sous-total</span><span>${subtotal}€</span></div>`;
-            
-            if(offerDiscount > 0) {
-                html += `<div class="flex justify-between text-xs text-green-500 font-bold"><span>Offre appliquée</span><span>-${offerDiscount}€</span></div>`;
-            }
-            
-            if(deliveryFee > 0) {
-                const deliveryLabel = currentMode === 'delivery' ? 'Livraison IDF' : 'Envoi Postal';
-                html += `<div class="flex justify-between text-xs text-gray-400"><span>${deliveryLabel}</span><span>+${deliveryFee}€</span></div>`;
-            } else if (currentMode === 'delivery' || currentMode === 'postal') {
-                html += `<div class="flex justify-between text-xs text-green-500"><span>Livraison</span><span>OFFERTE</span></div>`;
-            }
-            
-            html += `<div class="flex justify-between font-black text-violet-500 text-sm pt-2 border-t border-[var(--border-accent)]"><span>TOTAL</span><span>${total}€</span></div>`;
-            html += `</div>`;
-            
+            if (offerDiscount > 0) html += `<div class="flex justify-between text-xs text-green-500 font-bold"><span>Offre appliquée</span><span>-${offerDiscount}€</span></div>`;
+            if (deliveryFee > 0) { const label = currentMode === 'delivery' ? 'Livraison IDF' : 'Envoi Postal'; html += `<div class="flex justify-between text-xs text-gray-400"><span>${label}</span><span>+${deliveryFee}€</span></div>`; }
+            else if (currentMode === 'delivery' || currentMode === 'postal') html += `<div class="flex justify-between text-xs text-green-500"><span>Livraison</span><span>OFFERTE</span></div>`;
+            html += `<div class="flex justify-between font-black text-violet-500 text-sm pt-2 border-t border-[var(--border-accent)]"><span>TOTAL</span><span>${total}€</span></div></div>`;
             div.innerHTML = html;
             
             const offerAppliedDiv = document.getElementById('checkout-offer-applied');
             if (offerAppliedDiv) {
-                if (offerDesc) {
-                    offerAppliedDiv.innerHTML = `
-                        <div class="bg-green-900/20 border border-green-500/50 rounded-xl p-4">
-                            <div class="flex items-center gap-2 mb-2">
-                                <span class="text-xl">✅</span>
-                                <h4 class="text-green-500 font-black text-xs uppercase">OFFRE APPLIQUÉE</h4>
-                            </div>
-                            <p class="text-[10px] text-gray-300">${offerDesc}</p>
-                            ${offerDiscount > 0 ? `<p class="text-green-500 font-bold text-sm mt-2">Tu économises ${offerDiscount}€ !</p>` : ''}
-                        </div>
-                    `;
-                } else {
-                    offerAppliedDiv.innerHTML = '';
-                }
+                offerAppliedDiv.innerHTML = offerDesc ? `<div class="bg-green-900/20 border border-green-500/50 rounded-xl p-4"><div class="flex items-center gap-2 mb-2"><span class="text-xl">✅</span><h4 class="text-green-500 font-black text-xs uppercase">OFFRE APPLIQUÉE</h4></div><p class="text-[10px] text-gray-300">${offerDesc}</p>${offerDiscount > 0 ? `<p class="text-green-500 font-bold text-sm mt-2">Tu économises ${offerDiscount}€ !</p>` : ''}</div>` : '';
             }
         }
 
         function switchTab(mode) {
             currentMode = mode;
             triggerHaptic('light');
-            
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(`tab-${mode}`)?.classList.add('active');
-            
-            ['meetup', 'delivery', 'postal'].forEach(m => {
-                document.getElementById(`fields-${m}`)?.classList.add('hidden');
-            });
+            ['meetup', 'delivery', 'postal'].forEach(m => document.getElementById(`fields-${m}`)?.classList.add('hidden'));
             document.getElementById(`fields-${mode}`)?.classList.remove('hidden');
-            
             renderRecap();
-            
             trackEvent('checkout_method_changed', { method: mode });
         }
 
         function selectPayment(method, el) {
             triggerHaptic('light');
-            
-            const paymentInput = document.getElementById('payment-method');
-            if (paymentInput) {
-                paymentInput.value = method;
-            }
-            
+            const input = document.getElementById('payment-method');
+            if (input) input.value = method;
             document.querySelectorAll('.pay-card').forEach(c => c.classList.remove('selected'));
             el.classList.add('selected');
-            
             trackEvent('payment_method_selected', { method: method });
         }
 
@@ -3080,168 +2485,60 @@
         
         function submitOrder() {
             const checkId = document.getElementById('check-id');
-            if(!checkId?.checked) { 
-                showToast('error', 'ERREUR', 'Validation du protocole sécurité obligatoire');
-                triggerHaptic('error');
-                return; 
-            }
+            if (!checkId?.checked) { showToast('error', 'ERREUR', 'Validation du protocole sécurité obligatoire'); triggerHaptic('error'); return; }
             
-            let whatsappVal = "";
-            let addressVal = "";
-            let timeVal = "";
+            let whatsappVal = '', addressVal = '', timeVal = '';
+            if (currentMode === 'meetup') { whatsappVal = document.getElementById('mu-whatsapp')?.value.trim() || ''; timeVal = document.getElementById('mu-time')?.value.trim() || ''; }
+            if (currentMode === 'delivery') { whatsappVal = document.getElementById('del-whatsapp')?.value.trim() || ''; addressVal = document.getElementById('del-address')?.value.trim() || ''; }
+            if (currentMode === 'postal') { whatsappVal = document.getElementById('post-whatsapp')?.value.trim() || ''; addressVal = document.getElementById('post-address')?.value.trim() || ''; }
             
-            if(currentMode === 'meetup') { 
-                whatsappVal = document.getElementById('mu-whatsapp')?.value.trim() || '';
-                timeVal = document.getElementById('mu-time')?.value.trim() || '';
-            }
-            if(currentMode === 'delivery') { 
-                whatsappVal = document.getElementById('del-whatsapp')?.value.trim() || '';
-                addressVal = document.getElementById('del-address')?.value.trim() || '';
-            }
-            if(currentMode === 'postal') { 
-                whatsappVal = document.getElementById('post-whatsapp')?.value.trim() || '';
-                addressVal = document.getElementById('post-address')?.value.trim() || '';
-            }
-
-            if(!whatsappVal) { 
-                showToast('error', 'CHAMP REQUIS', 'Numéro WhatsApp obligatoire');
-                triggerHaptic('error');
-                return; 
-            }
-
-            if(currentMode === 'meetup' && !timeVal) {
-                showToast('warning', 'INFO MANQUANTE', 'Heure de passage obligatoire pour Meet-Up');
-                triggerHaptic('error');
-                return;
-            }
-
-            if((currentMode === 'delivery' || currentMode === 'postal') && !addressVal) {
-                showToast('error', 'ADRESSE REQUISE', 'Merci de renseigner ton adresse complète');
-                triggerHaptic('error');
-                return;
-            }
-
+            if (!whatsappVal) { showToast('error', 'CHAMP REQUIS', 'Numéro WhatsApp obligatoire'); triggerHaptic('error'); return; }
+            if (currentMode === 'meetup' && !timeVal) { showToast('warning', 'INFO MANQUANTE', 'Heure de passage obligatoire pour Meet-Up'); triggerHaptic('error'); return; }
+            if ((currentMode === 'delivery' || currentMode === 'postal') && !addressVal) { showToast('error', 'ADRESSE REQUISE', 'Merci de renseigner ton adresse complète'); triggerHaptic('error'); return; }
+            
             triggerHaptic('heavy');
-
             closeCheckout();
             document.getElementById('processing-screen')?.classList.remove('hidden');
 
             setTimeout(() => {
                 let subtotal = cart.reduce((a,b) => a + b.p, 0);
-                
-                const offerResult = calculateOfferDiscount(subtotal);
-                const offerDiscount = offerResult.discount;
-                const offerDesc = offerResult.description;
-                
-                const paymentInput = document.getElementById('payment-method');
-                let payment = paymentInput?.value || 'CASH';
-                
+                const {discount: offerDiscount, description: offerDesc} = calculateOfferDiscount(subtotal);
+                const payment = document.getElementById('payment-method')?.value || 'CASH';
                 let deliveryFee = 0;
-                if(currentMode === 'delivery') {
-                    if (currentOffer?.deliveryFree && subtotal >= (currentOffer.minAmount || 0)) {
-                        deliveryFee = 0;
-                    } else {
-                        deliveryFee = 10;
-                    }
-                } else if(currentMode === 'postal') {
-                    deliveryFee = 20;
-                }
-                
+                if (currentMode === 'delivery') deliveryFee = (currentOffer?.deliveryFree && subtotal >= (currentOffer.minAmount || 0)) ? 0 : 10;
+                else if (currentMode === 'postal') deliveryFee = 20;
                 let total = subtotal - offerDiscount + deliveryFee;
                 
-                let msgLines = [];
-                msgLines.push('COMMANDE SOUTH VALLEY');
-                msgLines.push('');
-                msgLines.push('=== ARTICLES ===');
-                
+                let msgLines = ['COMMANDE SOUTH VALLEY', '', '=== ARTICLES ==='];
                 cart.forEach((c, index) => {
                     const cleanName = c.name.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '').trim();
                     msgLines.push(`${index + 1}. ${cleanName}`);
-                    if (c.strain) {
-                        msgLines.push(`   Strain: ${c.strain.replace(/[\[\]]/g, '').trim()}`);
-                    }
-                    msgLines.push(`   Quantite: ${c.w}`);
-                    msgLines.push(`   Prix: ${c.p} EUR`);
+                    if (c.strain) msgLines.push(`   Strain: ${c.strain.replace(/[\[\]]/g, '').trim()}`);
+                    msgLines.push(`   Quantite: ${c.w}`, `   Prix: ${c.p} EUR`);
                 });
+                msgLines.push('', '=== TOTAL ===', `Sous-total: ${subtotal} EUR`);
+                if (offerDiscount > 0) msgLines.push(`Offre appliquee: -${offerDiscount} EUR`, `Details: ${offerDesc}`);
+                if (deliveryFee > 0) msgLines.push(`Frais livraison: +${deliveryFee} EUR`);
+                else if (currentMode === 'delivery' || currentMode === 'postal') msgLines.push('Livraison: OFFERTE');
+                msgLines.push(`TOTAL FINAL: ${total} EUR`, '', '=== PAIEMENT ===', payment, '', '=== MES INFOS ===', `WhatsApp: ${whatsappVal}`);
+                if (currentMode === 'meetup') msgLines.push('Mode: MEET-UP (92 Nord)', `Heure: ${timeVal}`);
+                else if (currentMode === 'delivery') msgLines.push('Mode: LIVRAISON IDF', `Adresse: ${addressVal}`);
+                else if (currentMode === 'postal') msgLines.push('Mode: ENVOI POSTAL', `Adresse: ${addressVal}`);
+                msgLines.push('', 'Pret pour verification CNI + Selfie');
                 
-                msgLines.push('');
-                msgLines.push('=== TOTAL ===');
-                msgLines.push(`Sous-total: ${subtotal} EUR`);
-                
-                if(offerDiscount > 0) {
-                    msgLines.push(`Offre appliquee: -${offerDiscount} EUR`);
-                    msgLines.push(`Details: ${offerDesc}`);
-                }
-                
-                if(deliveryFee > 0) {
-                    msgLines.push(`Frais livraison: +${deliveryFee} EUR`);
-                } else if(currentMode === 'delivery' || currentMode === 'postal') {
-                    msgLines.push(`Livraison: OFFERTE`);
-                }
-                
-                msgLines.push(`TOTAL FINAL: ${total} EUR`);
-                msgLines.push('');
-                msgLines.push('=== PAIEMENT ===');
-                msgLines.push(payment);
-                msgLines.push('');
-                msgLines.push('=== MES INFOS ===');
-                msgLines.push(`WhatsApp: ${whatsappVal}`);
-                
-                if(currentMode === 'meetup') {
-                    msgLines.push('Mode: MEET-UP (92 Nord)');
-                    msgLines.push(`Heure: ${timeVal}`);
-                } else if(currentMode === 'delivery') {
-                    msgLines.push('Mode: LIVRAISON IDF');
-                    msgLines.push(`Adresse: ${addressVal}`);
-                } else if(currentMode === 'postal') {
-                    msgLines.push('Mode: ENVOI POSTAL');
-                    msgLines.push(`Adresse: ${addressVal}`);
-                }
-                
-                msgLines.push('');
-                msgLines.push('Pret pour verification CNI + Selfie');
-                
-                const msg = msgLines.join('\n');
-                const phoneNumber = '33759840764';
-                const encodedMsg = encodeURIComponent(msg);
-                const waURL = `https://wa.me/${phoneNumber}?text=${encodedMsg}`;
-                
+                const waURL = `https://wa.me/33759840764?text=${encodeURIComponent(msgLines.join('\n'))}`;
                 const tg = window.Telegram?.WebApp;
+                if (tg) { tg.disableClosingConfirmation(); tg.openLink ? tg.openLink(waURL, { try_instant_view: false }) : window.open(waURL, '_blank'); }
+                else window.location.href = waURL;
                 
-                if (tg) {
-                    tg.disableClosingConfirmation();
-                    if (tg.openLink) {
-                        tg.openLink(waURL, { try_instant_view: false });
-                    } else {
-                        window.open(waURL, '_blank');
-                    }
-                } else {
-                    window.location.href = waURL;
-                }
-
-                trackEvent('purchase', {
-                    transaction_id: Date.now().toString(),
-                    value: total,
-                    currency: 'EUR',
-                    items: cart.map(c => ({
-                        item_name: c.name,
-                        quantity: c.w,
-                        price: c.p
-                    })),
-                    delivery_method: currentMode,
-                    payment_method: payment,
-                    offer_applied: offerDesc || 'none',
-                    discount: offerDiscount
-                });
-
+                trackEvent('purchase', { transaction_id: Date.now().toString(), value: total, currency: 'EUR', items: cart.map(c => ({item_name: c.name, quantity: c.w, price: c.p})), delivery_method: currentMode, payment_method: payment, offer_applied: offerDesc || 'none', discount: offerDiscount });
+                
                 setTimeout(() => {
                     document.getElementById('processing-screen')?.classList.add('hidden');
                     triggerConfetti();
                     triggerHaptic('success');
                     showToast('success', 'REDIRECTION WHATSAPP', 'Ouverture de WhatsApp avec ta commande !');
-                    
                     incrementUserOrders();
-                    
                     cart = [];
                     updateCartUI();
                 }, 1500);
@@ -3249,54 +2546,26 @@
         }
         
         function contactStaff(promoCode = '') { 
-            let waURL = `https://wa.me/33759840764`;
-            
-            if (promoCode) {
-                const msg = encodeURIComponent(`Bonjour ! Je suis intéressé par l'offre : ${promoCode}`);
-                waURL += `?text=${msg}`;
-            }
-            
+            let waURL = 'https://wa.me/33759840764';
+            if (promoCode) waURL += `?text=${encodeURIComponent(`Bonjour ! Je suis intéressé par l'offre : ${promoCode}`)}`;
             const tg = window.Telegram?.WebApp;
-            
-            if (tg) {
-                tg.disableClosingConfirmation();
-                if (tg.openLink) {
-                    tg.openLink(waURL, { try_instant_view: false });
-                } else {
-                    window.open(waURL, '_blank');
-                }
-            } else {
-                window.location.href = waURL;
-            }
-            
+            if (tg) { tg.disableClosingConfirmation(); tg.openLink ? tg.openLink(waURL, { try_instant_view: false }) : window.open(waURL, '_blank'); }
+            else window.location.href = waURL;
             trackEvent('contact_staff', { promo_code: promoCode || 'none' });
         }
 
         function shareReferral() {
             const tg = window.Telegram?.WebApp;
             const userId = tg?.initDataUnsafe?.user?.id;
-            
-            if (!userId) {
-                showToast('error', 'ERREUR', 'Impossible de générer le lien');
-                return;
-            }
-            
+            if (!userId) { showToast('error', 'ERREUR', 'Impossible de générer le lien'); return; }
             const referralLink = `https://t.me/southvalley_bot?start=ref_${userId}`;
             const message = `Rejoins South Valley avec mon lien de parrainage ! On reçoit tous les deux 10€ de crédit 🎁\n\n${referralLink}`;
-            
             if (navigator.share) {
-                navigator.share({
-                    title: 'Parrainage South Valley',
-                    text: message
-                }).catch(() => {
-                    navigator.clipboard.writeText(referralLink);
-                    showToast('success', 'COPIÉ', 'Lien de parrainage copié dans le presse-papier');
-                });
+                navigator.share({ title: 'Parrainage South Valley', text: message }).catch(() => { navigator.clipboard.writeText(referralLink); showToast('success', 'COPIÉ', 'Lien de parrainage copié dans le presse-papier'); });
             } else {
                 navigator.clipboard.writeText(referralLink);
                 showToast('success', 'COPIÉ', 'Lien de parrainage copié dans le presse-papier');
             }
-            
             triggerHaptic('success');
             trackEvent('referral_share');
         }
