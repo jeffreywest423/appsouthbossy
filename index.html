@@ -826,7 +826,7 @@
 
         .reviews-track {
             display: flex;
-            animation: reviewsScroll 60s linear infinite;
+            animation: reviewsScroll 18s linear infinite;
         }
 
         .reviews-track:hover { animation-play-state: paused; }
@@ -1738,9 +1738,10 @@
                 tag: "🇺🇸 CALI IMPORT",
                 desc: "CALI USA TOP SHELF - Strain Cereal Milk : Têtes compactes, couleur violette nuancée, Terps Ultra-Savoureux. Effets : Relaxation corporelle profonde & Euphorie, un régal pour les amateurs de Zaza ! Génétique légendaire, cultivation indoor premium.",
                 mediaType: 'image',
-                // PATCH 1b — thumbnail CM explicite (même URL que src)
+                // PATCH 1b — thumbnail CM + coverMode pour remplir le cadre entier sans flou
                 thumbnail: "https://res.cloudinary.com/dpojixeiy/image/upload/v1771124699/FILTRE%CC%81_3x_4_xzewtb.png",
                 src: "https://res.cloudinary.com/dpojixeiy/image/upload/v1771124699/FILTRE%CC%81_3x_4_xzewtb.png",
+                coverMode: true, // image plein cadre, pas de fond flouté
                 videoSrc: "https://res.cloudinary.com/dpojixeiy/video/upload/v1771200487/ScreenRecording_02-16-2026_00-52-33_1_ybphbf.mov",
                 tiers: [
                     {w:'3.5G', p:45, oldPrice: 50},
@@ -2073,53 +2074,55 @@
                 // Fallback : src vidéo → <video cover> (JM, WZ, MC)
                 const staticImage = item.thumbnail || (item.mediaType === 'image' ? item.src : null);
                 const isVideo = !staticImage;
+                const isCover = item.coverMode === true;
 
-                // Fond flouté : même URL que l'image (pour les vidéos → gradient sombre)
-                const blurBgStyle = staticImage
-                    ? `background-image: url('${staticImage}');`
-                    : `background: linear-gradient(135deg, #1a0030 0%, #000 100%);`;
+                // Fond flouté : masqué si coverMode, gradient si vidéo
+                let blurBgStyle;
+                if (isCover) { blurBgStyle = 'display:none;'; }
+                else if (staticImage) { blurBgStyle = "background-image: url('" + staticImage + "');"; }
+                else { blurBgStyle = 'background: linear-gradient(135deg, #1a0030 0%, #000 100%);'; }
 
-                // Média principal
+                // Média principal — cover si isCover ou vidéo, contain sinon
+                const mediaFit = (isCover || isVideo) ? 'cover' : 'contain';
+                const mediaFilter = (!isCover && !isVideo) ? 'filter:drop-shadow(0 8px 32px rgba(0,0,0,0.7));' : 'filter:none;';
                 const mediaTag = isVideo
-                    ? `<video class="slide-main-media" src="${item.src}" loop muted playsinline webkit-playsinline></video>`
-                    : `<img class="slide-main-media" src="${staticImage}" alt="${item.name}" loading="${index === 0 ? 'eager' : 'lazy'}">`;
+                    ? '<video class="slide-main-media" src="' + item.src + '" loop muted playsinline webkit-playsinline style="object-fit:cover;"></video>'
+                    : '<img class="slide-main-media" src="' + staticImage + '" alt="' + item.name + '" loading="' + (index === 0 ? 'eager' : 'lazy') + '" style="object-fit:' + mediaFit + ';' + mediaFilter + '">';
 
                 // Badges
                 let badgesHTML = '';
                 if (item.premium) badgesHTML += '<span class="badge-premium" style="background:linear-gradient(135deg,#8b5cf6,#a78bfa);">⭐ PREMIUM</span>';
                 if (item.bestseller) badgesHTML += '<span class="badge-premium badge-bestseller">🔥 BEST SELLER</span>';
                 if (item.stock === 'low') badgesHTML += '<span class="badge-premium badge-stock">⚠️ STOCK LIMITÉ</span>';
-                if (currentOffer && !currentOffer.flashSale) badgesHTML += `<span class="badge-premium badge-offer-active">${currentOffer.emoji} OFFRE</span>`;
+                if (currentOffer && !currentOffer.flashSale) badgesHTML += '<span class="badge-premium badge-offer-active">' + currentOffer.emoji + ' OFFRE</span>';
 
-                // Prix
+                // Prix + Catégorie
                 const basePrice = item.tiers[0].p;
                 const oldPrice = item.tiers[0].oldPrice;
+                const catEmojis = { 'WEED': '🌿', 'HASH': '🧼', 'FESTIVITÉS': '🥂' };
+                const catLine = (catEmojis[item.cat] || '•') + ' ' + item.cat + ' · ' + item.sub;
 
-                slide.innerHTML = `
-                    <!-- ZONE MEDIA -->
-                    <div class="slide-media-zone">
-                        <div class="slide-blur-bg" style="${blurBgStyle}"></div>
-                        ${mediaTag}
-                        <div class="slide-badges">${badgesHTML}</div>
-                    </div>
-
-                    <!-- PANEL INFO — jamais d'overlap avec l'image -->
-                    <div class="slide-info-panel">
-                        <span class="badge-premium slide-info-tag" style="width:fit-content;">${item.tag}</span>
-                        <p class="slide-info-name">${item.name}</p>
-                        <div class="slide-info-cta">
-                            <div class="slide-info-price-row">
-                                <span class="text-violet-400 font-black text-xl">Dès ${basePrice}€</span>
-                                ${oldPrice ? `<span class="text-gray-600 line-through text-sm">${oldPrice}€</span>` : ''}
-                                ${item.stock === 'low' ? '<span class="text-red-400 text-[9px] font-black uppercase">STOCK ⚠</span>' : ''}
-                            </div>
-                            <button onclick="openProduct('${item.id}')"
-                                class="bg-violet-500 text-white font-black text-[11px] px-5 py-3 rounded-xl active:scale-95 transition-transform shadow-[0_0_20px_rgba(139,92,246,0.45)] tracking-wide shrink-0">
-                                VOIR →
-                            </button>
-                        </div>
-                    </div>
-                `;
+                slide.innerHTML =
+                    '<div class="slide-media-zone">' +
+                        '<div class="slide-blur-bg" style="' + blurBgStyle + '"></div>' +
+                        mediaTag +
+                        '<div class="slide-badges">' + badgesHTML + '</div>' +
+                    '</div>' +
+                    '<div class="slide-info-panel">' +
+                        '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">' +
+                            '<span class="badge-premium" style="width:fit-content;">' + item.tag + '</span>' +
+                            '<span style="font-size:9px;font-weight:800;color:#6b7280;text-transform:uppercase;letter-spacing:0.12em;">' + catLine + '</span>' +
+                        '</div>' +
+                        '<p class="slide-info-name">' + item.name + '</p>' +
+                        '<div class="slide-info-cta">' +
+                            '<div class="slide-info-price-row">' +
+                                '<span class="text-violet-400 font-black text-xl">Dès ' + basePrice + '€</span>' +
+                                (oldPrice ? '<span class="text-gray-600 line-through text-sm">' + oldPrice + '€</span>' : '') +
+                                (item.stock === 'low' ? '<span class="text-red-400 text-[9px] font-black uppercase">STOCK ⚠</span>' : '') +
+                            '</div>' +
+                            '<button onclick="openProduct('' + item.id + '')" class="bg-violet-500 text-white font-black text-[11px] px-5 py-3 rounded-xl active:scale-95 transition-transform shadow-[0_0_20px_rgba(139,92,246,0.45)] tracking-wide shrink-0">VOIR →</button>' +
+                        '</div>' +
+                    '</div>';
 
                 track.appendChild(slide);
 
