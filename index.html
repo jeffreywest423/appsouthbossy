@@ -218,110 +218,172 @@
             50% { opacity: 0.7; }
         }
 
-        /* CARROUSEL PRODUITS FULL-SCREEN */
+        /* ===== CARROUSEL PRODUITS — ARCHITECTURE IMAGE + PANEL ===== */
+
+        /* Wrapper global — pas de hauteur fixe, le contenu dicte */
         .product-carousel {
             position: relative;
             width: 100%;
-            height: 70vh;
             overflow: hidden;
         }
 
+        /* Track horizontal — hauteur auto car les slides sont flex-col */
         .carousel-track {
             display: flex;
             transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            height: 100%;
+            align-items: stretch;
         }
 
+        /* Chaque slide = colonne verticale : zone media + panel info */
         .carousel-slide {
             min-width: 100%;
-            height: 100%;
-            position: relative;
             display: flex;
             flex-direction: column;
-            justify-content: flex-end;
         }
 
-        .carousel-slide video,
-        .carousel-slide img {
+        /* ---- ZONE MEDIA (60-65% de la hauteur écran) ---- */
+        .slide-media-zone {
+            position: relative;
+            height: 58vh;
+            min-height: 280px;
+            overflow: hidden;
+            background: #000;
+            flex-shrink: 0;
+        }
+
+        /* Fond flouté (même image/couleur derrière) — effet pro */
+        .slide-blur-bg {
             position: absolute;
-            top: 0;
-            left: 0;
+            inset: -30px;
+            background-size: cover;
+            background-position: center;
+            filter: blur(28px) saturate(1.6) brightness(0.55);
+            transform: scale(1.15);
+            z-index: 0;
+        }
+
+        /* Média principal — contain pour voir l'objet entier */
+        .slide-media-zone img.slide-main-media {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            z-index: 1;
+            /* Légère ombre portée pour détacher le produit du fond */
+            filter: drop-shadow(0 8px 32px rgba(0,0,0,0.7));
+        }
+
+        /* Vidéos : cover car elles sont filmées plein-cadre */
+        .slide-media-zone video.slide-main-media {
+            position: absolute;
+            inset: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
-        }
-
-        .carousel-gradient {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 60%;
-            background: linear-gradient(
-                to top,
-                rgba(0, 0, 0, 1) 0%,
-                rgba(0, 0, 0, 0.9) 20%,
-                rgba(0, 0, 0, 0.4) 60%,
-                transparent 100%
-            );
             z-index: 1;
         }
 
-        .carousel-content {
-            position: relative;
-            z-index: 2;
-            padding: 2rem;
-            padding-bottom: 8rem;
+        /* Badges produit (premium, bestseller, stock) — coin haut droite */
+        .slide-badges {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 6px;
+            z-index: 3;
         }
 
+        /* Indicateurs de slide — bas de la zone media */
         .carousel-indicators {
             position: absolute;
-            bottom: 7rem;
+            bottom: 12px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 0.5rem;
+            gap: 6px;
             z-index: 3;
         }
 
         .carousel-indicator {
-            width: 8px;
-            height: 8px;
+            width: 7px;
+            height: 7px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.35);
             transition: all 0.3s;
+            cursor: pointer;
         }
 
         .carousel-indicator.active {
             background: var(--accent);
-            width: 24px;
+            width: 22px;
             border-radius: 4px;
+            box-shadow: 0 0 8px var(--accent);
         }
 
+        /* Boutons nav gauche/droite — sur la zone media */
         .carousel-nav {
             position: absolute;
-            top: 50%;
+            /* Centre de la zone media uniquement (58vh / 2 = 29vh) */
+            top: 29vh;
             transform: translateY(-50%);
-            z-index: 3;
-            background: rgba(0, 0, 0, 0.5);
+            z-index: 4;
+            background: rgba(0, 0, 0, 0.45);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            width: 48px;
-            height: 48px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s;
         }
 
-        .carousel-nav:active {
-            transform: translateY(-50%) scale(0.9);
+        .carousel-nav:active { transform: translateY(-50%) scale(0.88); }
+        .carousel-nav.prev { left: 12px; }
+        .carousel-nav.next { right: 12px; }
+
+        /* ---- PANEL INFO (30-35%) — zone dédiée, jamais d'overlap ---- */
+        .slide-info-panel {
+            background: linear-gradient(180deg, #0d0d0d 0%, #000 100%);
+            border-top: 1px solid var(--border-accent);
+            padding: 1.1rem 1.5rem 1.4rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.55rem;
         }
 
-        .carousel-nav.prev { left: 1rem; }
-        .carousel-nav.next { right: 1rem; }
+        .slide-info-tag {
+            /* Badge catégorie */
+        }
+
+        .slide-info-name {
+            font-size: 1.55rem;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: -0.04em;
+            line-height: 1.05;
+            font-family: 'Outfit', sans-serif;
+            text-transform: uppercase;
+        }
+
+        .slide-info-price-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .slide-info-cta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 0.3rem;
+        }
 
         /* BADGES */
         .badge-premium {
@@ -857,7 +919,9 @@
             .splash-logo { width: 160px; height: 160px; }
             .splash-title { font-size: 2rem; }
             .toast { min-width: 280px; }
-            .carousel-content { padding: 1.5rem; padding-bottom: 7rem; }
+            .slide-media-zone { height: 52vh; min-height: 240px; }
+            .slide-info-name { font-size: 1.3rem; }
+            .slide-info-panel { padding: 0.9rem 1.2rem 1.2rem; }
         }
     </style>
 </head>
@@ -944,17 +1008,19 @@
     <!-- OFFRE DU JOUR BANNER -->
     <div id="daily-offer-banner" class="px-4 pt-4"></div>
 
-    <!-- CARROUSEL PRODUITS FULL-SCREEN -->
-    <div class="product-carousel" id="product-carousel">
+    <!-- CARROUSEL PRODUITS — ZONE MEDIA + PANEL INFO -->
+    <div class="product-carousel" id="product-carousel" style="overflow:hidden;">
         <div class="carousel-track" id="carousel-track"></div>
-        
+
+        <!-- Nav buttons positionnés sur la zone media (top 58vh/2) -->
         <button class="carousel-nav prev" onclick="prevSlide()">
-            <span class="text-white text-xl">←</span>
+            <span class="text-white" style="font-size:1.1rem;">←</span>
         </button>
         <button class="carousel-nav next" onclick="nextSlide()">
-            <span class="text-white text-xl">→</span>
+            <span class="text-white" style="font-size:1.1rem;">→</span>
         </button>
-        
+
+        <!-- Indicators au bas de la zone media -->
         <div class="carousel-indicators" id="carousel-indicators"></div>
     </div>
 
@@ -1986,10 +2052,9 @@
         }
 
         // ========== CAROUSEL ==========
-        // PATCH 2 — renderCarousel
-        // Avant : priorité TOUJOURS à videoSrc → toutes les vidéos s'autoplay sur la home
-        // Après : priorité à thumbnail (image statique) → fallback vidéo si pas de thumbnail
-        //         Les vidéos restent accessibles dans le modal openProduct()
+        // Architecture : zone media (55-60vh, contain+blur) + panel info (texte séparé)
+        // Pas de description sur la vitrine — seulement tag, nom, prix, CTA
+        // Videos : .play() déclenché programmatiquement sur la slide active
         
         function renderCarousel() {
             const track = document.getElementById('carousel-track');
@@ -2001,57 +2066,100 @@
             CATALOG.forEach((item, index) => {
                 const slide = document.createElement('div');
                 slide.className = 'carousel-slide';
-                
-                // PATCH 2 : détermine le média à afficher sur la home
-                // Si thumbnail ou image statique → <img> (chargement instantané, 0 bande passante vidéo)
-                // Sinon → <video> muted autoplay (fallback pour JM/WZ/MC sans thumbnail)
+                slide.dataset.id = item.id;
+
+                // --- Détermination du type de média pour le carrousel ---
+                // Priorité : thumbnail ou src image → <img contain>
+                // Fallback : src vidéo → <video cover> (JM, WZ, MC)
                 const staticImage = item.thumbnail || (item.mediaType === 'image' ? item.src : null);
-                const carouselMedia = staticImage
-                    ? `<img src="${staticImage}" alt="${item.name}" loading="lazy">`
-                    : `<video src="${item.src}" autoplay loop muted playsinline webkit-playsinline></video>`;
-                
-                let badges = '';
-                if (item.premium) badges += '<span class="badge-premium" style="background:linear-gradient(135deg,#8b5cf6,#a78bfa);animation:badgePulse 2s ease-in-out infinite;">⭐ PREMIUM</span>';
-                if (item.bestseller) badges += '<span class="badge-premium badge-bestseller mt-2">🔥 BEST SELLER</span>';
-                if (item.stock === 'low') badges += '<span class="badge-premium badge-stock mt-2">⚠️ STOCK LIMITÉ</span>';
-                
-                let offerBadge = '';
-                if (currentOffer && !currentOffer.flashSale) offerBadge = `<span class="badge-premium badge-offer-active mt-2">${currentOffer.emoji} OFFRE ACTIVE</span>`;
-                
+                const isVideo = !staticImage;
+
+                // Fond flouté : même URL que l'image (pour les vidéos → gradient sombre)
+                const blurBgStyle = staticImage
+                    ? `background-image: url('${staticImage}');`
+                    : `background: linear-gradient(135deg, #1a0030 0%, #000 100%);`;
+
+                // Média principal
+                const mediaTag = isVideo
+                    ? `<video class="slide-main-media" src="${item.src}" loop muted playsinline webkit-playsinline></video>`
+                    : `<img class="slide-main-media" src="${staticImage}" alt="${item.name}" loading="${index === 0 ? 'eager' : 'lazy'}">`;
+
+                // Badges
+                let badgesHTML = '';
+                if (item.premium) badgesHTML += '<span class="badge-premium" style="background:linear-gradient(135deg,#8b5cf6,#a78bfa);">⭐ PREMIUM</span>';
+                if (item.bestseller) badgesHTML += '<span class="badge-premium badge-bestseller">🔥 BEST SELLER</span>';
+                if (item.stock === 'low') badgesHTML += '<span class="badge-premium badge-stock">⚠️ STOCK LIMITÉ</span>';
+                if (currentOffer && !currentOffer.flashSale) badgesHTML += `<span class="badge-premium badge-offer-active">${currentOffer.emoji} OFFRE</span>`;
+
+                // Prix
+                const basePrice = item.tiers[0].p;
+                const oldPrice = item.tiers[0].oldPrice;
+
                 slide.innerHTML = `
-                    ${carouselMedia}
-                    <div class="carousel-gradient"></div>
-                    <div class="absolute top-6 right-6 flex flex-col gap-2 z-20">${badges}${offerBadge}</div>
-                    <div class="carousel-content">
-                        <span class="badge-premium inline-block mb-3">${item.tag}</span>
-                        <h2 class="text-4xl font-black text-white uppercase brand-font tracking-tighter leading-none mb-3">${item.name}</h2>
-                        <p class="text-sm text-gray-300 mb-4 line-clamp-2">${item.desc.substring(0, 100)}...</p>
-                        <div class="flex items-center gap-3 mb-4">
-                            <span class="text-violet-500 font-black text-2xl">À partir de ${item.tiers[0].p}€</span>
-                            ${item.tiers[0].oldPrice ? `<span class="text-gray-600 line-through text-lg">${item.tiers[0].oldPrice}€</span>` : ''}
+                    <!-- ZONE MEDIA -->
+                    <div class="slide-media-zone">
+                        <div class="slide-blur-bg" style="${blurBgStyle}"></div>
+                        ${mediaTag}
+                        <div class="slide-badges">${badgesHTML}</div>
+                    </div>
+
+                    <!-- PANEL INFO — jamais d'overlap avec l'image -->
+                    <div class="slide-info-panel">
+                        <span class="badge-premium slide-info-tag" style="width:fit-content;">${item.tag}</span>
+                        <p class="slide-info-name">${item.name}</p>
+                        <div class="slide-info-cta">
+                            <div class="slide-info-price-row">
+                                <span class="text-violet-400 font-black text-xl">Dès ${basePrice}€</span>
+                                ${oldPrice ? `<span class="text-gray-600 line-through text-sm">${oldPrice}€</span>` : ''}
+                                ${item.stock === 'low' ? '<span class="text-red-400 text-[9px] font-black uppercase">STOCK ⚠</span>' : ''}
+                            </div>
+                            <button onclick="openProduct('${item.id}')"
+                                class="bg-violet-500 text-white font-black text-[11px] px-5 py-3 rounded-xl active:scale-95 transition-transform shadow-[0_0_20px_rgba(139,92,246,0.45)] tracking-wide shrink-0">
+                                VOIR →
+                            </button>
                         </div>
-                        <button onclick="openProduct('${item.id}')" class="bg-violet-500 text-white font-black text-sm px-8 py-4 rounded-xl active:scale-95 transition-transform shadow-[0_0_30px_rgba(139,92,246,0.5)]">
-                            VOIR LE PRODUIT →
-                        </button>
                     </div>
                 `;
+
                 track.appendChild(slide);
-                
-                const indicator = document.createElement('div');
-                indicator.className = 'carousel-indicator' + (index === 0 ? ' active' : '');
-                indicator.onclick = () => goToSlide(index);
-                indicators.appendChild(indicator);
+
+                // Indicator
+                const dot = document.createElement('div');
+                dot.className = 'carousel-indicator' + (index === 0 ? ' active' : '');
+                dot.onclick = () => goToSlide(index);
+                indicators.appendChild(dot);
             });
-            
+
+            // Lancer la vidéo du premier slide si applicable
+            _playActiveSlideVideo(0);
             startAutoSlide();
+        }
+
+        // Lance la vidéo de la slide active, met en pause les autres
+        function _playActiveSlideVideo(activeIndex) {
+            document.querySelectorAll('.carousel-slide').forEach((slide, i) => {
+                const video = slide.querySelector('video.slide-main-media');
+                if (!video) return;
+                if (i === activeIndex) {
+                    video.play().catch(() => {}); // autoplay bloqué → silencieux
+                } else {
+                    video.pause();
+                }
+            });
         }
 
         function goToSlide(index) {
             currentSlide = index;
             const track = document.getElementById('carousel-track');
             if (!track) return;
+
             track.style.transform = `translateX(-${currentSlide * 100}%)`;
-            document.querySelectorAll('.carousel-indicator').forEach((ind, i) => ind.classList.toggle('active', i === currentSlide));
+
+            document.querySelectorAll('.carousel-indicator').forEach((ind, i) => {
+                ind.classList.toggle('active', i === currentSlide);
+            });
+
+            _playActiveSlideVideo(currentSlide);
             triggerHaptic('light');
         }
 
