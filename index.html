@@ -230,13 +230,16 @@
         /* Track horizontal — hauteur auto car les slides sont flex-col */
         .carousel-track {
             display: flex;
+            /* Largeur explicite = largeur du conteneur parent (viewport width) */
+            /* Sans ça, min-width:100% sur les slides est circulaire dans flex */
+            width: 100%;
             transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            align-items: stretch;
         }
 
-        /* Chaque slide = colonne verticale : zone media + panel info */
+        /* Chaque slide = exactement 1 viewport de large */
         .carousel-slide {
-            min-width: 100%;
+            flex: 0 0 100%;   /* 100% du carousel-track = largeur viewport */
+            min-width: 0;     /* reset — évite le dépassement */
             display: flex;
             flex-direction: column;
         }
@@ -1880,12 +1883,18 @@
         // ========== SECURITY ==========
         
         function blockAccess(reason, details = '') {
+            // Retirer le splash immédiatement — sinon le logo reste visible
+            const splashEl = document.getElementById('splash-screen');
+            if (splashEl) splashEl.remove();
+
             const screen = document.getElementById('block-screen');
+            if (!screen) return;
             document.getElementById('block-reason').textContent = reason;
             document.getElementById('block-details').textContent = details;
             screen.style.display = 'flex';
             screen.classList.remove('hidden');
-            setTimeout(() => { document.body.innerHTML = screen.outerHTML; }, 100);
+            // Remplace tout le body après 200ms pour bloquer toute manipulation JS
+            setTimeout(() => { document.body.innerHTML = screen.outerHTML; }, 200);
         }
 
         async function initSecurity() {
@@ -1918,7 +1927,17 @@
             }
         }
 
-        initSecurity().catch(err => {
+        // _securityPassed : flag partagé entre initSecurity().then() et window.onload
+        // Garantit que l'app ne se lance JAMAIS si le contexte Telegram n'est pas valide
+        let _securityPassed = false;
+
+        initSecurity().then(ok => {
+            _securityPassed = ok;
+            if (!ok) return; // blockAccess() a déjà géré l'affichage
+            // Si le DOM est déjà chargé au moment où la promesse se résout → lancer l'app
+            if (document.readyState === 'complete') _runApp();
+            // Sinon : window.onload va déclencher _runApp()
+        }).catch(err => {
             if (DEBUG_MODE) { console.error('Security error:', err); }
             else { blockAccess('Erreur système', err.message); }
         });
@@ -2287,19 +2306,20 @@
         }
 
         // ========== INIT ==========
-        
-        window.onload = () => {
+
+        // _runApp : lancé seulement après validation sécurité
+        function _runApp() {
             const splashTimeout = setTimeout(() => {
                 const splash = document.getElementById('splash-screen');
                 if (splash) { splash.style.opacity = '0'; setTimeout(() => splash.remove(), 800); }
             }, 3000);
-            
+
             setTimeout(() => {
                 clearTimeout(splashTimeout);
                 const splash = document.getElementById('splash-screen');
                 if (splash) { splash.style.opacity = '0'; setTimeout(() => splash.remove(), 800); }
             }, 1800);
-            
+
             updateStatus();
             setInterval(updateStatus, 60000);
             updateMarqueeOffer();
@@ -2310,6 +2330,12 @@
             renderReviews();
             startSocialProofEngine();
             trackEvent('app_loaded');
+        }
+
+        // window.onload : déclenche _runApp SEULEMENT si sécurité validée
+        window.onload = () => {
+            if (!_securityPassed) return; // bloqué — blockAccess() a déjà tout géré
+            _runApp();
         };
 
         // ========== NAVIGATION ==========
