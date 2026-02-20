@@ -1900,8 +1900,18 @@
         async function initSecurity() {
             'use strict';
             const tg = window.Telegram?.WebApp;
-            if (!tg || !tg.initData) {
+
+            // tg.initData peut être "" (chaîne vide) dans certains contextes Telegram légitimes
+            // On vérifie l'objet tg ET que l'environnement n'est pas un navigateur classique
+            // tg.platform === 'unknown' = navigateur web → bloqué
+            if (!tg) {
                 blockAccess('⛔ ACCÈS REFUSÉ', 'Cette application fonctionne uniquement via Telegram');
+                return false;
+            }
+
+            // Bloquer les navigateurs classiques (platform = 'unknown' ou absence de version)
+            if (!tg.version || tg.platform === 'unknown') {
+                blockAccess('⛔ ACCÈS REFUSÉ', 'Ouvre cette app depuis Telegram uniquement');
                 return false;
             }
             try {
@@ -1927,20 +1937,8 @@
             }
         }
 
-        // _securityPassed : flag partagé entre initSecurity().then() et window.onload
-        // Garantit que l'app ne se lance JAMAIS si le contexte Telegram n'est pas valide
-        let _securityPassed = false;
-
-        initSecurity().then(ok => {
-            _securityPassed = ok;
-            if (!ok) return; // blockAccess() a déjà géré l'affichage
-            // Si le DOM est déjà chargé au moment où la promesse se résout → lancer l'app
-            if (document.readyState === 'complete') _runApp();
-            // Sinon : window.onload va déclencher _runApp()
-        }).catch(err => {
-            if (DEBUG_MODE) { console.error('Security error:', err); }
-            else { blockAccess('Erreur système', err.message); }
-        });
+        // Sécurité : appelée dans window.onload — pas de race condition possible
+        // initSecurity() n'est plus async en dehors du onload
 
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.addEventListener('keydown', e => {
@@ -2307,8 +2305,12 @@
 
         // ========== INIT ==========
 
-        // _runApp : lancé seulement après validation sécurité
-        function _runApp() {
+        window.onload = async () => {
+            // 1. Vérification sécurité — synchrone dans le onload, pas de race condition
+            const authorized = await initSecurity();
+            if (!authorized) return; // blockAccess() a déjà affiché l'écran de blocage
+
+            // 2. Lancer l'app seulement si autorisé
             const splashTimeout = setTimeout(() => {
                 const splash = document.getElementById('splash-screen');
                 if (splash) { splash.style.opacity = '0'; setTimeout(() => splash.remove(), 800); }
@@ -2330,12 +2332,6 @@
             renderReviews();
             startSocialProofEngine();
             trackEvent('app_loaded');
-        }
-
-        // window.onload : déclenche _runApp SEULEMENT si sécurité validée
-        window.onload = () => {
-            if (!_securityPassed) return; // bloqué — blockAccess() a déjà tout géré
-            _runApp();
         };
 
         // ========== NAVIGATION ==========
